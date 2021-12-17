@@ -1,0 +1,10 @@
+---
+title: "Stats"
+author: "Julia Prein"
+date: "12/17/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
