@@ -1,0 +1,27 @@
+---
+title: "Measuring individual differences in the understanding of gaze cues"
+author: "Julia Prein"
+date: "12/17/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+# Methods
+## Participants
+## Procedure
+## Data analysis
+
+# Results
+
+# Discussion
+
+# References
+
+# Acknowledgements
+
+# Author Contributions
