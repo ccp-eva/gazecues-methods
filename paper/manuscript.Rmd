@@ -1,5 +1,5 @@
 ---
-title             : "Measuring individual differences in the understanding of gaze cues"
+title             : "Measuring individual differences in the understanding of gaze cues across the lifespan"
 shorttitle        : "Gaze cue understanding"
 
 author: 
@@ -77,7 +77,9 @@ set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
+Idea for an opener :) 
 
+Developmental psychology is facing a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to reliably measure these individual differences. For example ... . 
 
 # Methods
 We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
