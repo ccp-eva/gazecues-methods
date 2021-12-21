@@ -5,7 +5,7 @@
 \documentclass[
   english,
   man,floatsintext]{apa6}
-\title{Measuring individual differences in the understanding of gaze cues}
+\title{Measuring individual differences in the understanding of gaze cues across the lifespan}
 \author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1}, Luke Maurits\textsuperscript{1}, Steven Kalinke\textsuperscript{1}, \& Daniel M. Haun\textsuperscript{1}}
 \date{}
 
@@ -41,7 +41,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={Measuring individual differences in the understanding of gaze cues},
+  pdftitle={Measuring individual differences in the understanding of gaze cues across the lifespan},
   pdfauthor={Julia Prein1, Manuel Bohn1, Luke Maurits1, Steven Kalinke1, \& Daniel M. Haun1},
   pdflang={en-EN},
   pdfkeywords={social cognition, individual differences, gaze cues, psychometrics},
@@ -172,6 +172,7 @@ Correspondence concerning this article should be addressed to Julia Prein, Max P
 \affiliation{\vspace{0.5cm}\textsuperscript{1} Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology}
 
 \abstract{
+There must be an abstract of no more than 250 words.
 One or two sentences providing a \textbf{basic introduction} to the field, comprehensible to a scientist in any discipline.
 
 Two to three sentences of \textbf{more detailed background}, comprehensible to scientists in related disciplines.
@@ -192,6 +193,10 @@ Two or three sentences to provide a \textbf{broader perspective}, readily compre
 \begin{document}
 \maketitle
 
+Idea for an opener :)
+
+Developmental psychology is facing a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to reliably measure these individual differences. For example \ldots{} .
+
 \hypertarget{methods}{%
 \section{Methods}\label{methods}}
 
@@ -203,8 +208,90 @@ We report how we determined our sample size, all data exclusions (if any), all m
 \hypertarget{material}{%
 \subsection{Material}\label{material}}
 
-\hypertarget{procedure}{%
-\subsection{Procedure}\label{procedure}}
+Material is presented as an interactive web-app that is accessible for computers and tablets and runs on any web browser.
+The code is open-source (\url{https://github.com/ccp-eva/gafo-demo})
+and a live demo version can be found under: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
+
+The web-app generates two files:
+(1) a text file (JSON) containing click responses,
+and (2) a video file (webm) of the participant's webcam recording.
+Data gets automatically collected and safely stored on local servers located in Leipzig, Germany.
+
+The web-app was programmed in Vanilla JavaScript, HTML and CSS.
+For stimulus presentation, a scalable vector graphic (SVG) composition was parsed.
+This way, the composition scales according to the user's viewport without loss of quality,
+while keepiong the aspect ratio and relative object positions.
+Furthermore, SVGs allow us to precisely control and calculate the size and position of all
+composite parts of the scene (e.g., pupil of the agent).
+
+The GreenSock Animation Platform (GSAP; TODO insert citation) library was used
+to animate the movement of single SVG elements.
+
+Study instructions were pre-recorded and, therefore, constant across participants.
+No interaction with the experimenter was necessary and children needed minimal assistance from their caregivers.
+
+\hypertarget{procedure-from-pre-reg}{%
+\subsection{Procedure (from pre-reg)}\label{procedure-from-pre-reg}}
+
+An animal character (i.e., agent; sheep, monkey, or pig) is placed centrally in a window.
+A balloon (i.e., target; blue, green, yellow, or red) is located in front of them.
+The target then falls to the ground.
+The agent's gaze follows the movement of the target,
+that is, the pupils of the agent move in a way that their center aligns with the center of the target.
+Participants are then asked to locate the target's position on the screen.
+
+Visual access to the target's true location is manipulated by a hedge.
+Participants either have full, partial, or no visual access to the true target location.
+When partial or no information about the target location is accessible,
+participants are expected to use the agent's gaze as a cue.
+
+There are two different versions of partial and no visual access trials.
+For families that use a tablet with touchscreen,
+the target lands behind a hedge (i.e., hedge version).
+Children are then asked to click directly on the hedge to indicate where the target is.
+For families that use a computer without touchscreen, the balloon falls into a box.
+Children are then asked to point to the box containing the target.
+Caregivers then act as the ``digital finger'' of their children and click on the indicated box.
+
+The dependent variable depends on the study version:
+For the hedge version, our dependent variable is continuous.
+Here, the dependent variable is imprecision,
+which is defined as the absolute difference between the true x coordinate of the target
+and the x coordinate of the participant's click on the screen.
+For the box version, we use our categorical outcome (i.e., which box was clicked)
+to calculate the proportion of correct responses.
+
+There are three different trial types,
+depending on the visual access to the target flight and end location.
+In touch training trials, participants have full visual access to the target flight
+and the target's end location.
+In familiarization trials, participants have visual access to the target flight
+but not to the target's end location.
+In the hedge version, the target's end location is covered by a hedge.
+In the box version, the target flies into a box and is therefore not visible anymore.
+In test trials, participants have no visual access to the target flight
+nor the end location.
+In both versions, the target flight is covered by a hedge.
+In the hedge version, the hedge then shrinks to cover the target's end location.
+In the box version, the hedge shrinks completely.
+The boxes then hide the target's end location.
+
+Depending on the participant's device,
+participants have to indicate their estimated target location directly on the hedge
+(i.e., hedge version) or in one of five boxes (i.e., box version).
+
+Participants receive 19 trials with one touch training, two familiarization trials,
+and 16 test trials.
+The first trial of each type comprises a voice-over description of the presented events.
+Touch and familiarization trials, as well as voice-over trials, will not be included in the analysis.
+Therefore, we will conduct our analysis with 15 test trials.
+
+Target locations are generated as follows.
+For the hedge version, the full width of the screen is divided into ten bins.
+Exact coordinates within each bin are randomly generated.
+For the box version, the target randomly lands in one out of five boxes.
+Each bin/box occurs equally often.
+The same bin/box can occur only twice in a row.
 
 \hypertarget{data-analysis}{%
 \subsection{Data analysis}\label{data-analysis}}
@@ -216,6 +303,48 @@ We used R {[}Version 4.1.2; R Core Team (2021){]} and the R-package \emph{papaja
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
+
+\hypertarget{declarations}{%
+\section{Declarations}\label{declarations}}
+
+\hypertarget{open-practices-statement}{%
+\subsection{Open practices statement}\label{open-practices-statement}}
+
+The web application (\url{https://ccp-odc.eva.mpg.de/gafo-demo/}) described here is open source (\url{https://github.com/ccp-eva/gafo-demo}).
+The datasets generated during and/or analysed during the current study are available
+in the {[}gazecues-methods{]} repository, (\url{https://github.com/jprein/gazecues-methods}).
+All experiments were preregistered (\url{https://osf.io/zjhsc/}).
+
+\hypertarget{funding}{%
+\subsection{Funding}\label{funding}}
+
+This study was funded by the Max Planck Society for the Advancement of Science, a noncommercial, publicly financed scientific organization (no grant number).
+We thank all the children and parents who participated in the study.
+
+\hypertarget{conflicts-of-interest}{%
+\subsection{Conflicts of interest}\label{conflicts-of-interest}}
+
+The authors declare that they have no conflict of interest.
+
+\hypertarget{ethics-approval}{%
+\subsection{Ethics approval}\label{ethics-approval}}
+
+\hypertarget{consent-to-participate}{%
+\subsection{Consent to participate}\label{consent-to-participate}}
+
+Informed consent was obtained from all individual participants included in the study or their legal guardians.
+
+\hypertarget{consent-for-publication}{%
+\subsection{Consent for publication}\label{consent-for-publication}}
+
+\hypertarget{open-access}{%
+\subsection{Open access}\label{open-access}}
+
+\hypertarget{authors-contributions}{%
+\subsection{Authors' contributions}\label{authors-contributions}}
+
+optional: please review the submission guidelines from the
+journal whether statements are mandatory
 
 \newpage
 
