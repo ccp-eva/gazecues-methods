@@ -216,3 +216,87 @@ journal whether statements are mandatory
 
 <div id="refs" custom-style="Bibliography"></div>
 \endgroup
+
+\newpage
+
+# Supplements
+
+## Adult sample
+
+### Recruitment
+We recruited participants using the online participant recruitment service 
+*Prolific* from the University of Oxford. 
+*Prolific*'s subject pool consists of a mostly European and US-american sample 
+although subjects from all over the world are included.
+
+The recruitment platform realises ethical payment of participants, 
+which requires researchers to pay participants a fixed minimum wage  
+of £5.00 (around US$6.50 or €6.00) per hour.
+We decided to pay all participants the same fixed fee which was in relation 
+to the estimated average time taken to complete the task.
+
+*Prolific* distributed our study link to potential participants, 
+while the hosting of the online study was done by local servers in the
+Max Planck Institute for Evolutionary Anthropology, Leipzig. 
+Therefore, study data was saved only on our internal servers, 
+while *Prolific* provided demographic information of the participants.
+
+Participants' *Prolific* ID was forwarded to our study website using URL parameters.
+This way, we could match participant demographic data to our study data. 
+The same technique was used to confirm study completion: 
+we redirected participants from our study website back to the *Prolific* website 
+using URL parameters. 
+
+We used *Prolific*'s inbuilt prescreening filter to include 
+only participants who were fluent in English
+and could therefore properly understand our written and oral study instructions. 
+
+### Study 1 - Validation hedge version
+We recruited participants online by advertising the study on *Prolific*. 
+
+50 adults participated in the study. 
+One additional subject returned their submission,
+i.e., decided to leave the study early or withdrew their submission after study completion.
+Data collection took place in May 2021. 
+
+Participants were compensated with £1.25 for completing the study. 
+We estimated an average completion time of 6 minutes, resulting in an estimated hourly rate of £10.00.
+In average, participants took 05:56min to complete the study. 
+
+Participants were required to complete the study on a tablet or desktop. 
+Participation on mobile devices was disabled 
+since the display would be too small and would harm click precision.
+It was indicated that the study required audio sound. 
+
+We stored *Prolific*'s internal demographic information, 
+while not asking for additional personal information. 
+
+After clicking the study title, participants were directed to our online study website.
+...
+
+### Study 2 - Validation box version
+As in study 1, we recruited participants on *Prolific*, and employed the same methodology. 
+However, this time participants were presented with the box version of the task.
+We showed eight boxes in which the target could land.
+
+50 adults participated in the study. 
+One additional subject returned their submission,
+i.e., decided to leave the study early or withdrew their submission after study completion.
+Data collection took place in June 2021. 
+
+Participants were compensated with £1.00 for completing the study. 
+We estimated an average completion time of 6 minutes, resulting in an estimated hourly rate of £10.00.
+In average, participants took 04:43min to complete the study. 
+
+### Study 3 - Reliability hedge version
+In addition to the beforementioned prescreening settings, we used a whitelist.
+
+whitelist screener: 
+"When the researcher uses a whitelist, 
+only participants with IDs entered into the whitelist are invited to participate in a study. 
+This allows gathering information from the same subjects at different points in time."
+
+### Study 4 - Reliability box version
+As in study 3, we recruited participants on *Prolific*, and employed the same methodology. 
+However, this time participants were presented with the box version of the task.
+As in study 2, we employed eight boxes in which the target could land.
