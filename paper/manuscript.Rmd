@@ -252,6 +252,7 @@ only participants who were fluent in English
 and could therefore properly understand our written and oral study instructions. 
 
 ### Study 1 - Validation hedge version
+Study 1 was pre-registered: https://osf.io/r3bhn. 
 We recruited participants online by advertising the study on *Prolific*. 
 
 50 adults participated in the study. 
@@ -289,14 +290,83 @@ We estimated an average completion time of 6 minutes, resulting in an estimated 
 In average, participants took 04:43min to complete the study. 
 
 ### Study 3 - Reliability hedge version
-In addition to the beforementioned prescreening settings, we used a whitelist.
+Study 3 and study 4 were pre-registered: https://osf.io/nu62m.
+In order to assess the test-retest reliability, 
+we tested the same participants twice with a delay of two weeks.
 
-whitelist screener: 
-"When the researcher uses a whitelist, 
-only participants with IDs entered into the whitelist are invited to participate in a study. 
-This allows gathering information from the same subjects at different points in time."
+In addition to the beforementioned prescreening settings, we used a whitelist.
+*Prolific* has a so-called *custom allowlist prescreening filter* 
+where one can enter the *Prolific* IDs of participants who completed a previous study. 
+Only these subjects are then invited to participate in a study. 
+This way, repeated measurements can be implemented, collecting data from the same subjects at different points in time.  
+
+In a first round, 60 participants took part on the first testday. 
+Additional two subjects returned their submission,
+i.e., decided to leave the study early or withdrew their submission after study completion.
+One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
+The maximum time is calculated by *Prolific*, based on the estimated average completion time. 
+For this study, the maximum time amounted to 41 minutes. 
+For the first testday, participants were compensated with £1.25. 
+We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £8.33.
+In average, participants took 07:11min to complete the first part. 
+
+Of the 60 participants that completed testday 1, 41 subjects finished testday 2. 
+One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
+Participants were compensated with £1.50 for completing the second part of the study. 
+We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £10.
+In average, participants took 06:36min to complete the second part of the study.
+
+Since we aimed for a minimum sample size of 60 subjects participating on both testdays, 
+we reran the first testday with additional 50 participants. 
+Additional seven subjects returned their submission,
+i.e., decided to leave the study early or withdrew their submission after study completion.
+Two additional participants timed out, i.e., did not finish the survey within the allowed maximum time.
+Again, participants were compensated with £1.25 for completing the first part of the study 
+(estimated average completion time 9 minutes, estimated hourly rate of £8.33). 
+In average, participants took 06:51min to complete the first part. 
+
+Of the additional 50 participants that completed testday 1, 29 subjects finished testday 2. 
+Again, participants were compensated with £1.50 for completing the second part of the study. 
+(estimated average completion time 9 minutes, estimated hourly rate of £10).
+In average, participants took 06:26min to complete the second part of the study.
 
 ### Study 4 - Reliability box version
 As in study 3, we recruited participants on *Prolific*, and employed the same methodology. 
 However, this time participants were presented with the box version of the task.
 As in study 2, we employed eight boxes in which the target could land.
+
+In a first round, 60 participants took part on the first testday. 
+Additional five subjects returned their submission,
+i.e., decided to leave the study early or withdrew their submission after study completion.
+For the first testday, participants were compensated with £1.25. 
+We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £8.33.
+In average, participants took 07:33min to complete the first part. 
+
+Of the 60 participants that completed testday 1, 41 subjects finished testday 2. 
+Participants were compensated with £1.50 for completing the second part of the study. 
+We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £10.
+In average, participants took 07:50min to complete the second part of the study.
+
+Since we aimed for a minimum sample size of 60 subjects participating on both testdays, 
+we reran the first testday with additional 50 participants. 
+Additional eight subjects returned their submission,
+i.e., decided to leave the study early or withdrew their submission after study completion.
+One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
+Again, participants were compensated with £1.25 for completing the first part of the study 
+(estimated average completion time 9 minutes, estimated hourly rate of £8.33). 
+In average, participants took 07:37min to complete the first part. 
+
+Of the additional 50 participants that completed testday 1, 28 subjects finished testday 2. 
+Additional three subjects returned their submission,
+i.e., decided to leave the study early or withdrew their submission after study completion.
+One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
+Again, participants were compensated with £1.50 for completing the second part of the study. 
+(estimated average completion time 9 minutes, estimated hourly rate of £10).
+In average, participants took 06:30min to complete the second part of the study.
+
+## Child sample
+### Study 1 - Validation Remote and in-person
+https://osf.io/snju6
+
+### Study 2 - Reliability in-person 
+https://osf.io/xqm73
