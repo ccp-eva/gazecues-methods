@@ -145,47 +145,39 @@ Developmental psychology is facing a dilemma: many research questions are questi
 - existing tasks for social cognition: wellman
 - goal of the current project
 
-# Methods
-## Design of our balloon finding task
-- training trials (summarize touch & fam & voice over)
-- test trials in detail
-- two versions: continuous & discrete, flexible to use
+
+# Design of our balloon finding task
 
 ## Stimuli
-# TODO: cartoon style stimuli. engaging and for children and adults alike
+Our newly implemented balloon finding task displays cartoon-like stimuli that are engaging for children and adults alike. An animal character (i.e., agent; sheep, monkey, or pig) is placed centrally in a window. A balloon (i.e., target; blue, green, yellow, or red) is located in front of them. The target then falls to the ground. At all times, the agent’s gaze tracks the movement of the target. That is, the pupils and iris of the agent move in a way that their center aligns with the center of the target. Participants are then asked to locate the target’s position on the screen. 
 
-An animal character (i.e., agent; sheep, monkey, or pig) is placed centrally in a window. A balloon (i.e., target; blue, green, yellow, or red) is located in front of them. The target then falls to the ground. The agent’s gaze tracks the movement of the target, that is, the pupils and iris of the agent move in a way that their center aligns with the center of the target. Participants were then asked to locate the target’s position on the screen. 
+To keep participants engaged and interested, the presentation of events is accompanied by cartoon-like sounds. Each trial starts with an eye-blinking sound, while pupils and iris get slightly enlarged and change in opacity for 0.3 sec. The landing of the target is accompanied by a tapping sound. Once the target landed, the instructor's voice asks "Where is the balloon?". After the response is registered, a short plop sound plays and a small orange circle confirms the participants' location choice. If no response got registered within 5 secs after the target landed, an audio prompt reminds the participant to respond. 
 
-# TODO: phrasing training trials
-There are three different trial types, depending on the visual access to the target flight and end location. In *touch training* trials, participants have *full visual access* to the target flight and the target's end location. In *familiarization trials*, participants have *partial visual access*: they witness the target flight but cannot see the target's end location. In *test trials*, participants have *no visual access* to the target flight nor the end location. When partial or no information about the target location is accessible,  participants are expected to use the agent’s gaze as a cue. 
+## Trials
+Before participants advance to the test trials, there are four training trials. In the first training trial, participants have full visual access to the target flight and the target's end location and are simply asked to click on the visible balloon. In the second and third training trials, participants have partial visual access: they witness the target flight but cannot see the target's end location. They are then asked to click on the invisible balloon, i.e., the location where they saw the target land. In test trials, participants have no visual access to the target flight nor the end location. Participants are expected to use the agent’s gaze as a cue to locate the target. The first trial of each type comprises a voice-over description of the presented events. After these four training and audio guided trials, participants receive 15 test trials. The complete sequence of four training trials and 15 test trials can be administered within 5-10 minutes testing time.
 
-There are two different versions of partial and no visual access trials: participants have to indicate their estimated target location directly on the hedge (i.e., hedge version) or in one of five/eight boxes (i.e., box version). In test trials, the target flight is always covered by a hedge. In the hedge version, the hedge then shrinks to cover the target's end location. In the box version, the hedge shrinks completely. The boxes then hide the target's end location. 
+## Study versions
+We designed two study versions which can be chosen according to the researchers' need: there is a continuous *hedge* version and a discrete *box* version. The versions use the same first training trial and then differ in the two consecutive training trials and the test trials. 
+In the *hedge* version, participants have to indicate their estimated target location directly on a hedge (i.e., hedge version). 
+Here, the dependent variable is imprecision, which is defined as the absolute difference between the target's true x coordinate and the x coordinate of the participant’s click.
+In the *box* version, participants are asked to click on a box that hides the target. Researchers have the choice of how many boxes are shown: one up to eight boxes can be displayed as potential hiding locations. Here, we use a categorical outcome (i.e., which box was clicked) to calculate the proportion of correct responses. 
+Note that in the test trials of both study versions, the target flight is covered by a hedge. In the *hedge* version, the hedge then shrinks to a minimum height required to cover the target's end location. In the *box* version, the hedge shrinks completely. The boxes then hide the target's final destination. 
 
-To keep participants engaged and interested, the presentation of events was accompanied by cartoon-like sounds. Each trial started with an eye-blinking sound, while pupils and iris were enlarged and changed in opacity for 0.3 sec. The landing of the target was accompanied by a tapping sound. After the response was registered, a short plop sound played and a small orange circle confirmed the participants' location choice. Once the target landed, the instructor's voice asked "Where is the balloon?". If no response was registered, an audio prompt reminded the participant to respond and click on the balloon/the hedge/a box. 
-
-Study instructions were pre-recorded and constant across participants. No interaction with the experimenter was necessary and children needed minimal assistance from their caregivers. Participants received 19 trials with one touch training, two familiarization trials, 
-and 16 test trials. The first trial of each type comprised a voice-over description of the presented events. Touch and familiarization trials, as well as voice-over trials, were not included in the analysis. Therefore, we conducted our analyses with 15 test trials.
-
-### Randomization
-All agents and target colors appeared equally often and could not be repeated in more than two consecutive trials. The randomization of the target end location depended on the study version. In the hedge version, the full width of the screen was divided into ten bins. Exact coordinates within each bin were randomly generated. In the box version, the target randomly landed in one of the boxes. Each bin/box occurred equally often. The same bin/box could only occur twice in a row.
-
-### Dependent variable
-The dependent variable depends on the study version: for the hedge version, our dependent variable is continuous. Here, the dependent variable is imprecision, which is defined as the absolute difference between the true x coordinate of the target and the x coordinate of the participant’s click on the screen. For the box version, we use our categorical outcome (i.e., which box was clicked) to calculate the proportion of correct responses. 
-
+## Randomization
+All agents and target colors appear equally often and are not repeated in more than two consecutive trials. The randomization of the target end location depends on the study version. In the *hedge* version, the full width of the screen is divided into ten bins. Exact coordinates within each bin are then randomly generated. In the *box* version, the target randomly lands in one of the boxes. As with agent and color choice, each bin/box occurs equally often and can only occur twice in a row.
 
 ## Implementation
-- Parcel?
-- benefits of our choices: easy to adapt, portable across devices, webapp: no installation needed
-- response collection: file formats, information we save
+Our balloon finding task is presented as an interactive web-app. This way, the task is portable across devices and web browsers and does not require any installation. A great advantage of online testing is that our testing procedure is standardized across participants. Study instructions were pre-recorded and no interaction with the experimenter is necessary during the study. The code is open-source (https://github.com/ccp-eva/gafo-demo) and a live demo version can be found under: https://ccp-odc.eva.mpg.de/gafo-demo/.
 
-Material is presented as an interactive web-app that is accessible for computers and tablets and runs on any web browser. The code is open-source (https://github.com/ccp-eva/gafo-demo) and a live demo version can be found under: https://ccp-odc.eva.mpg.de/gafo-demo/.
+The web-app was programmed in JavaScript (ECMAScript 2015, i.e., ES6), HTML5, CSS and PHP. 
+For the web-app development, we chose the zero configuration bundler Parcel. It enables a live server for debugging, makes imports easy, and minifies scripts in order to save data storage.
+For the design of the landing pages, the CSS library Material Components Web (TODO: insert citation) was used. 
+For stimulus presentation, a scalable vector graphic (SVG) composition was parsed. This way, the composition scales according to the user's view port without loss of quality, while keeping the aspect ratio and relative object positions constant. 
+Furthermore, SVGs allow us to define all composite parts of the scene (e.g., pupil of the agent) individually. This is needed for precisely calculating exact pupil and target locations and sizes. Additionally, it makes it easy to adjust the stimuli and, for example, add another agent to the scene.
+The GreenSock Animation Platform (GSAP; TODO: insert citation) library was used to animate the movement of single SVG elements. 
 
-The web-app generates two files: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording. Data gets automatically collected and safely stored on local servers located in Leipzig, Germany. 
-
-The web-app was programmed in JavaScript (ECMAScript 2015, i.e., ES6), HTML5 and CSS. For stimulus presentation, a scalable vector graphic (SVG) composition was parsed. This way, the composition scales according to the user's viewport without loss of quality, while keeping the aspect ratio and relative object positions constant. Furthermore, SVGs allow us to precisely control and calculate the size and position of all composite parts of the scene (e.g., pupil of the agent). 
-
-The GreenSock Animation Platform (GSAP; TODO insert citation) library was used to animate the movement of single SVG elements. 
-
+The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
+For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device.
 
 ## Data processing
 - workflow server to R, converting coordinate systems
