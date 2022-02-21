@@ -48,6 +48,16 @@
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -364,23 +374,28 @@ Developmental psychology is facing a dilemma: many research questions are questi
 \hypertarget{stimuli}{%
 \subsection{Stimuli}\label{stimuli}}
 
-Our newly implemented balloon finding task displays cartoon-like stimuli that are engaging for children and adults alike. An animal character (i.e., agent; sheep, monkey, or pig) is placed centrally in a window. A balloon (i.e., target; blue, green, yellow, or red) is located in front of them. The target then falls to the ground. At all times, the agent's gaze tracks the movement of the target. That is, the pupils and iris of the agent move in a way that their center aligns with the center of the target. Participants are then asked to locate the target's position on the screen.
+Our newly implemented balloon finding task displays cartoon-like stimuli that are engaging for children and adults alike. An animal character (i.e., agent; sheep, monkey, or pig) is placed centrally in a window. A balloon (i.e., target; blue, green, yellow, or red) is located in front of them. The target then falls to the ground. At all times, the agent's gaze tracks the movement of the target. That is, the pupils and iris of the agent move in a way that their center aligns with the center of the target. While the distance of the target's flight depends on the final location, the target moves at a constant speed. Participants are then asked to locate the target's position on the screen.
 
-To keep participants engaged and interested, the presentation of events is accompanied by cartoon-like sounds. Each trial starts with an eye-blinking sound, while pupils and iris get slightly enlarged and change in opacity for 0.3 sec.~The landing of the target is accompanied by a tapping sound. Once the target landed, the instructor's voice asks ``Where is the balloon?'' After the response is registered, a short plop sound plays and a small orange circle confirms the participants' location choice. If no response got registered within 5 secs after the target landed, an audio prompt reminds the participant to respond.
+To keep participants engaged and interested, the presentation of events is accompanied by cartoon-like effects. Each trial starts with an attention-getter: an eye-blinking sound plays while the pupils and iris of the agent enlarge (increase to 130\%) and change in opacity (decrease to 75\%) for 0.3 sec.~The landing of the target is accompanied by a tapping sound. Once the target landed, the instructor's voice asks ``Where is the balloon?'' After the response is registered, a short plop sound plays and a small orange circle confirms the participants' location choice. If no response got registered within 5 secs after the target landed, an audio prompt reminds the participant to respond.
 
 \hypertarget{trials}{%
 \subsection{Trials}\label{trials}}
 
-Before participants advance to the test trials, there are four training trials. In the first training trial, participants have full visual access to the target flight and the target's end location and are simply asked to click on the visible balloon. In the second and third training trials, participants have partial visual access: they witness the target flight but cannot see the target's end location. They are then asked to click on the invisible balloon, i.e., the location where they saw the target land. In test trials, participants have no visual access to the target flight nor the end location. Participants are expected to use the agent's gaze as a cue to locate the target. The first trial of each type comprises a voice-over description of the presented events. After these four training and audio guided trials, participants receive 15 test trials. The complete sequence of four training trials and 15 test trials can be administered within 5-10 minutes testing time.
+Before participants advance to the test trials, we present four training trials. In the first training trial, participants have full visual access to the target flight and the target's end location and are simply asked to click on the visible balloon. In the second and third training trials, participants have partial visual access: they witness the target flight but cannot see the target's end location. They are then asked to click on the invisible balloon, i.e., the location where they saw the target land. In test trials, participants have no visual access to the target flight nor the end location. Participants are expected to use the agent's gaze as a cue to locate the target. The first trial of each type comprises a voice-over description of the presented events. The audio descriptions explicitly state that the agent is always looking at the target (see Appendix for audio script). After these four training and audio guided trials, participants receive 15 test trials. The complete sequence of four training trials and 15 test trials can be administered within 5-10 minutes of testing time.
 
 \hypertarget{study-versions}{%
 \subsection{Study versions}\label{study-versions}}
 
-We designed two study versions which can be chosen according to the researchers' need: there is a continuous \emph{hedge} version and a discrete \emph{box} version. The versions use the same first training trial and then differ in the two consecutive training trials and the test trials.
+We designed two study versions which can be chosen according to the researchers' need: there is a continuous \emph{hedge} version and a discrete \emph{box} version. Both versions use the same first training trial and then differ in the consecutive training and test trials.
 In the \emph{hedge} version, participants have to indicate their estimated target location directly on a hedge (i.e., hedge version).
 Here, the dependent variable is imprecision, which is defined as the absolute difference between the target's true x coordinate and the x coordinate of the participant's click.
 In the \emph{box} version, participants are asked to click on a box that hides the target. Researchers have the choice of how many boxes are shown: one up to eight boxes can be displayed as potential hiding locations. Here, we use a categorical outcome (i.e., which box was clicked) to calculate the proportion of correct responses.
 Note that in the test trials of both study versions, the target flight is covered by a hedge. In the \emph{hedge} version, the hedge then shrinks to a minimum height required to cover the target's end location. In the \emph{box} version, the hedge shrinks completely. The boxes then hide the target's final destination.
+
+
+\begin{figure}
+\includegraphics[width=1\linewidth]{../figures/gafo_hedge} \includegraphics[width=1\linewidth]{../figures/gafo_boxes} \caption{\textbf{Study versions of the balloon finding task}. (a) Screenshots from the continuous \emph{hedge} version of the task. (b) Screenshots from the discrete \emph{box} version of the task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground / into a box. The agent's eyes track the movement of the target.}\label{fig:fig1}
+\end{figure}
 
 \hypertarget{randomization}{%
 \subsection{Randomization}\label{randomization}}
@@ -390,7 +405,7 @@ All agents and target colors appear equally often and are not repeated in more t
 \hypertarget{implementation}{%
 \subsection{Implementation}\label{implementation}}
 
-Our balloon finding task is presented as an interactive web-app. This way, the task is portable across devices and web browsers and does not require any installation. A great advantage of online testing is that our testing procedure is standardized across participants. Study instructions were pre-recorded and no interaction with the experimenter is necessary during the study. The code is open-source (\url{https://github.com/ccp-eva/gafo-demo}) and a live demo version can be found under: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
+Our balloon finding task is presented as an interactive web-app. The task is portable across devices and web browsers and does not require any installation. A great advantage of online testing is that our testing procedure is standardized across participants. By using pre-recorded study instructions,no interaction with the experimenter is necessary during the study. The code is open-source (\url{https://github.com/ccp-eva/gafo-demo}) and a live demo version can be found under: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
 
 The web-app was programmed in JavaScript (ECMAScript 2015, i.e., ES6), HTML5, CSS and PHP.
 For the web-app development, we chose the zero configuration bundler Parcel. It enables a live server for debugging, makes imports easy, and minifies scripts in order to save data storage.
@@ -401,6 +416,17 @@ The GreenSock Animation Platform (GSAP; TODO: insert citation) library was used 
 
 The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device.
+
+
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/infrastructure} 
+
+}
+
+\caption{\textbf{Infrastructure for online testing}. With our new infrastructure, subjects aged 3 -- 99+ can participate. Data collection is efficient and automatized and can take place anywhere: at home, in kindergartens or research institutes. Our task is presented as a website that works across devices. The scripts for the website and recorded data are stored on secure local servers.}\label{fig:fig2}
+\end{figure}
 
 \hypertarget{data-processing-1}{%
 \subsection{Data processing}\label{data-processing-1}}
@@ -633,10 +659,75 @@ Depending on the participant's device, the website automatically presents the he
 
 Our in-person supervised testing sample involved 120 children, including 40 3-year-olds (mean = 41.45 months, SD = 3.85, range = 36 - 47, 22 girls), 40 4-year-olds (mean = 54.6 months, SD = 3.1, range = 48 - 59, 19 girls), and 40 5-year-olds (mean = 66.95 months, SD = 3.39, range = 60 - 71, 22 girls).
 
+\begin{table}[h]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:unnamed-chunk-2}Child sample}
+
+\begin{tabular}{llllll}
+\toprule
+ageInYears & \multicolumn{1}{c}{nTotal} & \multicolumn{1}{c}{meanAgeInMonths} & \multicolumn{1}{c}{sdAgeInMonths} & \multicolumn{1}{c}{minAgeInMonths} & \multicolumn{1}{c}{maxAgeInMonths}\\
+\midrule
+3.00 & 40 & 41.45 & 3.85 & 36.00 & 47.00\\
+4.00 & 40 & 54.60 & 3.10 & 48.00 & 59.00\\
+5.00 & 40 & 66.95 & 3.39 & 60.00 & 71.00\\
+\bottomrule
+\addlinespace
+\end{tabular}
+
+\begin{tablenotes}[para]
+\normalsize{\textit{Note.} in-person supervised testing}
+\end{tablenotes}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
+
 \hypertarget{study-2---reliability-in-person}{%
 \subsubsection{Study 2 - Reliability in-person}\label{study-2---reliability-in-person}}
 
 \url{https://osf.io/xqm73}
+
+\hypertarget{instructions-and-voice-over-descriptions}{%
+\section{Instructions and voice over descriptions}\label{instructions-and-voice-over-descriptions}}
+
+This is the content of our voice recordings. Children listen to this during the game.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}@{}}
+\toprule
+\endhead
+\textbf{Nr} & \textbf{Timeline} & \textbf{German} & \textbf{English} & \textbf{Filename} \\
+\textbf{1} & \textbf{welcome} & Hallo! Schön, dass du da bist. Wir spielen jetzt das Ballon-Spiel! Siehst du die Tiere auf dem Bild da? Wir möchten gleich zusammen mit den Tieren mit einem Ballon spielen. Was genau passiert, erklären wir dir jetzt ganz in Ruhe. & Hello! Great that you're here. We'll now play a balloon game. Can you see the animals in the picture over there? We want to play together with the animals using the balloon. We'll now talk you through exactly what will happen. & welcome.mp3 \\
+\textbf{2} & \textbf{touch} & Schau mal, da steht ein Tier im Fenster. Und siehst du den Ballon da? Der Ballon fällt immer runter und landet auf dem Boden. Und du musst ihn dann finden. Das Tier hilft Dir und schaut immer den Ballon an. & Look, an animal is standing in the window. And can you see the balloon over there? The balloon always falls down and lands on the ground. And you have to find it! The animal helps you and always looks at the balloon. & touch-1.mp3 \\
+\textbf{3} & & Wo ist der Ballon? Drück auf den Ballon! & Where is the balloon? Click on the balloon! & prompt-touch-long.mp3 \\
+\textbf{4} & \textbf{fam - HEDGE} & Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er hinter eine Hecke. Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. & Perfect, that was great! Now, we'll continue playing. Can you see the animal and the balloon again? The balloon will fall down again. This time, it will fall behind a hedge. And you have to find it! The animal helps you and looks at the balloon. & fam-hedge-1.mp3 \\
+\textbf{5} & & Wo ist der Ballon? Drücke auf die Hecke - wo der Ballon ist. & Where is the balloon? On the hedge, click where the balloon is. & prompt-hedge-long.mp3 \\
+\textbf{6} & \textbf{fam - BOX} & Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er in eine Kiste. Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. & Perfect, that was great! Now, we'll continue playing. Can you see the animal and the balloon again? The balloon falls down again. This time, it falls into a box. And you have to find it! The animal helps you and looks at the balloon. & fam-box-1.mp3 \\
+\textbf{7} & & Wo ist der Ballon? Drücke auf die Kiste mit dem Ballon. & Where is the balloon? Click on the box with the balloon. & prompt-box-long.mp3 \\
+\textbf{8} & \textbf{test - HEDGE} & Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Hecke. Die Hecke wächst jetzt hoch. & Nice, good job! Now, we'll continue playing. There is the balloon, the animal and the hedge. The hedge is growing a bit now. & test-hedge-1.mp3 \\
+\textbf{9} & & Der Ballon ist nun hinter der Hecke. Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon auf den Boden und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an. & The balloon is behind the hedge now. You can't see it - but the animal can! The balloon falls to the ground and you have to find it. Remember - the animal always looks at the balloon! & test-hedge-2.mp3 \\
+\textbf{10} & & Dann schrumpft die Hecke. Drücke auf die Hecke - wo der Ballon ist. & Now, the hedge is shrinking. On the hedge, click where the balloon is. & test-hedge-3.mp3 \\
+\textbf{11} & \textbf{test - BOX} & Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Kisten. Jetzt wächst eine Hecke hoch. & Nice, good job! Now, we'll continue playing. There is the balloon and the animal. Now, a hedge is growing. & test-box-1.mp3 \\
+\textbf{12} & & Der Ballon ist nun hinter der Hecke. Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon in eine Kiste und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an. & The balloon is behind the hedge now. You can't see it - but the animal can! The balloon falls into a box and you have to find it. Remember - the animal always looks at the balloon! & test-box-2.mp3 \\
+\textbf{13} & & Dann schrumpft die Hecke. Drücke auf die Kiste mit dem Ballon. & Now, the hedge is shrinking. Click on the box with the balloon. & test-box-3.mp3 \\
+\textbf{14} & \textbf{goodbye} & Geschafft! Die Tiere sind schon ganz glücklich vom Spielen! Vielen Dank für deine Hilfe! Bis zum nächsten Mal und liebe Grüße vom Schwein, Affen und Schaf & The animals are super happy after playing. Thanks a lot for your help! See you soon and goodbye from the pig, monkey and sheep & goodbye.mp3 \\
+\textbf{15} & \textbf{general prompt} & Wo ist der Ballon? & Where is the balloon? & prompt-general.mp3 \\
+\textbf{16} & \textbf{touch - no response} & Drück auf den Ballon! & Click on the balloon! & prompt-touch.mp3 \\
+\textbf{17} & \textbf{hedge - no response} & Drücke auf die Hecke - wo der Ballon ist! & On the hedge, click where the balloon is! & prompt-hedge.mp3 \\
+\textbf{18} & \textbf{box - no response} & Drücke auf die Kiste mit dem Ballon! & Click on the box with the balloon! & prompt-box.mp3 \\
+\textbf{19} & \textbf{landing sound of balloon} & - & - & balloon-lands.mp3 \\
+\textbf{20} & \textbf{sound of blinking eyes} & - & - & blink.mp3 \\
+\textbf{21} & \textbf{sound for target click} & - & - & positive-feedback.mp3 \\
+\bottomrule
+\end{longtable}
 
 
 \end{document}
