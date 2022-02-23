@@ -8,3 +8,174 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(viridis) # color scales
+library(ggpubr)
+library(tidyboot)
+library(ggthemes)
+library(brms)
+
+options(scipen = 999)
+theme_set(theme_classic())
+```
+
+```{r load_data}
+testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>% 
+  # determine order of factors
+  mutate(
+    targetPosition = factor(targetPosition, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "box1", "box2", "box3", "box4", "box5")), 
+    studyversion = factor(studyversion, levels = c("hedge", "box")), 
+    datacollection = factor(datacollection, levels = c("in-person - supervised", "remote - unsupervised")),
+    sample = factor(sample, levels = c("kids", "adults")), 
+    studytype = factor(studytype, levels = c("vali", "vali2", "reli"))
+  )
+```
+
+```{r vali_data}
+vali <- testtrials %>% 
+  filter(studytype == "vali" & (ageInYears < 6 | ageInYears == 18))
+```
+
+```{r}
+variationHedgeKids <- vali %>% 
+  filter(studyversion == "hedge" & sample == "kids" & datacollection == "in-person - supervised") %>% 
+  group_by(ageInYears, ageInMonths, subjID) %>%
+  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE) %>% 
+  group_by(ageInYears) %>% 
+  arrange(desc(mean), .by_group = TRUE) %>% 
+  mutate(
+    subjID = as_factor(subjID), 
+    ageInYears = as_factor(ageInYears)
+  )
+
+variationHedgeAdultsInd <- vali %>% 
+  filter(sample == "adults" & studyversion == "hedge") %>% 
+  group_by(ageInYears, subjID) %>%
+  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE)
+
+variationHedgeAdults <- vali %>% 
+  filter(sample == "adults" & studyversion == "hedge") %>% 
+  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE)
+
+ggplot(data = variationHedgeKids, aes(x = ageInMonths, y = mean/160)) +
+  geom_pointrange(aes(ymin = ci_lower/160, ymax = ci_upper/160), position = position_jitter(width = 0.5), size = .25, colour = "darkgrey") +
+  geom_smooth(method = "glm", color = "#006c66", alpha = 0.2) +
+  labs(x = "Age in months", y = "Average imprecision in target width") + 
+  geom_point(data = variationHedgeAdults, aes(x = 78, y = mean/160), color = "#006c66", size = 1) + 
+  scale_y_continuous(limits = c(0, 6), breaks = seq(0, 6, 1)) +
+  geom_errorbar(data = variationHedgeAdults, aes(x = 78, ymin = ci_lower/160, ymax = ci_upper/160), width = 0.2, color = "#006c66") +
+  scale_x_continuous(breaks = seq(36, 78, 6), labels = c(paste0(seq(36, 72, 6)), expression(paste("Adults ",italic("(N"), "= 50)"))))
+
+ggsave("../figures/gafo_hedge_variationAgeMonths.png", width = 6, height = 4)
+```
+
+```{r}
+vali %>% 
+  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
+  group_by(ageInYears) %>% 
+  summarise(n = n_distinct(subjID)) 
+
+variationHedgeAgegroups <- vali %>% 
+  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
+  group_by(ageInYears) %>%
+  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE)
+
+variationHedgeAgegroupsInd <- vali %>% 
+  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
+  group_by(ageInYears, subjID) %>%
+  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE)
+
+ggplot() +
+  geom_jitter(data = variationHedgeAgegroupsInd, aes(x = as.factor(ageInYears), y = mean/160), alpha = .8, width = 0.1, height = 0, col = "grey") + 
+  geom_pointrange(data = variationHedgeAgegroups, aes(x = as.factor(ageInYears), y = mean/160, ymin = ci_lower/160, ymax = ci_upper/160), 
+    size = 0.8, pch = 18) +
+  labs(x = "Age", y = "Average imprecision in target width") + 
+  scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) +
+  scale_x_discrete(breaks = c(3, 4, 5, 18), labels = c(expression(paste("3-year-olds ",italic("(N"), "= 20)")), expression(paste("4-year-olds ",italic("(N"), "= 20)")), expression(paste("5-year-olds ",italic("(N"), "= 20)")), expression(paste("Adults ",italic("(N"), "= 50)"))))
+
+ggsave("../figures/gafo_hedge_variationAgegroup.png", width = 6, height = 4)
+```
+
+```{r variation_hedge}
+variationHedgeInd <- vali %>% 
+  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
+  mutate(
+    ageInYearsExact = ageInMonths/12
+  ) %>% 
+  group_by(sample, ageInYears, ageInYearsExact, subjID) %>% 
+  summarise(mean = mean(abs(clickDistFromTargetCenterX)/160, na.rm = TRUE))
+
+variationHedge <- variationHedgeInd %>%
+  group_by(sample, ageInYears) %>%
+  tidyboot_mean(column = mean)
+
+## without color
+# ggplot() +
+#   # child data
+#   geom_smooth(data = variationHedgeInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "#006c66", alpha = 0.2) +
+#   geom_point(data = variationHedgeInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean), alpha = .25) +
+#   geom_pointrange(data = variationHedge %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) + 
+# 
+#   # adult data
+#   geom_jitter(data = variationHedgeInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
+#   geom_pointrange(data = variationHedge %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +  
+#   labs(x = "Age in years", y = "Average imprecision in target width") + 
+#   scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) +
+#   scale_x_continuous(breaks = c(3.5, 4.5, 5.5, 6.5), labels = c(expression(paste("3-year-olds ",italic("(n"), "= 20)")), expression(paste("4-year-olds ",italic("(n"), "= 20)")), expression(paste("5-year-olds ",italic("(n"), "= 20)")), expression(paste("Adults ",italic("(n"), "= 50)"))))
+
+## with color
+ggplot() +
+  # child data
+  geom_smooth(data = variationHedgeInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "darkgrey", alpha = 0.2) +
+  geom_point(data = variationHedgeInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears)), alpha = .5) +
+  geom_pointrange(data = variationHedge %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears)), size = 0.8, pch = 18) + 
+  scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
+  
+  # adult data
+  geom_jitter(data = variationHedgeInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
+  geom_pointrange(data = variationHedge %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +  
+  labs(x = "Age in years", y = "Average imprecision in target width", color = "Age group") + 
+  scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) + 
+  scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
+  theme(legend.position = c(0.11, 0.18))
+
+ggsave("../figures/gafo_hedge_variation.png", width = 6, height = 4)
+```
+
+```{r variation_box}
+variationBoxInd <- vali %>% 
+  filter(studyversion == "box" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
+  mutate(
+    ageInYearsExact = ageInMonths/12
+  ) %>% 
+  group_by(sample, ageInYears, ageInYearsExact, subjID) %>% 
+  summarise(mean = mean(correctBox, na.rm = TRUE))
+
+variationBox <- variationBoxInd %>%
+  group_by(sample, ageInYears) %>%
+  tidyboot_mean(column = mean)
+
+ggplot() +
+  # chance level
+  geom_hline(aes(yintercept = 0.2), lty = 1) + 
+  geom_hline(aes(yintercept = 0.125), lty = 2) + 
+  
+  # child data
+  geom_smooth(data = variationBoxInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "darkgrey", alpha = 0.2) +
+  geom_point(data = variationBoxInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears)), alpha = .5) +
+  geom_pointrange(data = variationBox %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears)), size = 0.8, pch = 18) + 
+  scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
+  
+  # adult data
+  geom_jitter(data = variationBoxInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
+  geom_pointrange(data = variationBox %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +  
+  labs(x = "Age in years", y = "Proportion correct", color = "Age group") + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) + 
+  scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
+  theme(legend.position = c(0.11, 0.85))
+
+ggsave("../figures/gafo_box_variation.png", width = 6, height = 4)
+```
+

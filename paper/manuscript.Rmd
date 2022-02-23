@@ -77,6 +77,7 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 
 ```{r load_data}
 library(tidyverse)
+library(brms)
 testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>% 
   # determine order of factors
   mutate(
@@ -162,12 +163,12 @@ Developmental psychology is facing a dilemma: many research questions are questi
 # Design of our balloon finding task
 
 ## Stimuli
-Our newly implemented balloon finding task displays cartoon-like stimuli that are engaging for children and adults alike. An animal character (i.e., agent; sheep, monkey, or pig) is placed centrally in a window. A balloon (i.e., target; blue, green, yellow, or red) is located in front of them. The target then falls to the ground. At all times, the agent’s gaze tracks the movement of the target. That is, the pupils and iris of the agent move in a way that their center aligns with the center of the target. While the distance of the target's flight depends on the final location, the target moves at a constant speed. Participants are then asked to locate the target’s position on the screen. 
+Our newly implemented balloon finding task displays cartoon-like stimuli that are engaging for children and adults alike. An animal character (i.e., agent; sheep, monkey, or pig) is placed centrally in a window. A balloon (i.e., target; blue, green, yellow, or red) is located in front of them. The target then falls to the ground. At all times, the agent’s gaze tracks the movement of the target. That is, the pupils and iris of the agent move in a way that their center aligns with the center of the target. While the distance of the target's flight depends on the final location, the target moves at a constant speed. Participants are then asked to locate the target’s destination: they respond by touching or clicking onto position on the screen. 
 
 To keep participants engaged and interested, the presentation of events is accompanied by cartoon-like effects. Each trial starts with an attention-getter: an eye-blinking sound plays while the pupils and iris of the agent enlarge (increase to 130%) and change in opacity (decrease to 75%) for 0.3 sec. The landing of the target is accompanied by a tapping sound. Once the target landed, the instructor's voice asks "Where is the balloon?". After the response is registered, a short plop sound plays and a small orange circle confirms the participants' location choice. If no response got registered within 5 secs after the target landed, an audio prompt reminds the participant to respond. 
 
 ## Trials
-Before participants advance to the test trials, we present four training trials. In the first training trial, participants have full visual access to the target flight and the target's end location and are simply asked to click on the visible balloon. In the second and third training trials, participants have partial visual access: they witness the target flight but cannot see the target's end location. They are then asked to click on the invisible balloon, i.e., the location where they saw the target land. In test trials, participants have no visual access to the target flight nor the end location. Participants are expected to use the agent’s gaze as a cue to locate the target. The first trial of each type comprises a voice-over description of the presented events. The audio descriptions explicitly state that the agent is always looking at the target (see Appendix for audio script). After these four training and audio guided trials, participants receive 15 test trials. The complete sequence of four training trials and 15 test trials can be administered within 5-10 minutes of testing time.
+Before the test trials start, we present four training trials during which participants familiarize themselves with selection positions on the screen. In the first training trial, participants have full visual access to the target flight and the target's end location and are simply asked to click on the visible balloon. In the second and third training trials, participants have partial visual access: they witness the target flight but cannot see the target's end location. They are then asked to click on the invisible balloon, i.e., the location where they saw the target land. In test trials, participants have no visual access to the target flight nor the end location. Participants are expected to use the agent’s gaze as a cue to locate the target. The first trial of each type comprises a voice-over description of the presented events. The audio descriptions explicitly state that the agent is always looking at the target (see Appendix for audio script). After these four training and audio guided trials, participants receive 15 test trials. The complete sequence of four training trials and 15 test trials can be administered within 5-10 minutes of testing time.
 
 ## Study versions
 We designed two study versions which can be chosen according to the researchers' need: there is a continuous *hedge* version and a discrete *box* version. Both versions use the same first training trial and then differ in the consecutive training and test trials. 
@@ -186,7 +187,7 @@ knitr::include_graphics(c("../figures/gafo_hedge.png", "../figures/gafo_boxes.pn
 All agents and target colors appear equally often and are not repeated in more than two consecutive trials. The randomization of the target end location depends on the study version. In the *hedge* version, the full width of the screen is divided into ten bins. Exact coordinates within each bin are then randomly generated. In the *box* version, the target randomly lands in one of the boxes. As with agent and color choice, each bin/box occurs equally often and can only occur twice in a row.
 
 ## Implementation
-Our balloon finding task is presented as an interactive web-app. The task is portable across devices and web browsers and does not require any installation. A great advantage of online testing is that our testing procedure is standardized across participants. By using pre-recorded study instructions,no interaction with the experimenter is necessary during the study. The code is open-source (https://github.com/ccp-eva/gafo-demo) and a live demo version can be found under: https://ccp-odc.eva.mpg.de/gafo-demo/.
+Our balloon finding task is presented as an interactive web-app. The task is portable across devices and web browsers and does not require any installation. A great advantage of online testing is that our testing procedure is standardized across participants. By using pre-recorded study instructions, no interaction with the experimenter is necessary during the study. The code is open-source (https://github.com/ccp-eva/gafo-demo) and a live demo version can be found under: https://ccp-odc.eva.mpg.de/gafo-demo/.
 
 The web-app was programmed in JavaScript (ECMAScript 2015, i.e., ES6), HTML5, CSS and PHP. 
 For the web-app development, we chose the zero configuration bundler Parcel. It enables a live server for debugging, makes imports easy, and minifies scripts in order to save data storage.
@@ -197,20 +198,20 @@ The GreenSock Animation Platform (GSAP; TODO: insert citation) library was used 
 We use URL parameters to capture the participant's ID, language and study version. 
 
 The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
-For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device.
+For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device. For child samples, we upload safety copies of the already collected responses after the fourth test trial. In cases where children want to stop participation earlier, no responses get lost.
 
-(ref:figlab2) **Infrastructure for online testing**. With our new infrastructure, subjects aged 3 – 99+ can participate. Data collection is efficient and automatized and can take place anywhere: at home, in kindergartens or research institutes. Our task is presented as a website that works across devices. The scripts for the website and recorded data are stored on secure local servers.
+(ref:figlab2) **Infrastructure for online testing**. (i) With our new infrastructure, subjects aged 3 – 99+ can participate. Data collection is efficient and automatized and can take place anywhere: at home, in kindergartens or research institutes. (ii) Our task is presented as a website that works across devices. (iii) The scripts for the website and recorded data are stored on secure local servers.
 ```{r fig2, out.width="100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
 knitr::include_graphics("../figures/infrastructure.png")
 ```
 
 ## Data processing
-- workflow server to R, converting coordinate systems
-We used `r cite_r("r-references.bib")` for all our analyses.
-For child samples, we uploaded safety copies of the already collected responses after the fourth test trial. In cases where children want to stop participation earlier, no responses get lost. All test trials without voice over description are included in our analyses.
-
+We used `r cite_r("r-references.bib")` for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses. 
+All test trials without voice over description are included in our analyses.
 
 # Does the balloon finding task induce variation?
+Our first aim was to assess whether our balloon finding task induces variation in a child and adult sample. The pre-registrations can be found here: https://osf.io/snju6 (child sample) and here: https://osf.io/r3bhn (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between May 2021 and XXX 2022.
+
 ```{r vali_sample}
 vali <- testtrials %>% 
   filter(studytype == "vali" & (ageInYears < 6 | ageInYears == 18))
@@ -257,8 +258,6 @@ vali_adults <- vali_adults %>%
   full_join(vali_adults_gender, by = character())
 ```
 ## Participants
-Our first aim was to assess whether our balloon finding task induces variation in a child and adult sample. The pre-registrations can be found here: https://osf.io/snju6 (child sample) and here: https://osf.io/r3bhn (adult sample). Participants were equally distributed across the two study versions. 
-
 For our child sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education. 
 The child sample consisted of 
 `r sum(vali_kids$nTotal[vali_kids$datacollection == "in-person - supervised"])` children, including 
@@ -286,12 +285,32 @@ In addition, we recruited adult participants by advertising the study on *Prolif
 For completing the study, subjects were payed above the fixed minimum wage (in average £10.00 per hour). *Prolific* distributed our study link to potential participants, while the hosting of the online study was done by local servers in the Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany.
 
 ## Procedure
+Children were tested in a quiet room in their daycare. An experimenter guided the child through the different parts of the study.
 All participants received 15 test trials that were displayed as described above. In the box version, we decided to adjust the task difficulty according to the participant's age: children were presented with five boxes while adults were presented with eight boxes as possible hiding location of the target. 
 
 ## Results
-- for hedge & box
 - sanity check: developmental trajectory
 - remote testing: online child sample as side note
+
+We captured a developmental trajectory of gaze cue understanding. With increasing age, participants get more and more accurate in their performance.
+
+(ref:figlab3) **Interindividual variation**. 
+The regression line shows the developmental trajectory (with 95% CI) of children's performance by age. 
+Colored diamonds show means by age in years (with 95% CI based on non-parametric bootstrap). Light shapes show the mean performance for each subject.
+(a) Variation in the hedge version. Here, we measure performance as the average imprecision, i.e., the absolute click distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. 
+(b) Variation in the box version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. The straight line shows level of performance expected by chance for the child sample (20%, i.e., 1 out of 5 boxes). Dotted line shows level of performance expected by chance for the adult sample (12.5%, i.e., 1 out of 8 boxes).
+
+```{r fig3, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab3)"}
+# {r, echo=FALSE, out.width="49%", out.height="20%", fig.cap="figlab1", fig.show='hold', fig.align='center'}
+knitr::include_graphics(c("../figures/gafo_hedge_variation.png", "../figures/gafo_box_variation.png"))
+``` 
+
+TODO: For investigating the internal consistency of our task, we split the test trials into halves...
+
+(ref:figlab4) **Internal consistency**. 
+```{r fig4, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab4)"}
+# knitr::include_graphics(c("../figures/gafo_hedge_variation.png", "../figures/gafo_box_variation.png"))
+``` 
 
 To assess whether we would gain similar results in a remote, unsupervised testing context with children, we recruited an additional online sample of `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised"])` children, including 
 `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` 3-year-olds 
@@ -317,7 +336,18 @@ In the beginning of the online study, families were invited to enter "our virtua
 After completion, families received a little crafting / coloring sheet as a small thank-you gift.
 Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen. Caregivers were then asked to act as the "digital finger" of their children and click on the indicated box.
 
+(ref:figlab5) **Comparing data collection modes**. 
+
+```{r fig5, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab5)"}
+# knitr::include_graphics(c("../figures/gafo_hedge_variation.png", "../figures/gafo_box_variation.png"))
+``` 
+
+## Discussion
+Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation in across all age groups: some three-year-olds were more precise than some five-year-olds. Internal consistency indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task. Furthermore, we found comparable results for an unsupervised remote child sample. This underlines how flexibly our new task can be used. 
+
 # Can we capture variation reliably?
+Based on the results of Study 1, we wanted to further investigate whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the test-retest reliability by testing the same individual twice. The pre-registrations can be found here: https://osf.io/xqm73 (child sample) and here: https://osf.io/nu62m (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between XXX 2021 and XXX 2022.
+
 ```{r reli_sample}
 reli <- testtrials %>% 
   filter(studytype == "reli" & (ageInYears < 6 | ageInYears == 18) & completedReli)
@@ -364,8 +394,6 @@ reli_adults <- reli_adults %>%
   full_join(reli_adults_gender, by = character())
 ```
 ## Participants
-Our second aim was to assess whether the variation that we captured with our balloon finding task is reliable. The pre-registrations can be found here: https://osf.io/xqm73 (child sample) and here: https://osf.io/nu62m (adult sample).
-
 For our child sample, we again went to kindergartens in Leipzig and surroundings.
 The child sample consisted of 
 `r sum(reli_kids$nTotal[reli_kids$datacollection == "in-person - supervised"])` children, including 
@@ -401,6 +429,7 @@ Adults in the hedge version received 30 test trials, each of the ten bin occurri
 - test-retest
 
 # Exploring the external validity of our task
+Our third aim was to assess whether the captured individual variation in gaze cue understanding relates to factors in children's real live social surroundings. 
 ```{r peerexposure_sample}
 pe <- testtrials %>% 
   filter(ageInYears < 6) %>% 
@@ -430,7 +459,7 @@ pe_sample <- pe_sample %>%
 ```
 
 ## Participants
-Our third aim was to assess whether the captured individual variation in gaze cue understanding relates to factors in children's real live social surroundings. For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. Our sample consisted of 
+For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. Our sample consisted of 
 `r sum(pe_sample$nTotal)` children, including 
 `r sum(pe_sample$nTotal[pe_sample$ageInYears == "3"])` 3-year-olds 
 (mean = `r sum(pe_sample$meanAgeInMonths[pe_sample$ageInYears == "3"])` months, 
