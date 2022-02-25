@@ -176,11 +176,11 @@ In the *hedge* version, participants have to indicate their estimated target loc
 Here, the dependent variable is imprecision, which is defined as the absolute difference between the target's true x coordinate and the x coordinate of the participant’s click.
 In the *box* version, participants are asked to click on a box that hides the target. Researchers have the choice of how many boxes are shown: one up to eight boxes can be displayed as potential hiding locations. Here, we use a categorical outcome (i.e., which box was clicked) to calculate the proportion of correct responses. 
 Note that in the test trials of both study versions, the target flight is covered by a hedge. In the *hedge* version, the hedge then shrinks to a minimum height required to cover the target's end location. In the *box* version, the hedge shrinks completely. The boxes then hide the target's final destination. 
-(ref:figlab1) **Study versions of the balloon finding task**. (a) Screenshots from the continuous *hedge* version of the task. (b) Screenshots from the discrete *box* version of the task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground / into a box. The agent's eyes track the movement of the target. 
+(ref:figlab1) **Study versions of the balloon finding task**. (a) Screenshots from the continuous *hedge* version of the task. (b) Screenshots from the discrete *box* version of the task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set individually. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground / into a box. The agent's eyes track the movement of the target. 
 
 ```{r fig1, fig.show = "hold", out.width = "100%", fig.align = "default", fig.cap = "(ref:figlab1)",}
 # {r, echo=FALSE, out.width="49%", out.height="20%", fig.cap="figlab1", fig.show='hold', fig.align='center'}
-knitr::include_graphics(c("../figures/gafo_hedge.png", "../figures/gafo_boxes.png"))
+knitr::include_graphics(c("../figures/gafo_hedge_procedure.png", "../figures/gafo_box_procedure.png"))
 ``` 
 
 ## Randomization
@@ -290,8 +290,8 @@ All participants received 15 test trials that were displayed as described above.
 
 ## Results
 - sanity check: developmental trajectory
-- remote testing: online child sample as side note
 
+### Interindividual variation
 We captured a developmental trajectory of gaze cue understanding. With increasing age, participants get more and more accurate in their performance.
 
 (ref:figlab3) **Interindividual variation**. 
@@ -305,14 +305,27 @@ Colored diamonds show means by age in years (with 95% CI based on non-parametric
 knitr::include_graphics(c("../figures/gafo_hedge_variation.png", "../figures/gafo_box_variation.png"))
 ``` 
 
-TODO: For investigating the internal consistency of our task, we split the test trials into halves...
+### Internal consistency
+```{r variation_splithalf}
+splithalf <- readRDS(file = "../stats/gafo-splithalf.rds") 
+```
+
+TODO: cite splithalfr package
+We were interested to see whether our found inter-individual variation in gaze cue understanding is reliable. As a first step, we investigated the internal consistency. In the hedge version, we found a splithalf reliability of 
+`r splithalf$hedge_odd_even` (95%CI [`r splithalf$hedge_odd_even_ci_lower`;`r splithalf$hedge_odd_even_ci_upper`]) when applying an odd-even split, and splithalf reliability of 
+`r splithalf$hedge_first_second` (95%CI [`r splithalf$hedge_first_second_ci_lower`;`r splithalf$hedge_first_second_ci_upper`]) when splitting trials in the first and second test halves. 
+For the box version, we found a splithalf reliability of 
+`r splithalf$box_odd_even` (95%CI [`r splithalf$box_odd_even_ci_lower`;`r splithalf$box_odd_even_ci_upper`]) when applying an odd-even split, and splithalf reliability of 
+`r splithalf$box_first_second` (95%CI [`r splithalf$box_first_second_ci_lower`;`r splithalf$box_first_second_ci_upper`]) when splitting trials in the first and second test halves.
 
 (ref:figlab4) **Internal consistency**. 
 ```{r fig4, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab4)"}
-# knitr::include_graphics(c("../figures/gafo_hedge_variation.png", "../figures/gafo_box_variation.png"))
+knitr::include_graphics(c("../figures/gafo_hedge_intCon.png", "../figures/gafo_box_intCon.png"))
 ``` 
 
-To assess whether we would gain similar results in a remote, unsupervised testing context with children, we recruited an additional online sample of `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised"])` children, including 
+### Remote data collection
+Since our task is implemented in a way that no experimenter interaction is necessary, data can also be collected without supervision. 
+To assess whether we would gain similar results in a remote testing context, we recruited an additional online sample of `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised"])` children, including 
 `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` 3-year-olds 
 (mean = `r sum(vali_kids$meanAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` months, 
 SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])`, 
@@ -331,19 +344,23 @@ SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "remote - unsupe
 range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`
 - `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`, 
 `r sum(vali_kids$nFemales[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])` girls). 
-Families were recruited on a voluntary basis via email from the institute internal database. 
-In the beginning of the online study, families were invited to enter "our virtual institute" and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Subsequently, a brief demographic questionnaire was displayed, asking for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves. 
-After completion, families received a little crafting / coloring sheet as a small thank-you gift.
+Families were recruited on a voluntary basis via email from the institute internal database. Every child received a personalized link and families could participate at any time or location they wanted.
+In the beginning of the online study, families were invited to enter "our virtual institute" and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. We stressed that caregivers should not help their children and that all kinds of child behavior were interesting to us. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves. After completion, families received a little crafting / coloring sheet as a small thank-you gift.
 Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen. Caregivers were then asked to act as the "digital finger" of their children and click on the indicated box.
 
-(ref:figlab5) **Comparing data collection modes**. 
+As Figure 5 shows, our remotely collected data closely resembled the data from the kindergarten sample. We found a minor difference in that children that participate remotely are slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to help with the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children. 
 
+(ref:figlab5) **Comparing data collection modes**. 
+The regression line shows the developmental trajectory (with 95% CI) of children's performance by age, separated by data collection mode. 
+Colored diamonds show means by age in years (with 95% CI based on non-parametric bootstrap). Light shapes show the mean performance for each subject.
+(a) Variation in the hedge version split by data collection mode. Performance is measured as the average imprecision, i.e., the absolute click distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. 
+(b) Variation in the box version split by data collection mode. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. The straight line shows level of performance expected by chance for the child sample (20%, i.e., 1 out of 5 boxes).
 ```{r fig5, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab5)"}
 knitr::include_graphics(c("../figures/gafo_hedge_remote.png", "../figures/gafo_box_remote.png"))
 ``` 
 
 ## Discussion
-Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation in across all age groups: some three-year-olds were more precise than some five-year-olds. Internal consistency indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task. Furthermore, we found comparable results for an unsupervised remote child sample. This underlines how flexibly our new task can be used. 
+Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation in across all age groups: some three-year-olds were more precise than some five-year-olds. Internal consistency indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used. 
 
 # Can we capture variation reliably?
 Based on the results of Study 1, we wanted to further investigate whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the test-retest reliability by testing the same individual twice. The pre-registrations can be found here: https://osf.io/xqm73 (child sample) and here: https://osf.io/nu62m (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between XXX 2021 and XXX 2022.
@@ -459,7 +476,7 @@ pe_sample <- pe_sample %>%
 ```
 
 ## Participants
-For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. Our sample consisted of 
+For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This ub sample consisted of 
 `r sum(pe_sample$nTotal)` children, including 
 `r sum(pe_sample$nTotal[pe_sample$ageInYears == "3"])` 3-year-olds 
 (mean = `r sum(pe_sample$meanAgeInMonths[pe_sample$ageInYears == "3"])` months, 
@@ -479,6 +496,9 @@ SD = `r sum(pe_sample$sdAgeInMonths[pe_sample$ageInYears == "5"])`,
 range = `r sum(pe_sample$minAgeInMonths[pe_sample$ageInYears == "5"])`
 - `r sum(pe_sample$maxAgeInMonths[pe_sample$ageInYears == "5"])`, 
 `r sum(pe_sample$nFemales[pe_sample$ageInYears == "5"])` girls). 
+
+## Procedure
+Families of our kindergarten and online child sample were asked to fill out a brief demographic questionnaire (print out / online questionnaire). We asked for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day. 
 
 ## Results
 - peer exposure (hedge & box combined?)
