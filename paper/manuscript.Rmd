@@ -339,7 +339,7 @@ Depending on the participant's device, the website automatically presented the h
 (ref:figlab5) **Comparing data collection modes**. 
 
 ```{r fig5, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab5)"}
-# knitr::include_graphics(c("../figures/gafo_hedge_variation.png", "../figures/gafo_box_variation.png"))
+knitr::include_graphics(c("../figures/gafo_hedge_remote.png", "../figures/gafo_box_remote.png"))
 ``` 
 
 ## Discussion

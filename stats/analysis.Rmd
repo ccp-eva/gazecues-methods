@@ -38,40 +38,28 @@ vali <- testtrials %>%
   filter(studytype == "vali" & (ageInYears < 6 | ageInYears == 18))
 ```
 
-```{r variation_hedge}
+```{r variation_hedge_preparateData}
 variationHedgeInd <- vali %>% 
-  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
+  filter(studyversion == "hedge") %>% 
   mutate(
     ageInYearsExact = ifelse(sample == "kids", ageInMonths/12, 18), 
     ageInMonthsCentered = scale(ageInYearsExact, center = TRUE, scale = TRUE)[,1],
   ) %>% 
-  group_by(sample, ageInYears, ageInYearsExact, ageInMonthsCentered, subjID) %>%
+  group_by(sample, datacollection, ageInYears, ageInYearsExact, ageInMonthsCentered, subjID) %>%
   summarise(mean = mean(abs(clickDistFromTargetCenterX)/160, na.rm = TRUE))
 
 variationHedge <- variationHedgeInd %>%
-  group_by(sample, ageInYears) %>%
+  group_by(sample, datacollection, ageInYears) %>%
   tidyboot_mean(column = mean)
+```
 
-## without color
-# ggplot() +
-#   # child data
-#   geom_smooth(data = variationHedgeInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "#006c66", alpha = 0.2) +
-#   geom_point(data = variationHedgeInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean), alpha = .25) +
-#   geom_pointrange(data = variationHedge %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) + 
-# 
-#   # adult data
-#   geom_jitter(data = variationHedgeInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
-#   geom_pointrange(data = variationHedge %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +  
-#   labs(x = "Age in years", y = "Average imprecision in target width") + 
-#   scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) +
-#   scale_x_continuous(breaks = c(3.5, 4.5, 5.5, 6.5), labels = c(expression(paste("3-year-olds ",italic("(n"), "= 20)")), expression(paste("4-year-olds ",italic("(n"), "= 20)")), expression(paste("5-year-olds ",italic("(n"), "= 20)")), expression(paste("Adults ",italic("(n"), "= 50)"))))
-
-## with color
+```{r variation_hedge}
+## variation without remote kids
 ggplot() +
   # child data
-  geom_smooth(data = variationHedgeInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "darkgrey", alpha = 0.2) +
-  geom_point(data = variationHedgeInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears)), alpha = .5) +
-  geom_pointrange(data = variationHedge %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears)), size = 0.8, pch = 18) + 
+  geom_smooth(data = variationHedgeInd %>% filter(sample == "kids" & datacollection == "in-person - supervised"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "darkgrey", alpha = 0.2) +
+  geom_point(data = variationHedgeInd %>% filter(sample == "kids" & datacollection == "in-person - supervised"), aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears)), alpha = .5) +
+  geom_pointrange(data = variationHedge %>% filter(sample == "kids" & datacollection == "in-person - supervised"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears)), size = 0.8, pch = 18) + 
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
   
   # adult data
@@ -85,29 +73,52 @@ ggplot() +
 ggsave("../figures/gafo_hedge_variation.png", width = 6, height = 4)
 ```
 
-```{r variation_box}
+```{r variation_hedge_remote}
+# with remote sample
+ggplot() +
+  # child data
+  geom_smooth(data = variationHedgeInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean, group = datacollection, col = datacollection), method = "glm", alpha = 0.2, size = 0.5) + 
+  geom_point(data = variationHedgeInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean, col = datacollection), alpha = .25) +
+  geom_pointrange(data = variationHedge %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = datacollection), size = 0.8, pch = 18, position=position_dodge(width = 0.1)) +
+  scale_color_manual(values = c("#00b1ea", "#29485d"), labels = c("in-person - supervised", "remote - unsupervised")) +
+  
+  # adult data
+  geom_jitter(data = variationHedgeInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
+  geom_pointrange(data = variationHedge %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +
+  
+  labs(x = "Age in years", y = "Average imprecision in target width", color = "Data collection mode") + 
+  scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) + 
+  scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
+  theme(legend.position = c(0.85, 0.88))
+
+ggsave("../figures/gafo_hedge_remote.png", width = 6, height = 4)
+```
+
+```{r variation_box_prepareData}
 variationBoxInd <- vali %>% 
-  filter(studyversion == "box" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
+  filter(studyversion == "box") %>% 
   mutate(
     ageInYearsExact = ifelse(sample == "kids", ageInMonths/12, 18), 
     ageInMonthsCentered = scale(ageInYearsExact, center = TRUE, scale = TRUE)[,1],
   ) %>% 
-  group_by(sample, ageInYears, ageInYearsExact, ageInMonthsCentered, subjID) %>% 
+  group_by(sample, datacollection, ageInYears, ageInYearsExact, ageInMonthsCentered, subjID) %>% 
   summarise(mean = mean(correctBox, na.rm = TRUE))
 
 variationBox <- variationBoxInd %>%
-  group_by(sample, ageInYears) %>%
+  group_by(sample, datacollection, ageInYears) %>%
   tidyboot_mean(column = mean)
+```
 
+```{r variation_box} 
 ggplot() +
   # chance level
   geom_hline(aes(yintercept = 0.2), lty = 1) + 
   geom_hline(aes(yintercept = 0.125), lty = 2) + 
   
   # child data
-  geom_smooth(data = variationBoxInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "darkgrey", alpha = 0.2) +
-  geom_point(data = variationBoxInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears)), alpha = .5) +
-  geom_pointrange(data = variationBox %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears)), size = 0.8, pch = 18) + 
+  geom_smooth(data = variationBoxInd %>% filter(sample == "kids" & datacollection == "in-person - supervised"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "darkgrey", alpha = 0.2) +
+  geom_point(data = variationBoxInd %>% filter(sample == "kids" & datacollection == "in-person - supervised"), aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears)), alpha = .5) +
+  geom_pointrange(data = variationBox %>% filter(sample == "kids" & datacollection == "in-person - supervised"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears)), size = 0.8, pch = 18) + 
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
   
   # adult data
@@ -121,77 +132,27 @@ ggplot() +
 ggsave("../figures/gafo_box_variation.png", width = 6, height = 4)
 ```
 
-```{r}
-# ICC
-# no simple ICC function for brms models. use lmer instead
-library(lme4)
-library(sjstats)
+```{r variation_box_remote}
+# with remote sample
+ggplot() +
+  # chance level
+  geom_hline(aes(yintercept = 0.2), lty = 1) + 
+  geom_hline(aes(yintercept = 0.125), lty = 2) + 
+  
+  # child data
+  geom_smooth(data = variationBoxInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean, group = datacollection, col = datacollection), method = "glm", alpha = 0.2, size = 0.5) +
+  geom_point(data = variationBoxInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean, col = datacollection), alpha = .25) +
+  geom_pointrange(data = variationBox %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = datacollection), size = 0.8, pch = 18, position=position_dodge(width = 0.1)) +
+  scale_color_manual(values = c("#00b1ea", "#29485d"), labels = c("in-person - supervised", "remote - unsupervised")) +
+  
+  # adult data
+  geom_jitter(data = variationBoxInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
+  geom_pointrange(data = variationBox %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +
+  
+  labs(x = "Age in years", y = "Average imprecision in target width", color = "Data collection mode") + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) + 
+  scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
+  theme(legend.position = c(0.17, 0.9))
 
-hedgeMdata <- vali %>% 
-  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
-  mutate(
-    imprecision = abs(clickDistFromTargetCenterX), 
-    bin = case_when(
-                      targetPosition == 5 | targetPosition == 6 ~ 1, 
-                      targetPosition == 4 | targetPosition == 7 ~ 2, 
-                      targetPosition == 3 | targetPosition == 8 ~ 3, 
-                      targetPosition == 2 | targetPosition == 9 ~ 4,                       
-                      targetPosition == 1 | targetPosition == 10 ~ 5), 
-    trial = scale(trialNr, center = TRUE, scale = TRUE)[,1],
-    pos = scale(targetCentralityX, center = TRUE, scale = TRUE)[,1], 
-  ) %>% 
-  select(subjID, imprecision, bin, pos, trial)
-
-hedgeID <- lmer(imprecision ~ (1 | subjID), data = hedgeMdata)
-sjstats::icc(hedgeID) # 37% is attributable to between-person variation, 63% is attributable to within-person variation.
-
-hedgeIDBin <- lmer(imprecision ~ (bin | subjID), data = hedgeMdata)
-sjstats::icc(hedgeIDBin) # 50% is attributable to between-person variation, 50% is attributable to within-person variation.
-
-hedgeIDBinRE <- lmer(imprecision ~ (bin | subjID) + (1 | bin), data = hedgeMdata)
-sjstats::icc(hedgeIDBinRE) # 53.1% is attributable to between-person variation
-
-hedgeIDBinF <- lmer(imprecision ~ bin + (bin | subjID), data = hedgeMdata)
-sjstats::icc(hedgeIDBinF) # Adjusted ICC: 0.550, Conditional ICC: 0.470
-
-hedgeIDPos <- lmer(imprecision ~ (pos | subjID), data = hedgeMdata)
-sjstats::icc(hedgeIDPos) # Adjusted ICC: 0.593, Conditional ICC: 0.593
-
-hedgeIDPosF <- lmer(imprecision ~ pos + (pos | subjID), data = hedgeMdata)
-sjstats::icc(hedgeIDPosF) # Adjusted ICC: 0.550, Conditional ICC: 0.465
-
-hedgeIDPosTrial <- lmer(imprecision ~ pos + (pos + trial | subjID), data = hedgeMdata)
-sjstats::icc(hedgeIDPosTrial) # Adjusted ICC: 0.556, Conditional ICC: 0.469
-
-hedgeIDPosTrialF <- lmer(imprecision ~ pos + trial + (pos + trial | subjID), data = hedgeMdata)
-sjstats::icc(hedgeIDPosTrialF) # Adjusted ICC: 0.559, Conditional ICC: 0.473
-
-# => der wert steigt, je besser wir within erklären 
-# => Target position ist wichtig, trial weniger
-
-# icc() calculates an adjusted and conditional ICC, which both take all sources of uncertainty (i.e. of all random effects) into account. While the adjusted ICC only relates to the random effects, the conditional ICC also takes the fixed effects variances into account (see Nakagawa et al. 2017). 
-# (1 | subjID) + (1 | targetBin) # symmetrisch, binned
-# (targetBin | subjID) + (1 | targetBin) # symmetrisch, binned. targetBin kann variieren zwischen IDs
-# fixed kein pooling, unterschiedliche levels frei geschätzt. RE pooling, shrinkage
-
-# targetCentrality + (targetCentrality | ID) # linear & symmetrisch, metrisch. als abweichung von mean
-# nicht als RE, dann wärs gaussian process
-
-# split into between and within subjects component
-hedgeICCdata %>% 
-  mutate(
-    meanOverall = mean(imprecision, na.rm = TRUE), 
-    meanCentered =  imprecision - meanOverall, # subtract grand mean from the raw scores 
-  ) %>% 
-  group_by(subjID) %>% 
-  mutate(
-    imprecisionB = mean(meanCentered, na.rm = TRUE), # between-subjects mean from this grand mean centered variable
-    imprecisionW = meanCentered - imprecisionB, # within-subjects mean using this between-subject mean
-  ) 
+ggsave("../figures/gafo_box_remote.png", width = 6, height = 4)
 ```
-
-```{r}
-
-
-```
-
