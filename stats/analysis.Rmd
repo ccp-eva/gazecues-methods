@@ -38,73 +38,14 @@ vali <- testtrials %>%
   filter(studytype == "vali" & (ageInYears < 6 | ageInYears == 18))
 ```
 
-```{r}
-variationHedgeKids <- vali %>% 
-  filter(studyversion == "hedge" & sample == "kids" & datacollection == "in-person - supervised") %>% 
-  group_by(ageInYears, ageInMonths, subjID) %>%
-  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE) %>% 
-  group_by(ageInYears) %>% 
-  arrange(desc(mean), .by_group = TRUE) %>% 
-  mutate(
-    subjID = as_factor(subjID), 
-    ageInYears = as_factor(ageInYears)
-  )
-
-variationHedgeAdultsInd <- vali %>% 
-  filter(sample == "adults" & studyversion == "hedge") %>% 
-  group_by(ageInYears, subjID) %>%
-  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE)
-
-variationHedgeAdults <- vali %>% 
-  filter(sample == "adults" & studyversion == "hedge") %>% 
-  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE)
-
-ggplot(data = variationHedgeKids, aes(x = ageInMonths, y = mean/160)) +
-  geom_pointrange(aes(ymin = ci_lower/160, ymax = ci_upper/160), position = position_jitter(width = 0.5), size = .25, colour = "darkgrey") +
-  geom_smooth(method = "glm", color = "#006c66", alpha = 0.2) +
-  labs(x = "Age in months", y = "Average imprecision in target width") + 
-  geom_point(data = variationHedgeAdults, aes(x = 78, y = mean/160), color = "#006c66", size = 1) + 
-  scale_y_continuous(limits = c(0, 6), breaks = seq(0, 6, 1)) +
-  geom_errorbar(data = variationHedgeAdults, aes(x = 78, ymin = ci_lower/160, ymax = ci_upper/160), width = 0.2, color = "#006c66") +
-  scale_x_continuous(breaks = seq(36, 78, 6), labels = c(paste0(seq(36, 72, 6)), expression(paste("Adults ",italic("(N"), "= 50)"))))
-
-ggsave("../figures/gafo_hedge_variationAgeMonths.png", width = 6, height = 4)
-```
-
-```{r}
-vali %>% 
-  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
-  group_by(ageInYears) %>% 
-  summarise(n = n_distinct(subjID)) 
-
-variationHedgeAgegroups <- vali %>% 
-  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
-  group_by(ageInYears) %>%
-  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE)
-
-variationHedgeAgegroupsInd <- vali %>% 
-  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
-  group_by(ageInYears, subjID) %>%
-  tidyboot_mean(col = abs(clickDistFromTargetCenterX), na.rm = TRUE)
-
-ggplot() +
-  geom_jitter(data = variationHedgeAgegroupsInd, aes(x = as.factor(ageInYears), y = mean/160), alpha = .8, width = 0.1, height = 0, col = "grey") + 
-  geom_pointrange(data = variationHedgeAgegroups, aes(x = as.factor(ageInYears), y = mean/160, ymin = ci_lower/160, ymax = ci_upper/160), 
-    size = 0.8, pch = 18) +
-  labs(x = "Age", y = "Average imprecision in target width") + 
-  scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) +
-  scale_x_discrete(breaks = c(3, 4, 5, 18), labels = c(expression(paste("3-year-olds ",italic("(N"), "= 20)")), expression(paste("4-year-olds ",italic("(N"), "= 20)")), expression(paste("5-year-olds ",italic("(N"), "= 20)")), expression(paste("Adults ",italic("(N"), "= 50)"))))
-
-ggsave("../figures/gafo_hedge_variationAgegroup.png", width = 6, height = 4)
-```
-
 ```{r variation_hedge}
 variationHedgeInd <- vali %>% 
   filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
   mutate(
-    ageInYearsExact = ageInMonths/12
+    ageInYearsExact = ifelse(sample == "kids", ageInMonths/12, 18), 
+    ageInMonthsCentered = scale(ageInYearsExact, center = TRUE, scale = TRUE)[,1],
   ) %>% 
-  group_by(sample, ageInYears, ageInYearsExact, subjID) %>% 
+  group_by(sample, ageInYears, ageInYearsExact, ageInMonthsCentered, subjID) %>%
   summarise(mean = mean(abs(clickDistFromTargetCenterX)/160, na.rm = TRUE))
 
 variationHedge <- variationHedgeInd %>%
@@ -148,9 +89,10 @@ ggsave("../figures/gafo_hedge_variation.png", width = 6, height = 4)
 variationBoxInd <- vali %>% 
   filter(studyversion == "box" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
   mutate(
-    ageInYearsExact = ageInMonths/12
+    ageInYearsExact = ifelse(sample == "kids", ageInMonths/12, 18), 
+    ageInMonthsCentered = scale(ageInYearsExact, center = TRUE, scale = TRUE)[,1],
   ) %>% 
-  group_by(sample, ageInYears, ageInYearsExact, subjID) %>% 
+  group_by(sample, ageInYears, ageInYearsExact, ageInMonthsCentered, subjID) %>% 
   summarise(mean = mean(correctBox, na.rm = TRUE))
 
 variationBox <- variationBoxInd %>%
@@ -177,5 +119,79 @@ ggplot() +
   theme(legend.position = c(0.11, 0.85))
 
 ggsave("../figures/gafo_box_variation.png", width = 6, height = 4)
+```
+
+```{r}
+# ICC
+# no simple ICC function for brms models. use lmer instead
+library(lme4)
+library(sjstats)
+
+hedgeMdata <- vali %>% 
+  filter(studyversion == "hedge" & ((sample == "kids" & datacollection == "in-person - supervised") | sample == "adults")) %>% 
+  mutate(
+    imprecision = abs(clickDistFromTargetCenterX), 
+    bin = case_when(
+                      targetPosition == 5 | targetPosition == 6 ~ 1, 
+                      targetPosition == 4 | targetPosition == 7 ~ 2, 
+                      targetPosition == 3 | targetPosition == 8 ~ 3, 
+                      targetPosition == 2 | targetPosition == 9 ~ 4,                       
+                      targetPosition == 1 | targetPosition == 10 ~ 5), 
+    trial = scale(trialNr, center = TRUE, scale = TRUE)[,1],
+    pos = scale(targetCentralityX, center = TRUE, scale = TRUE)[,1], 
+  ) %>% 
+  select(subjID, imprecision, bin, pos, trial)
+
+hedgeID <- lmer(imprecision ~ (1 | subjID), data = hedgeMdata)
+sjstats::icc(hedgeID) # 37% is attributable to between-person variation, 63% is attributable to within-person variation.
+
+hedgeIDBin <- lmer(imprecision ~ (bin | subjID), data = hedgeMdata)
+sjstats::icc(hedgeIDBin) # 50% is attributable to between-person variation, 50% is attributable to within-person variation.
+
+hedgeIDBinRE <- lmer(imprecision ~ (bin | subjID) + (1 | bin), data = hedgeMdata)
+sjstats::icc(hedgeIDBinRE) # 53.1% is attributable to between-person variation
+
+hedgeIDBinF <- lmer(imprecision ~ bin + (bin | subjID), data = hedgeMdata)
+sjstats::icc(hedgeIDBinF) # Adjusted ICC: 0.550, Conditional ICC: 0.470
+
+hedgeIDPos <- lmer(imprecision ~ (pos | subjID), data = hedgeMdata)
+sjstats::icc(hedgeIDPos) # Adjusted ICC: 0.593, Conditional ICC: 0.593
+
+hedgeIDPosF <- lmer(imprecision ~ pos + (pos | subjID), data = hedgeMdata)
+sjstats::icc(hedgeIDPosF) # Adjusted ICC: 0.550, Conditional ICC: 0.465
+
+hedgeIDPosTrial <- lmer(imprecision ~ pos + (pos + trial | subjID), data = hedgeMdata)
+sjstats::icc(hedgeIDPosTrial) # Adjusted ICC: 0.556, Conditional ICC: 0.469
+
+hedgeIDPosTrialF <- lmer(imprecision ~ pos + trial + (pos + trial | subjID), data = hedgeMdata)
+sjstats::icc(hedgeIDPosTrialF) # Adjusted ICC: 0.559, Conditional ICC: 0.473
+
+# => der wert steigt, je besser wir within erklären 
+# => Target position ist wichtig, trial weniger
+
+# icc() calculates an adjusted and conditional ICC, which both take all sources of uncertainty (i.e. of all random effects) into account. While the adjusted ICC only relates to the random effects, the conditional ICC also takes the fixed effects variances into account (see Nakagawa et al. 2017). 
+# (1 | subjID) + (1 | targetBin) # symmetrisch, binned
+# (targetBin | subjID) + (1 | targetBin) # symmetrisch, binned. targetBin kann variieren zwischen IDs
+# fixed kein pooling, unterschiedliche levels frei geschätzt. RE pooling, shrinkage
+
+# targetCentrality + (targetCentrality | ID) # linear & symmetrisch, metrisch. als abweichung von mean
+# nicht als RE, dann wärs gaussian process
+
+# split into between and within subjects component
+hedgeICCdata %>% 
+  mutate(
+    meanOverall = mean(imprecision, na.rm = TRUE), 
+    meanCentered =  imprecision - meanOverall, # subtract grand mean from the raw scores 
+  ) %>% 
+  group_by(subjID) %>% 
+  mutate(
+    imprecisionB = mean(meanCentered, na.rm = TRUE), # between-subjects mean from this grand mean centered variable
+    imprecisionW = meanCentered - imprecisionB, # within-subjects mean using this between-subject mean
+  ) 
+```
+
+```{r}
+
+
 ```
 
