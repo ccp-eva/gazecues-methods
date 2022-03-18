@@ -62,6 +62,10 @@ draft             : no
 documentclass     : "apa6"
 classoption       : "man"
 output            : papaja::apa6_pdf
+
+header-includes:
+  - \usepackage{setspace}
+  - \captionsetup[figure]{font={stretch=1}}
 ---
 
 ```{r setup, include = FALSE}
@@ -176,11 +180,14 @@ In the *hedge* version, participants have to indicate their estimated target loc
 Here, the dependent variable is imprecision, which is defined as the absolute difference between the target's true x coordinate and the x coordinate of the participant’s click.
 In the *box* version, participants are asked to click on a box that hides the target. Researchers have the choice of how many boxes are shown: one up to eight boxes can be displayed as potential hiding locations. Here, we use a categorical outcome (i.e., which box was clicked) to calculate the proportion of correct responses. 
 Note that in the test trials of both study versions, the target flight is covered by a hedge. In the *hedge* version, the hedge then shrinks to a minimum height required to cover the target's end location. In the *box* version, the hedge shrinks completely. The boxes then hide the target's final destination. 
-(ref:figlab1) **Study versions of the balloon finding task**. (a) Screenshots from the continuous *hedge* version of the task. (b) Screenshots from the discrete *box* version of the task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set individually. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground / into a box. The agent's eyes track the movement of the target. 
 
-```{r fig1, fig.show = "hold", out.width = "100%", fig.align = "default", fig.cap = "(ref:figlab1)",}
-# {r, echo=FALSE, out.width="49%", out.height="20%", fig.cap="figlab1", fig.show='hold', fig.align='center'}
-knitr::include_graphics(c("../figures/gafo_hedge_procedure.png", "../figures/gafo_box_procedure.png"))
+(ref:figlab1) **Study setup**. 
+(a) Infrastructure for online testing. (i) Subjects aged 3 – 99+ can participate. Data collection can take place anywhere: at home, in kindergartens or research institutes. (ii) The task is presented as a website that works across devices. (iii) The scripts for the website and the recorded data are stored on secure local servers.
+(b) Continuous *hedge* version of the balloon finding task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground. The agent's eyes track the movement of the target. 
+(c) Discrete *box* version of the balloon finding task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set individually.
+
+```{r fig1, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab1)"}
+knitr::include_graphics("../figures/gafo_procedure.jpg")
 ``` 
 
 ## Randomization
@@ -199,11 +206,6 @@ We use URL parameters to capture the participant's ID, language and study versio
 
 The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device. For child samples, we upload safety copies of the already collected responses after the fourth test trial. In cases where children want to stop participation earlier, no responses get lost.
-
-(ref:figlab2) **Infrastructure for online testing**. (i) With our new infrastructure, subjects aged 3 – 99+ can participate. Data collection is efficient and automatized and can take place anywhere: at home, in kindergartens or research institutes. (ii) Our task is presented as a website that works across devices. (iii) The scripts for the website and recorded data are stored on secure local servers.
-```{r fig2, out.width="100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
-knitr::include_graphics("../figures/infrastructure.png")
-```
 
 ## Data processing
 We used `r cite_r("r-references.bib")` for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses. 
@@ -294,15 +296,17 @@ All participants received 15 test trials that were displayed as described above.
 ### Interindividual variation
 We captured a developmental trajectory of gaze cue understanding. With increasing age, participants get more and more accurate in their performance.
 
-(ref:figlab3) **Interindividual variation**. 
-The regression line shows the developmental trajectory (with 95% CI) of children's performance by age. 
-Colored diamonds show means by age in years (with 95% CI based on non-parametric bootstrap). Light shapes show the mean performance for each subject.
-(a) Variation in the hedge version. Here, we measure performance as the average imprecision, i.e., the absolute click distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. 
-(b) Variation in the box version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. The straight line shows level of performance expected by chance for the child sample (20%, i.e., 1 out of 5 boxes). Dotted line shows level of performance expected by chance for the adult sample (12.5%, i.e., 1 out of 8 boxes).
+(ref:figlab2) **Measuring interindividual variation**. 
+(a) Developmental trajectory in continuous *hedge* version. Performance is measured as average imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. 
+(b) Internal consistency (odd-even split) in hedge child sample. (c) Internal consistency in hedge adult sample. (d) Test-retest reliability in hedge child sample. (e) Test-retest reliability in hedge adult sample.
+(f) Developmental trajectory in discrete *box* version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. Dotted black line shows level of performance expected by chance (for child sample 20%, i.e., 1 out of 5 boxes; for adult sample 12.5%, i.e., 1 out of 8 boxes).
+(g) Internal consistency (odd-even split) in box child sample. (h) Internal consistency in box adult sample. (i) Test-retest reliability in box child sample. (j) Test-retest reliability in box adult sample.
+Regression lines with 95% CI show product-moment-correlations with Pearson's correlation coefficient r. 
+Large data points with 95% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year). 
+Small data points show the mean performance for each subject. Shape of data points represents data collection mode: opaque round circles with stand for in-person supervised data collection, translucent diamonds stand for remote unsupervised data collection. Color of data points represent each age group (binned by year).
 
-```{r fig3, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab3)"}
-# {r, echo=FALSE, out.width="49%", out.height="20%", fig.cap="figlab1", fig.show='hold', fig.align='center'}
-knitr::include_graphics(c("../figures/gafo_hedge_variation.png", "../figures/gafo_box_variation.png"))
+```{r fig2, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
+knitr::include_graphics(c("../figures/gafo_results.png"))
 ``` 
 
 ### Internal consistency
@@ -317,11 +321,6 @@ We were interested to see whether our found inter-individual variation in gaze c
 For the box version, we found a splithalf reliability of 
 `r splithalf$box_odd_even` (95%CI [`r splithalf$box_odd_even_ci_lower`;`r splithalf$box_odd_even_ci_upper`]) when applying an odd-even split, and splithalf reliability of 
 `r splithalf$box_first_second` (95%CI [`r splithalf$box_first_second_ci_lower`;`r splithalf$box_first_second_ci_upper`]) when splitting trials in the first and second test halves.
-
-(ref:figlab4) **Internal consistency**. 
-```{r fig4, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab4)"}
-knitr::include_graphics(c("../figures/gafo_hedge_intCon.png", "../figures/gafo_box_intCon.png"))
-``` 
 
 ### Remote data collection
 Since our task is implemented in a way that no experimenter interaction is necessary, data can also be collected without supervision. 
@@ -355,9 +354,6 @@ The regression line shows the developmental trajectory (with 95% CI) of children
 Colored diamonds show means by age in years (with 95% CI based on non-parametric bootstrap). Light shapes show the mean performance for each subject.
 (a) Variation in the hedge version split by data collection mode. Performance is measured as the average imprecision, i.e., the absolute click distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. 
 (b) Variation in the box version split by data collection mode. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. The straight line shows level of performance expected by chance for the child sample (20%, i.e., 1 out of 5 boxes).
-```{r fig5, fig.show = "hold", out.width = "49%", fig.align = "default", fig.cap = "(ref:figlab5)"}
-knitr::include_graphics(c("../figures/gafo_hedge_remote.png", "../figures/gafo_box_remote.png"))
-``` 
 
 ## Discussion
 Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation in across all age groups: some three-year-olds were more precise than some five-year-olds. Internal consistency indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used. 

@@ -3,12 +3,7 @@
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
-  english,
   man,floatsintext]{apa6}
-\title{Measuring individual differences in the understanding of gaze cues across the lifespan}
-\author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1}, Luke Maurits\textsuperscript{1}, Steven Kalinke\textsuperscript{1}, \& Daniel M. Haun\textsuperscript{1}}
-\date{}
-
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
 \usepackage{iftex}
@@ -107,6 +102,15 @@
 \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+\babelprovide[main,import]{english}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
 % Manuscript styling
 \usepackage{upgreek}
 \captionsetup{font=singlespacing,justification=justified}
@@ -122,9 +126,9 @@
 
 % Create new environments so endfloat can handle them
 % \newenvironment{ltable}
-%   {\begin{landscape}\centering\begin{threeparttable}}
-%   {\end{threeparttable}\end{landscape}}
-\newenvironment{lltable}{\begin{landscape}\centering\begin{ThreePartTable}}{\end{ThreePartTable}\end{landscape}}
+%   {\begin{landscape}\begin{center}\begin{threeparttable}}
+%   {\end{threeparttable}\end{center}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
 
 % Enables adjusting longtable caption width to table width
 % Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
@@ -137,6 +141,20 @@
 % \setlength{\parindent}{0.5in}
 % \setlength{\parskip}{0pt plus 0pt minus 0pt}
 
+% Overwrite redefinition of paragraph and subparagraph by the default LaTeX template
+% See https://github.com/crsh/papaja/issues/292
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{\parindent}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries\itshape\typesectitle}}
+
+\renewcommand{\subparagraph}[1]{\@startsection{subparagraph}{5}{1em}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-\z@\relax}%
+  {\normalfont\normalsize\itshape\hspace{\parindent}{#1}\textit{\addperi}}{\relax}}
+\makeatother
+
 % \usepackage{etoolbox}
 \makeatletter
 \patchcmd{\HyOrg@maketitle}
@@ -148,26 +166,32 @@
   {\section*{\protect\normalfont{\@title}}}
   {}{\typeout{Failed to patch title.}}
 \makeatother
-\shorttitle{Gaze cue understanding}
+
+\usepackage{xpatch}
+\makeatletter
+\xapptocmd\appendix
+  {\xapptocmd\section
+    {\addcontentsline{toc}{section}{\appendixname\ifoneappendix\else~\theappendix\fi\\: #1}}
+    {}{\InnerPatchFailed}%
+  }
+{}{\PatchFailed}
 \keywords{social cognition, individual differences, gaze cues, psychometrics\newline\indent Word count: X}
 \usepackage{lineno}
 
 \linenumbers
 \usepackage{csquotes}
-\ifXeTeX
-  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
-  \usepackage{polyglossia}
-  \setmainlanguage[]{english}
-\else
-  \usepackage[main=english]{babel}
-% get rid of language-specific shorthands (see #6817):
-\let\LanguageShortHands\languageshorthands
-\def\languageshorthands#1{}
-\fi
+\usepackage{setspace}
+\captionsetup[figure]{font={stretch=1}}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
+\title{Measuring individual differences in the understanding of gaze cues across the lifespan}
+\author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1}, Luke Maurits\textsuperscript{1}, Steven Kalinke\textsuperscript{1}, \& Daniel M. Haun\textsuperscript{1}}
+\date{}
+
+
+\shorttitle{Gaze cue understanding}
 
 \authornote{
 
@@ -177,7 +201,7 @@ Correspondence concerning this article should be addressed to Julia Prein, Max P
 
 \affiliation{\vspace{0.5cm}\textsuperscript{1} Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany}
 
-\abstract{
+\abstract{%
 There must be an abstract of no more than 250 words.
 One or two sentences providing a \textbf{basic introduction} to the field, comprehensible to a scientist in any discipline.
 
@@ -376,7 +400,7 @@ Developmental psychology is facing a dilemma: many research questions are questi
 
 Our newly implemented balloon finding task displays cartoon-like stimuli that are engaging for children and adults alike. An animal character (i.e., agent; sheep, monkey, or pig) is placed centrally in a window. A balloon (i.e., target; blue, green, yellow, or red) is located in front of them. The target then falls to the ground. At all times, the agent's gaze tracks the movement of the target. That is, the pupils and iris of the agent move in a way that their center aligns with the center of the target. While the distance of the target's flight depends on the final location, the target moves at a constant speed. Participants are then asked to locate the target's destination: they respond by touching or clicking onto position on the screen.
 
-To keep participants engaged and interested, the presentation of events is accompanied by cartoon-like effects. Each trial starts with an attention-getter: an eye-blinking sound plays while the pupils and iris of the agent enlarge (increase to 130\%) and change in opacity (decrease to 75\%) for 0.3 sec.~The landing of the target is accompanied by a tapping sound. Once the target landed, the instructor's voice asks ``Where is the balloon?'' After the response is registered, a short plop sound plays and a small orange circle confirms the participants' location choice. If no response got registered within 5 secs after the target landed, an audio prompt reminds the participant to respond.
+To keep participants engaged and interested, the presentation of events is accompanied by cartoon-like effects. Each trial starts with an attention-getter: an eye-blinking sound plays while the pupils and iris of the agent enlarge (increase to 130\%) and change in opacity (decrease to 75\%) for 0.3 sec.~The landing of the target is accompanied by a tapping sound. Once the target landed, the instructor's voice asks ``Where is the balloon?''. After the response is registered, a short plop sound plays and a small orange circle confirms the participants' location choice. If no response got registered within 5 secs after the target landed, an audio prompt reminds the participant to respond.
 
 \hypertarget{trials}{%
 \subsection{Trials}\label{trials}}
@@ -393,8 +417,20 @@ In the \emph{box} version, participants are asked to click on a box that hides t
 Note that in the test trials of both study versions, the target flight is covered by a hedge. In the \emph{hedge} version, the hedge then shrinks to a minimum height required to cover the target's end location. In the \emph{box} version, the hedge shrinks completely. The boxes then hide the target's final destination.
 
 
+
+
+
+
 \begin{figure}
-\includegraphics[width=1\linewidth]{../figures/gafo_hedge} \includegraphics[width=1\linewidth]{../figures/gafo_boxes} \caption{\textbf{Study versions of the balloon finding task}. (a) Screenshots from the continuous \emph{hedge} version of the task. (b) Screenshots from the discrete \emph{box} version of the task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground / into a box. The agent's eyes track the movement of the target.}\label{fig:fig1}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/gafo_procedure} 
+
+}
+
+\caption{\textbf{Study setup}.
+(a) Infrastructure for online testing. (i) Subjects aged 3 -- 99+ can participate. Data collection can take place anywhere: at home, in kindergartens or research institutes. (ii) The task is presented as a website that works across devices. (iii) The scripts for the website and the recorded data are stored on secure local servers.
+(b) Continuous \emph{hedge} version of the balloon finding task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground. The agent's eyes track the movement of the target.
+(c) Discrete \emph{box} version of the balloon finding task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set individually.}\label{fig:fig1}
 \end{figure}
 
 \hypertarget{randomization}{%
@@ -418,30 +454,19 @@ We use URL parameters to capture the participant's ID, language and study versio
 The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device. For child samples, we upload safety copies of the already collected responses after the fourth test trial. In cases where children want to stop participation earlier, no responses get lost.
 
-
-
-\begin{figure}
-
-{\centering \includegraphics[width=1\linewidth]{../figures/infrastructure} 
-
-}
-
-\caption{\textbf{Infrastructure for online testing}. (i) With our new infrastructure, subjects aged 3 -- 99+ can participate. Data collection is efficient and automatized and can take place anywhere: at home, in kindergartens or research institutes. (ii) Our task is presented as a website that works across devices. (iii) The scripts for the website and recorded data are stored on secure local servers.}\label{fig:fig2}
-\end{figure}
-
 \hypertarget{data-processing-1}{%
 \subsection{Data processing}\label{data-processing-1}}
 
-We used R {[}Version 4.1.2; R Core Team (2021){]} and the R-packages \emph{brms} {[}Version 2.15.0; Bürkner (2017); Bürkner (2018){]}, \emph{dplyr} {[}Version 1.0.7; Wickham, François, Henry, and Müller (2021){]}, \emph{forcats} {[}Version 0.5.1; Wickham (2021a){]}, \emph{ggplot2} {[}Version 3.3.5; Wickham (2016){]}, \emph{ggpubr} {[}Version 0.4.0; Kassambara (2020){]}, \emph{ggthemes} {[}Version 4.2.4; Arnold (2021){]}, \emph{papaja} {[}Version 0.1.0.9997; Aust and Barth (2020){]}, \emph{purrr} {[}Version 0.3.4; Henry and Wickham (2020){]}, \emph{Rcpp} {[}Version 1.0.6; Eddelbuettel and François (2011); Eddelbuettel and Balamuta (2018){]}, \emph{readr} {[}Version 1.4.0; Wickham and Hester (2020){]}, \emph{stringr} {[}Version 1.4.0; Wickham (2019){]}, \emph{tibble} {[}Version 3.1.6; Müller and Wickham (2021){]}, \emph{tidyboot} {[}Version 0.1.1; Braginsky and Yurovsky (2018){]}, \emph{tidyr} {[}Version 1.1.4; Wickham (2021b){]}, \emph{tidyverse} {[}Version 1.3.1; Wickham et al. (2019){]}, \emph{viridis} {[}Version 0.6.1; Garnier et al. (2021a); Garnier et al. (2021b){]}, and \emph{viridisLite} {[}Version 0.4.0; Garnier et al. (2021b){]} for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses.
+We used R (Version 4.1.2; R Core Team, 2021) and the R-packages \emph{brms} (Version 2.15.0; Bürkner, 2017, 2018), \emph{dplyr} (Version 1.0.8; Wickham, François, Henry, \& Müller, 2021), \emph{forcats} (Version 0.5.1; Wickham, 2021a), \emph{ggplot2} (Version 3.3.5; Wickham, 2016), \emph{ggpubr} (Version 0.4.0; Kassambara, 2020), \emph{ggthemes} (Version 4.2.4; Arnold, 2021), \emph{papaja} (Version 0.1.0.9997; Aust \& Barth, 2020), \emph{purrr} (Version 0.3.4; Henry \& Wickham, 2020), \emph{Rcpp} (Eddelbuettel \& Balamuta, 2018; Version 1.0.6; Eddelbuettel \& François, 2011), \emph{readr} (Version 1.4.0; Wickham \& Hester, 2020), \emph{splithalfr} (Version 2.1.1; Thomas, Dylan, Reinout, \& Jaap, 2021), \emph{stringr} (Version 1.4.0; Wickham, 2019), \emph{tibble} (Version 3.1.6; Müller \& Wickham, 2021), \emph{tidyboot} (Version 0.1.1; Braginsky \& Yurovsky, 2018), \emph{tidyr} (Version 1.2.0; Wickham, 2021b), \emph{tidyverse} (Version 1.3.1; Wickham et al., 2019), \emph{tinylabels} (Version 0.2.3; Barth, 2022), \emph{viridis} (Version 0.6.1; Garnier et al., 2021a, 2021b), and \emph{viridisLite} (Version 0.4.0; Garnier et al., 2021b) for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses.
 All test trials without voice over description are included in our analyses.
 
 \hypertarget{does-the-balloon-finding-task-induce-variation}{%
 \section{Does the balloon finding task induce variation?}\label{does-the-balloon-finding-task-induce-variation}}
 
+Our first aim was to assess whether our balloon finding task induces variation in a child and adult sample. The pre-registrations can be found here: \url{https://osf.io/snju6} (child sample) and here: \url{https://osf.io/r3bhn} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between May 2021 and XXX 2022.
+
 \hypertarget{participants}{%
 \subsection{Participants}\label{participants}}
-
-Our first aim was to assess whether our balloon finding task induces variation in a child and adult sample. The pre-registrations can be found here: \url{https://osf.io/snju6} (child sample) and here: \url{https://osf.io/r3bhn} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between May 2021 and XXX 2022.
 
 For our child sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
 The child sample consisted of
@@ -482,9 +507,10 @@ All participants received 15 test trials that were displayed as described above.
 \tightlist
 \item
   sanity check: developmental trajectory
-\item
-  remote testing: online child sample as side note
 \end{itemize}
+
+\hypertarget{interindividual-variation}{%
+\subsubsection{Interindividual variation}\label{interindividual-variation}}
 
 We captured a developmental trajectory of gaze cue understanding. With increasing age, participants get more and more accurate in their performance.
 
@@ -494,19 +520,41 @@ We captured a developmental trajectory of gaze cue understanding. With increasin
 
 
 
+
+
+
 \begin{figure}
-\includegraphics[width=0.49\linewidth]{../figures/gafo_hedge_variation} \includegraphics[width=0.49\linewidth]{../figures/gafo_box_variation} \caption{\textbf{Interindividual variation}.
-The regression line shows the developmental trajectory (with 95\% CI) of children's performance by age.
-Colored diamonds show means by age in years (with 95\% CI based on non-parametric bootstrap). Light shapes show the mean performance for each subject.
-(a) Variation in the hedge version. Here, we measure performance as the average imprecision, i.e., the absolute click distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center.
-(b) Variation in the box version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. The straight line shows level of performance expected by chance for the child sample (20\%, i.e., 1 out of 5 boxes). Dotted line shows level of performance expected by chance for the adult sample (12.5\%, i.e., 1 out of 8 boxes).}\label{fig:fig3}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/gafo_results} 
+
+}
+
+\caption{\textbf{Measuring interindividual variation}.
+(a) Developmental trajectory in continuous \emph{hedge} version. Performance is measured as average imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center.
+(b) Internal consistency (odd-even split) in hedge child sample. (c) Internal consistency in hedge adult sample. (d) Test-retest reliability in hedge child sample. (e) Test-retest reliability in hedge adult sample.
+(f) Developmental trajectory in discrete \emph{box} version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. Dotted black line shows level of performance expected by chance (for child sample 20\%, i.e., 1 out of 5 boxes; for adult sample 12.5\%, i.e., 1 out of 8 boxes).
+(g) Internal consistency (odd-even split) in box child sample. (h) Internal consistency in box adult sample. (i) Test-retest reliability in box child sample. (j) Test-retest reliability in box adult sample.
+Regression lines with 95\% CI show product-moment-correlations with Pearson's correlation coefficient r.
+Large data points with 95\% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year).
+Small data points show the mean performance for each subject. Shape of data points represents data collection mode: opaque round circles with stand for in-person supervised data collection, translucent diamonds stand for remote unsupervised data collection. Color of data points represent each age group (binned by year).}\label{fig:fig2}
 \end{figure}
 
-TODO: For investigating the internal consistency of our task, we split the test trials into halves\ldots{}
+\hypertarget{internal-consistency}{%
+\subsubsection{Internal consistency}\label{internal-consistency}}
 
+TODO: cite splithalfr package
+We were interested to see whether our found inter-individual variation in gaze cue understanding is reliable. As a first step, we investigated the internal consistency. In the hedge version, we found a splithalf reliability of
+0.72 (95\%CI {[}0.60;0.82{]}) when applying an odd-even split, and splithalf reliability of
+0.71 (95\%CI {[}0.51;0.81{]}) when splitting trials in the first and second test halves.
+For the box version, we found a splithalf reliability of
+0.55 (95\%CI {[}0.35;0.69{]}) when applying an odd-even split, and splithalf reliability of
+0.79 (95\%CI {[}0.64;0.86{]}) when splitting trials in the first and second test halves.
 
+\hypertarget{remote-data-collection}{%
+\subsubsection{Remote data collection}\label{remote-data-collection}}
 
-To assess whether we would gain similar results in a remote, unsupervised testing context with children, we recruited an additional online sample of 147 children, including
+Since our task is implemented in a way that no experimenter interaction is necessary, data can also be collected without supervision.
+To assess whether we would gain similar results in a remote testing context, we recruited an additional online sample of 147 children, including
 45 3-year-olds
 (mean = 42.62 months,
 SD = 3.35,
@@ -525,49 +573,52 @@ SD = 3.77,
 range = 60
 - 71,
 27 girls).
-Families were recruited on a voluntary basis via email from the institute internal database.
-In the beginning of the online study, families were invited to enter ``our virtual institute'' and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Subsequently, a brief demographic questionnaire was displayed, asking for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves.
-After completion, families received a little crafting / coloring sheet as a small thank-you gift.
+Families were recruited on a voluntary basis via email from the institute internal database. Every child received a personalized link and families could participate at any time or location they wanted.
+In the beginning of the online study, families were invited to enter ``our virtual institute'' and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. We stressed that caregivers should not help their children and that all kinds of child behavior were interesting to us. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves. After completion, families received a little crafting / coloring sheet as a small thank-you gift.
 Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen. Caregivers were then asked to act as the ``digital finger'' of their children and click on the indicated box.
+
+As Figure 5 shows, our remotely collected data closely resembled the data from the kindergarten sample. We found a minor difference in that children that participate remotely are slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to help with the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
+
+
+
+
 
 
 
 \hypertarget{discussion-1}{%
 \subsection{Discussion}\label{discussion-1}}
 
-Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation in across all age groups: some three-year-olds were more precise than some five-year-olds. Internal consistency indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task. Furthermore, we found comparable results for an unsupervised remote child sample. This underlines how flexibly our new task can be used.
+Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation in across all age groups: some three-year-olds were more precise than some five-year-olds. Internal consistency indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used.
 
 \hypertarget{can-we-capture-variation-reliably}{%
 \section{Can we capture variation reliably?}\label{can-we-capture-variation-reliably}}
 
-Based on the results of Study 1, we wanted to further investigate the reliability of our measure. We analyzed the test-retest reliability by testing the same individual twice.
+Based on the results of Study 1, we wanted to further investigate whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the test-retest reliability by testing the same individual twice. The pre-registrations can be found here: \url{https://osf.io/xqm73} (child sample) and here: \url{https://osf.io/nu62m} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between XXX 2021 and XXX 2022.
 
 \hypertarget{participants-1}{%
 \subsection{Participants}\label{participants-1}}
 
-Our second aim was to assess whether the variation that we captured with our balloon finding task is reliable. The pre-registrations can be found here: \url{https://osf.io/xqm73} (child sample) and here: \url{https://osf.io/nu62m} (adult sample).
-
 For our child sample, we again went to kindergartens in Leipzig and surroundings.
 The child sample consisted of
-87 children, including
-19 3-year-olds
-(mean = 42.57 months,
-SD = 3.32,
+93 children, including
+24 3-year-olds
+(mean = 42.49 months,
+SD = 2.99,
 range = 38
 - 47,
-9 girls),
+13 girls),
 38 4-year-olds
 (mean = 53.77 months,
 SD = 3.16,
 range = 48
 - 59,
 19 girls),
-and 30 5-year-olds
-(mean = 66.10 months,
-SD = 3.43,
+and 31 5-year-olds
+(mean = 66 months,
+SD = 3.42,
 range = 61
 - 71,
-16 girls).
+17 girls).
 
 The adult sample was again recruited over \emph{Prolific} and consisted of 136 English-speakers with an average age of 25.74 years (SD = 8.11, range = 18 - 71, 87 females).
 
@@ -593,14 +644,16 @@ Adults in the hedge version received 30 test trials, each of the ten bin occurri
 \hypertarget{exploring-the-external-validity-of-our-task}{%
 \section{Exploring the external validity of our task}\label{exploring-the-external-validity-of-our-task}}
 
+Our third aim was to assess whether the captured individual variation in gaze cue understanding relates to factors in children's real live social surroundings.
+
 \hypertarget{participants-2}{%
 \subsection{Participants}\label{participants-2}}
 
-Our third aim was to assess whether the captured individual variation in gaze cue understanding relates to factors in children's real live social surroundings. For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. Our sample consisted of
+For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This ub sample consisted of
 130 children, including
 39 3-year-olds
 (mean = 43.02 months,
-SD = 3.26,
+SD = 3.20,
 range = 37
 - 47,
 20 girls),
@@ -611,11 +664,16 @@ range = 48
 - 59,
 26 girls),
 and 47 5-year-olds
-(mean = 66.19 months,
-SD = 3.56,
+(mean = 66.13 months,
+SD = 3.55,
 range = 60
 - 71,
 23 girls).
+
+\hypertarget{procedure-3}{%
+\subsection{Procedure}\label{procedure-3}}
+
+Families of our kindergarten and online child sample were asked to fill out a brief demographic questionnaire (print out / online questionnaire). We asked for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day.
 
 \hypertarget{results-5}{%
 \subsection{Results}\label{results-5}}
@@ -693,6 +751,9 @@ Arnold, J. B. (2021). \emph{Ggthemes: Extra themes, scales and geoms for 'ggplot
 \leavevmode\vadjust pre{\hypertarget{ref-R-papaja}{}}%
 Aust, F., \& Barth, M. (2020). \emph{{papaja}: {Create} {APA} manuscripts with {R Markdown}}. Retrieved from \url{https://github.com/crsh/papaja}
 
+\leavevmode\vadjust pre{\hypertarget{ref-R-tinylabels}{}}%
+Barth, M. (2022). \emph{{tinylabels}: Lightweight variable labels}. Retrieved from \url{https://cran.r-project.org/package=tinylabels}
+
 \leavevmode\vadjust pre{\hypertarget{ref-R-tidyboot}{}}%
 Braginsky, M., \& Yurovsky, D. (2018). \emph{Tidyboot: Tidyverse-compatible bootstrapping}. Retrieved from \url{https://CRAN.R-project.org/package=tidyboot}
 
@@ -725,6 +786,9 @@ Müller, K., \& Wickham, H. (2021). \emph{Tibble: Simple data frames}. Retrieved
 
 \leavevmode\vadjust pre{\hypertarget{ref-R-base}{}}%
 R Core Team. (2021). \emph{R: A language and environment for statistical computing}. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from \url{https://www.R-project.org/}
+
+\leavevmode\vadjust pre{\hypertarget{ref-R-splithalfr}{}}%
+Thomas, P., Dylan, M., Reinout, W., \& Jaap, M. (2021). Methods to split cognitive task data for estimating split-half reliability: A comprehensive review and systematic assessment. \emph{Psychonomic Bulletin \& Review}, 1--11. \url{https://doi.org/10.3758/s13423-021-01948-3}
 
 \leavevmode\vadjust pre{\hypertarget{ref-R-ggplot2}{}}%
 Wickham, H. (2016). \emph{ggplot2: Elegant graphics for data analysis}. Springer-Verlag New York. Retrieved from \url{https://ggplot2.tidyverse.org}
@@ -845,11 +909,11 @@ Depending on the participant's device, the website automatically presents the he
 This is the content of our voice recordings. Children listen to this during the game.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.20}}@{}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
 \toprule
 \endhead
 \textbf{Nr} & \textbf{Timeline} & \textbf{German} & \textbf{English} & \textbf{Filename} \\
