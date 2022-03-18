@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse) # data handling etc.
-library(viridis) # color scales, plotting...
+library(viridis) # col scales, plotting...
 library(ggpubr)
 library(ggthemes)
 library(tidyboot) # for bootstrap CIs
@@ -34,6 +34,8 @@ testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>%
   )
 ```
 
+# VARIATION
+
 ```{r vali_data}
 vali <- testtrials %>% 
   filter(studytype == "vali" & (ageInYears < 6 | ageInYears == 18))
@@ -54,45 +56,64 @@ variationHedge <- variationHedgeInd %>%
   tidyboot_mean(column = mean)
 ```
 
-```{r variation_hedge}
-## variation without remote kids
-ggplot() +
+```{r variation_hedge_plot}
+hedge_variation_plot <- ggplot() +
   # child data
-  geom_smooth(data = variationHedgeInd %>% filter(sample == "kids" & datacollection == "in-person - supervised"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "darkgrey", alpha = 0.2) +
-  geom_point(data = variationHedgeInd %>% filter(sample == "kids" & datacollection == "in-person - supervised"), aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears)), alpha = .5) +
-  geom_pointrange(data = variationHedge %>% filter(sample == "kids" & datacollection == "in-person - supervised"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears)), size = 0.8, pch = 18) + 
+  geom_smooth(
+    data = variationHedgeInd %>% filter(sample == "kids"),  
+    aes(x = ageInYearsExact, y = mean, group = datacollection, lty = datacollection), 
+    method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey",
+  ) + 
+  
+  geom_point(
+    data = variationHedgeInd %>% filter(sample == "kids"), 
+    aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears), shape = datacollection, alpha = datacollection)
+  ) +
+  
+  geom_pointrange(
+    data = variationHedge %>% filter(sample == "kids"), 
+    aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears), shape = datacollection, alpha = datacollection), size = 0.8, position=position_dodge(width = 0.1)
+  ) +
+  
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
+  scale_shape_manual(values = c(16, 18)) + 
+  scale_alpha_discrete(range = c(1, 0.4)) + 
+  scale_linetype_manual(values = c("solid", "dashed")) + 
   
   # adult data
-  geom_jitter(data = variationHedgeInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
-  geom_pointrange(data = variationHedge %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +  
-  labs(x = "Age in years", y = "Average imprecision in target width", color = "Age group") + 
+  geom_jitter(
+    data = variationHedgeInd %>% filter(sample == "adults"), 
+    aes(x = 6.5, y = mean, shape = datacollection), alpha = .15, width = .05, height = .01,  
+  ) +
+
+  geom_pointrange(
+    data = variationHedge %>% filter(sample == "adults"), 
+    aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper, shape = datacollection), 
+    size = 0.8,
+  ) +
+  
+  labs(x = "Age in years", y = "Average imprecision in target width", col = "Age", shape = "Data collection mode", alpha = "Data collection mode", lty = "Data collection mode") + 
   scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) + 
   scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
-  theme(legend.position = c(0.11, 0.18))
-
-ggsave("../figures/gafo_hedge_variation.png", width = 6, height = 4)
-```
-
-```{r variation_hedge_remote}
-# with remote sample
-ggplot() +
-  # child data
-  geom_smooth(data = variationHedgeInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean, group = datacollection, col = datacollection), method = "glm", alpha = 0.2, size = 0.5) + 
-  geom_point(data = variationHedgeInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean, col = datacollection), alpha = .25) +
-  geom_pointrange(data = variationHedge %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = datacollection), size = 0.8, pch = 18, position=position_dodge(width = 0.1)) +
-  scale_color_manual(values = c("#00b1ea", "#29485d"), labels = c("in-person - supervised", "remote - unsupervised")) +
   
-  # adult data
-  # geom_jitter(data = variationHedgeInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
-  # geom_pointrange(data = variationHedge %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +
-  
-  labs(x = "Age in years", y = "Average imprecision in target width", color = "Data collection mode") + 
-  scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) + 
-  scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
-  theme(legend.position = c(0.85, 0.88))
+  # theme(legend.text = element_text(size = 7),
+  #       legend.key.size = unit(0.4, "cm"), 
+  #       legend.direction = "vertical", 
+  #       legend.position = c(0.89, 0.8), 
+  #       legend.spacing.y = unit(0.25, 'cm'))
 
-ggsave("../figures/gafo_hedge_remote.png", width = 6, height = 4)
+  theme(legend.text = element_text(size = 8),
+        legend.key.size = unit(0.4, "cm"), 
+        legend.direction = "vertical", 
+        legend.box = "horizontal",
+        legend.position = c(0.72, 0.85), 
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black")
+        )
+
+hedge_variation_plot
+
+ggsave("../figures/gafo_hedge_variation.png", width = 7, height = 4)
 ```
 
 ```{r variation_box_prepareData}
@@ -110,70 +131,81 @@ variationBox <- variationBoxInd %>%
   tidyboot_mean(column = mean)
 ```
 
-```{r variation_box} 
-ggplot() +
-  # chance level
-  geom_hline(aes(yintercept = 0.2), lty = 1) + 
-  geom_hline(aes(yintercept = 0.125), lty = 2) + 
-  
-  # child data
-  geom_smooth(data = variationBoxInd %>% filter(sample == "kids" & datacollection == "in-person - supervised"),  aes(x = ageInYearsExact, y = mean), method = "glm", color = "darkgrey", alpha = 0.2) +
-  geom_point(data = variationBoxInd %>% filter(sample == "kids" & datacollection == "in-person - supervised"), aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears)), alpha = .5) +
-  geom_pointrange(data = variationBox %>% filter(sample == "kids" & datacollection == "in-person - supervised"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears)), size = 0.8, pch = 18) + 
-  scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
-  
-  # adult data
-  geom_jitter(data = variationBoxInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
-  geom_pointrange(data = variationBox %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +  
-  labs(x = "Age in years", y = "Proportion correct", color = "Age group") + 
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) + 
-  scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
-  theme(legend.position = c(0.11, 0.85))
-
-ggsave("../figures/gafo_box_variation.png", width = 6, height = 4)
-```
-
-```{r variation_box_remote}
+```{r variation_box_plot}
 # with remote sample
-ggplot() +
+box_variation_plot <- ggplot() +
   # chance level
-  geom_hline(aes(yintercept = 0.2), lty = 1) + 
-  # geom_hline(aes(yintercept = 0.125), lty = 2) + 
+  geom_segment(aes(x = 3.0, y = 0.2, xend = 6.2, yend = 0.2), lty = "dotted") + 
+  geom_segment(aes(x = 6.25, y = 0.125, xend = 6.75, yend = 0.125), lty = "dotted") + 
   
   # child data
-  geom_smooth(data = variationBoxInd %>% filter(sample == "kids"),  aes(x = ageInYearsExact, y = mean, group = datacollection, col = datacollection), method = "glm", alpha = 0.2, size = 0.5) +
-  geom_point(data = variationBoxInd %>% filter(sample == "kids"), aes(x = ageInYearsExact, y = mean, col = datacollection), alpha = .25) +
-  geom_pointrange(data = variationBox %>% filter(sample == "kids"), aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = datacollection), size = 0.8, pch = 18, position=position_dodge(width = 0.1)) +
-  scale_color_manual(values = c("#00b1ea", "#29485d"), labels = c("in-person - supervised", "remote - unsupervised")) +
+  geom_smooth(
+    data = variationBoxInd %>% filter(sample == "kids"),  
+    aes(x = ageInYearsExact, y = mean, group = datacollection, lty = datacollection), 
+    method = "glm", size = 0.5, alpha = 0.15, col = "darkgrey",
+  ) + 
+  
+  geom_point(
+    data = variationBoxInd %>% filter(sample == "kids"), 
+    aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears), shape = datacollection, alpha = datacollection)
+  ) +
+  
+  geom_pointrange(
+    data = variationBox %>% filter(sample == "kids"), 
+    aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears), shape = datacollection, alpha = datacollection), size = 0.8, position=position_dodge(width = 0.1)
+  ) +
+  
+  scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
+  scale_shape_manual(values = c(16, 18)) + 
+  scale_alpha_discrete(range = c(1, 0.4)) + 
+  scale_linetype_manual(values = c("solid", "dashed")) + 
   
   # adult data
-  # geom_jitter(data = variationBoxInd %>% filter(sample == "adults"), aes(x = 6.5, y = mean), alpha = .15, width = .05, height = .01) +
-  # geom_pointrange(data = variationBox %>% filter(sample == "adults"), aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper), size = 0.8, pch = 18) +
+  geom_jitter(
+    data = variationBoxInd %>% filter(sample == "adults"), 
+    aes(x = 6.5, y = mean, shape = datacollection), alpha = .15, width = .05, height = .01,  
+  ) +
+
+  geom_pointrange(
+    data = variationBox %>% filter(sample == "adults"), 
+    aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper, shape = datacollection), 
+    size = 0.8,
+  ) +
   
-  labs(x = "Age in years", y = "Average imprecision in target width", color = "Data collection mode") + 
+  labs(x = "Age in years", y = "Proportion correct", col = "Age in years", shape = "Data collection mode", alpha = "Data collection mode", lty = "Data collection mode") + 
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) + 
   scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
-  theme(legend.position = c(0.17, 0.9))
+  theme(legend.position="none")
 
-ggsave("../figures/gafo_box_remote.png", width = 6, height = 4)
+box_variation_plot
+
+ggsave("../figures/gafo_box_variation.png", width = 5, height = 4)
 ```
 
-```{r variation_hedge_intCon}
-# check for kids that did not have at least 2 trials in each target position
-# not happening for hedge version! since 10 bins but only 15 test trials 
+# RELI
 
-hedge_intCon_data <- vali %>% 
-  filter(studyversion == "hedge" & sample == "kids" & datacollection == "in-person - supervised") 
-  # mutate(trialsPerPos = n()) %>% 
-  # filter(trialsPerPos >= 2)
+```{r reli_data}
+reli <- testtrials %>% 
+  filter(studytype == "reli" & (ageInYears < 6 | ageInYears == 18) & completedReli == TRUE)
 
-hedge_intCon <- hedge_intCon_data %>% 
-  group_by(subjID, targetPosition) %>% 
+reli %>%
+  group_by(subjID) %>%
+  slice(1) %>%
+  ungroup() %>% 
+  select(ageInYears, studyversion) %>%
+  ftable()
+```
+
+```{r intCon_hedge_data}
+# take data of first reli day for internal consistency
+hedge_intCon <- reli %>% 
+  filter(studyversion == "hedge" & reliday == "reliday1") %>% 
+  # group_by(subjID, targetPosition, sample) %>% 
   mutate(
     testhalf = ifelse(trialNr %% 2 == 0, "even_trials", "odd_trials")
   ) %>% 
-  group_by(subjID, testhalf) %>%
-  tidyboot_mean(col = abs(clickDistFromTargetCenterX)/160, na.rm = TRUE)
+  group_by(subjID, testhalf, sample) %>%
+  tidyboot_mean(column = abs(clickDistFromTargetCenterX)/160, na.rm = TRUE)
 
 hedge_intCon <- hedge_intCon %>% 
   select(-c(n, empirical_stat)) %>% 
@@ -185,87 +217,96 @@ hedge_intCon <- hedge_intCon %>%
   ungroup()
 
 # summary
-hedge_intCon %>% psych::describe()
+psych::describeBy(hedge_intCon, hedge_intCon$sample)
+```
 
-hedge_intCon %>% 
+```{r intCon_hedge_kids}
+hedge_intCon_kids <- hedge_intCon %>% 
+  filter(sample == "kids") %>% 
   ggplot(., aes(x = mean_even_trials, y = mean_odd_trials)) + 
-  geom_point(alpha = .5) + 
-  geom_errorbarh(aes(xmin = ci_lower_even_trials, xmax = ci_upper_odd_trials), alpha = 0.3, col = "darkgrey") + 
-  geom_errorbar(aes(ymin = ci_lower_even_trials, ymax = ci_upper_odd_trials), alpha = 0.3, col = "darkgrey") +
-  # stat_cor(r.accuracy = 0.01, p.accuracy = 0.01) +
-  geom_smooth(method = "lm", color = "#006c66", alpha = 0.25) +
-  geom_abline(intercept = 0, slope = 1, color = "darkgrey", linetype = "longdash") +
-  scale_x_continuous(breaks = seq(0, 7, 1)) +
-  scale_y_continuous(breaks = seq(0, 7, 1)) +
-  labs(x = "Average imprecision in target width in even trials", y = "Average imprecision in target width in odd trials")
+  geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
+  geom_point(col = "#006c66", size = 0.7) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0, label.y = 5, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  scale_x_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) +
+  scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) +
+  labs(x = "Even trials", y = "Odd trials")
 
-ggsave("../figures/gafo_hedge_intCon.png", width = 6, height = 4)
+hedge_intCon_kids
+
+ggsave("../figures/gafo_hedge_intCon_kids.png", width = 6, height = 4)
 ```
 
-```{r hedge_splithalfr}
-fn_score_hedge <- function(ds) {
-  return(mean(abs(ds$clickDistFromTargetCenterX)/160, na.rm = TRUE))
-}
+```{r intCon_hedge_adults}
+hedge_intCon_adults <- hedge_intCon %>% 
+  filter(sample == "adults") %>% 
+  ggplot(., aes(x = mean_even_trials, y = mean_odd_trials)) + 
+  geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
+  geom_point(col = "darkgrey", size = 1.2, shape = 18, alpha = 0.5) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0, label.y = 2, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  scale_x_continuous(limits = c(0, 2), breaks = seq(0, 2, 0.5)) +
+  scale_y_continuous(limits = c(0, 2), breaks = seq(0, 2, 0.5)) +
+  labs(x = "Even trials", y = "Odd trials")
 
-### ODD EVEN
-split_scores_hedge_odd_even <- by_split(
-  hedge_intCon_data,
-  hedge_intCon_data$subjID,
-  fn_score_hedge,
-  replications = 1,
-  method = c("odd_even"),
-)
+hedge_intCon_adults
 
-hedge_odd_even <- split_coefs(split_scores_hedge_odd_even, cor)
-hedge_odd_even_ci  <- split_ci(split_scores_hedge_odd_even, cor)
-
-save_splithalf <- tibble(hedge_odd_even)
-
-### FIRST SECOND
-split_scores_hedge_first_second <- by_split(
-  hedge_intCon_data,
-  hedge_intCon_data$subjID,
-  fn_score_hedge,
-  replications = 1,
-  method = c("first_second"),
-)
-
-hedge_first_second <- split_coefs(split_scores_hedge_first_second, cor)
-hedge_first_second_ci <- split_ci(split_scores_hedge_first_second, cor)
-
-save_splithalf <- save_splithalf %>% 
-  mutate(
-    # add confidence interval of coefficients (bca: bias-corrected and accelerated bootstrap confidence intervals)
-    hedge_odd_even_ci_lower = hedge_odd_even_ci$lims["0.025","bca"],
-    hedge_odd_even_ci_upper = hedge_odd_even_ci$lims["0.975","bca"],
-    
-    # same for splitting according to first / second test half
-    hedge_first_second = hedge_first_second, 
-    hedge_first_second_ci_lower = hedge_first_second_ci$lims["0.025","bca"],
-    hedge_first_second_ci_upper = hedge_first_second_ci$lims["0.975","bca"],
-  )
+ggsave("../figures/gafo_hedge_intCon_adults.png", width = 6, height = 4)
 ```
 
-```{r variation_box_intCon}
-box_intCon_excluded <- vali %>% 
-  filter(studyversion == "box" & sample == "kids" & datacollection == "in-person - supervised") %>% 
-  group_by(subjID, targetPosition) %>% 
-  summarise(trialsPerPos = n()) %>% 
-  filter(trialsPerPos < 2)
+```{r splithalfr_hedge}
+# fn_score_hedge <- function(ds) {
+#   return(mean(abs(ds$clickDistFromTargetCenterX)/160, na.rm = TRUE))
+# }
+# 
+# ### ODD EVEN
+# split_scores_hedge_odd_even <- by_split(
+#   hedge_intCon_data,
+#   hedge_intCon_data$subjID,
+#   fn_score_hedge,
+#   replications = 1,
+#   method = c("odd_even"),
+# )
+# 
+# hedge_odd_even <- split_coefs(split_scores_hedge_odd_even, cor)
+# hedge_odd_even_ci  <- split_ci(split_scores_hedge_odd_even, cor)
+# 
+# save_splithalf <- tibble(hedge_odd_even)
+# 
+# ### FIRST SECOND
+# split_scores_hedge_first_second <- by_split(
+#   hedge_intCon_data,
+#   hedge_intCon_data$subjID,
+#   fn_score_hedge,
+#   replications = 1,
+#   method = c("first_second"),
+# )
+# 
+# hedge_first_second <- split_coefs(split_scores_hedge_first_second, cor)
+# hedge_first_second_ci <- split_ci(split_scores_hedge_first_second, cor)
+# 
+# save_splithalf <- save_splithalf %>% 
+#   mutate(
+#     # add confidence interval of coefficients (bca: bias-corrected and accelerated bootstrap confidence intervals)
+#     hedge_odd_even_ci_lower = hedge_odd_even_ci$lims["0.025","bca"],
+#     hedge_odd_even_ci_upper = hedge_odd_even_ci$lims["0.975","bca"],
+#     
+#     # same for splitting according to first / second test half
+#     hedge_first_second = hedge_first_second, 
+#     hedge_first_second_ci_lower = hedge_first_second_ci$lims["0.025","bca"],
+#     hedge_first_second_ci_upper = hedge_first_second_ci$lims["0.975","bca"],
+#   )
+```
 
-box_intCon_excluded %>% 
-  select(subjID) %>% 
-  summarise(n = n_distinct(subjID))
-
-box_intCon_data <- vali %>% 
-  filter(studyversion == "box" & sample == "kids" & datacollection == "in-person - supervised" & subjID != "gk1-103") 
-
-box_intCon <- box_intCon_data %>% 
+```{r intCon_box_data}
+# take data of first reli day for internal consistency
+box_intCon <- reli %>% 
+  filter(studyversion == "box" & reliday == "reliday1") %>% 
   mutate(
     testhalf = ifelse(trialNr %% 2 == 0, "even_trials", "odd_trials")
   ) %>% 
-  group_by(subjID, testhalf) %>%
-  tidyboot_mean(col = correctBox, na.rm = TRUE)
+  group_by(subjID, testhalf, sample) %>%
+  tidyboot_mean(column = correctBox, na.rm = TRUE)
 
 box_intCon <- box_intCon %>% 
   select(-c(n, empirical_stat)) %>% 
@@ -277,71 +318,247 @@ box_intCon <- box_intCon %>%
   ungroup()
 
 # summary
-box_intCon %>% psych::describe()
-
-box_intCon %>% 
-  ggplot(., aes(x = mean_even_trials, y = mean_odd_trials)) + 
-  geom_point(alpha = .5) + 
-  geom_errorbarh(aes(xmin = ci_lower_even_trials, xmax = ci_upper_odd_trials), alpha = 0.3, col = "darkgrey") + 
-  geom_errorbar(aes(ymin = ci_lower_even_trials, ymax = ci_upper_odd_trials), alpha = 0.3, col = "darkgrey") +
-  # stat_cor(r.accuracy = 0.01, p.accuracy = 0.01) +
-  geom_smooth(method = "lm", color = "#006c66", alpha = 0.25) +
-  geom_abline(intercept = 0, slope = 1, color = "darkgrey", linetype = "longdash") +
-  scale_x_continuous(breaks = seq(0, 1, 0.2)) +
-  scale_y_continuous(breaks = seq(0, 1, 0.2)) +
-  labs(x = "Average imprecision in target width in even trials", y = "Average imprecision in target width in odd trials")
-
-ggsave("../figures/gafo_box_intCon.png", width = 6, height = 4)
+psych::describeBy(box_intCon, box_intCon$sample)
 ```
 
+```{r intCon_box_kids}
+box_intCon_kids <- box_intCon %>% 
+  filter(sample == "kids") %>% 
+  ggplot(., aes(x = mean_even_trials, y = mean_odd_trials)) + 
+  geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
+  geom_point(col = "#006c66", size = 0.7) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0, label.y = 1, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  scale_x_continuous(breaks = seq(0, 1, 0.2)) +
+  scale_y_continuous(breaks = seq(0, 1, 0.2)) +
+  labs(x = "Even trials", y = "Odd trials")
+
+box_intCon_kids
+
+ggsave("../figures/gafo_box_intCon_kids.png", width = 6, height = 4)
+```
+
+```{r intCon_box_adults}
+box_intCon_adults <- box_intCon %>% 
+  filter(sample == "adults") %>% 
+  ggplot(., aes(x = mean_even_trials, y = mean_odd_trials)) + 
+  geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
+  geom_point(col = "darkgrey", size = 1.2, shape = 18, alpha = 0.5) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0, label.y = 1, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(x = "Even trials", y = "Odd trials")
+
+box_intCon_adults
+
+ggsave("../figures/gafo_box_intCon_adults.png", width = 6, height = 4)
+```
 
 ```{r box_splithalfr}
-fn_score_box <- function(ds) {
-  return(mean(ds$correctBox, na.rm = TRUE))
-}
-
-### ODD EVEN
-split_scores_box_odd_even <- by_split(
-  box_intCon_data,
-  box_intCon_data$subjID,
-  fn_score_box,
-  replications = 1,
-  method = c("odd_even"),
-)
-
-box_odd_even = split_coefs(split_scores_box_odd_even, cor)
-box_odd_even_ci = split_ci(split_scores_box_odd_even, cor)
-  
-### FIRST SECOND
-split_scores_box_first_second <- by_split(
-  box_intCon_data,
-  box_intCon_data$subjID,
-  fn_score_box,
-  replications = 1,
-  method = c("first_second"),
-)
-
-box_first_second = split_coefs(split_scores_box_first_second, cor)
-box_first_second_ci = split_ci(split_scores_box_first_second, cor)
-
-save_splithalf <- save_splithalf %>% 
-  mutate(
-    # add splitting according to odd / even test half
-    box_odd_even = box_odd_even, 
-    box_odd_even_ci_lower = box_odd_even_ci$lims["0.025","bca"],
-    box_odd_even_ci_upper = box_odd_even_ci$lims["0.975","bca"],
-    
-    # same for splitting according to first / second test half
-    box_first_second = box_first_second, 
-    box_first_second_ci_lower = box_first_second_ci$lims["0.025","bca"],
-    box_first_second_ci_upper = box_first_second_ci$lims["0.975","bca"],
-  )
+# fn_score_box <- function(ds) {
+#   return(mean(ds$correctBox, na.rm = TRUE))
+# }
+# 
+# ### ODD EVEN
+# split_scores_box_odd_even <- by_split(
+#   box_intCon_data,
+#   box_intCon_data$subjID,
+#   fn_score_box,
+#   replications = 1,
+#   method = c("odd_even"),
+# )
+# 
+# box_odd_even = split_coefs(split_scores_box_odd_even, cor)
+# box_odd_even_ci = split_ci(split_scores_box_odd_even, cor)
+#   
+# ### FIRST SECOND
+# split_scores_box_first_second <- by_split(
+#   box_intCon_data,
+#   box_intCon_data$subjID,
+#   fn_score_box,
+#   replications = 1,
+#   method = c("first_second"),
+# )
+# 
+# box_first_second = split_coefs(split_scores_box_first_second, cor)
+# box_first_second_ci = split_ci(split_scores_box_first_second, cor)
+# 
+# save_splithalf <- save_splithalf %>% 
+#   mutate(
+#     # add splitting according to odd / even test half
+#     box_odd_even = box_odd_even, 
+#     box_odd_even_ci_lower = box_odd_even_ci$lims["0.025","bca"],
+#     box_odd_even_ci_upper = box_odd_even_ci$lims["0.975","bca"],
+#     
+#     # same for splitting according to first / second test half
+#     box_first_second = box_first_second, 
+#     box_first_second_ci_lower = box_first_second_ci$lims["0.025","bca"],
+#     box_first_second_ci_upper = box_first_second_ci$lims["0.975","bca"],
+#   )
 ```
 
 ```{r save_splithalfr}
-save_splithalf
-
-write.csv(save_splithalf, "gafo-splithalf.csv", quote = F, row.names = F)
-saveRDS(save_splithalf, file = "gafo-splithalf.rds")
+# save_splithalf
+# 
+# write.csv(save_splithalf, "gafo-splithalf.csv", quote = F, row.names = F)
+# saveRDS(save_splithalf, file = "gafo-splithalf.rds")
 ```
 
+```{r retest_hedge_data}
+# take data of first reli day for internal consistency
+hedge_retest <- reli %>% 
+  filter(studyversion == "hedge") %>% 
+  group_by(subjID, reliday, sample) %>% 
+  tidyboot_mean(column = abs(clickDistFromTargetCenterX)/160, na.rm = TRUE)
+
+hedge_retest <- hedge_retest %>% 
+  select(-c(n, empirical_stat)) %>% 
+  group_by(subjID, reliday) %>%
+  pivot_wider(
+    names_from = reliday,
+    values_from = c(mean, ci_lower, ci_upper)
+  ) %>%
+  ungroup()
+
+# summary
+psych::describeBy(hedge_retest, hedge_retest$sample)
+
+# exclude 1 outlier
+hedge_retest <- hedge_retest %>% 
+  filter(mean_reliday1 < mean(mean_reliday1) + 3*sd(mean_reliday1), mean_reliday1 > mean(mean_reliday1) - 3*sd(mean_reliday1), 
+         mean_reliday2 < mean(mean_reliday2) + 3*sd(mean_reliday2), mean_reliday2 > mean(mean_reliday2) - 3*sd(mean_reliday2))
+```
+
+```{r retest_hedge_kids}
+hedge_retest_kids <- hedge_retest %>% 
+  filter(sample == "kids") %>% 
+  ggplot(., aes(x = mean_reliday1, y = mean_reliday2)) + 
+  geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
+  geom_point(col = "#006c66", size = 0.7) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0, label.y = 4, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  scale_x_continuous(limits = c(0, 4), breaks = seq(0, 4, 1)) +
+  scale_y_continuous(limits = c(0, 4), breaks = seq(0, 4, 1)) +
+  labs(x = "Testday 1", y = "Testday 2")
+
+hedge_retest_kids
+
+ggsave("../figures/gafo_hedge_retest_kids.png", width = 6, height = 4)
+```
+
+```{r retest_hedge_adults}
+hedge_retest_adults <- hedge_retest %>% 
+  filter(sample == "adults") %>% 
+  ggplot(., aes(x = mean_reliday1, y = mean_reliday2)) + 
+  geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
+  geom_point(col = "darkgrey", size = 1.2, shape = 18, alpha = 0.5) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0, label.y = 2, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  scale_x_continuous(limits = c(0, 2), breaks = seq(0, 2, 0.5)) +
+  scale_y_continuous(limits = c(0, 2), breaks = seq(0, 2, 0.5)) +
+  labs(x = "Testday 1", y = "Testday 2")
+
+hedge_retest_adults
+
+ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
+```
+
+```{r retest_box_data}
+# take data of first reli day for internal consistency
+box_retest <- reli %>% 
+  filter(studyversion == "box") %>% 
+  group_by(subjID, reliday, sample) %>% 
+  tidyboot_mean(column = correctBox, na.rm = TRUE)
+
+box_retest <- box_retest %>% 
+  select(-c(n, empirical_stat)) %>% 
+  group_by(subjID, reliday) %>%
+  pivot_wider(
+    names_from = reliday,
+    values_from = c(mean, ci_lower, ci_upper)
+  ) %>%
+  ungroup()
+
+# summary
+psych::describeBy(box_retest, box_retest$sample)
+```
+```{r retest_box_kids}
+box_retest_kids <- box_retest %>% 
+  filter(sample == "kids") %>% 
+  ggplot(., aes(x = mean_reliday1, y = mean_reliday2)) + 
+  geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
+  geom_point(col = "#006c66", size = 0.7) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0, label.y = 1, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(x = "Testday 1", y = "Testday 2")
+
+box_retest_kids
+
+ggsave("../figures/gafo_hedge_retest_kids.png", width = 6, height = 4)
+```
+
+```{r retest_box_adults}
+box_retest_adults <- box_retest %>% 
+  filter(sample == "adults") %>% 
+  ggplot(., aes(x = mean_reliday1, y = mean_reliday2)) + 
+  geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
+  geom_point(col = "darkgrey", size = 1.2, shape = 18, alpha = 0.5) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0, label.y = 1, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(x = "Testday 1", y = "Testday 2")
+
+box_retest_adults
+
+ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
+```
+
+```{r arrange_plots}
+ggarrange(
+
+  ggarrange(hedge_variation_plot,
+            NULL,
+            ggarrange(
+              hedge_intCon_kids, 
+              hedge_intCon_adults,
+              hedge_retest_kids, 
+              hedge_retest_adults, 
+              nrow = 2, 
+              ncol = 2, 
+              labels = c("B", "C", "D", "E")
+            ), 
+            
+            # hedge: space between vari and reli
+            nrow = 1, widths = c(1.2, 0.06, 1),
+            labels = c("A", "", "")
+  ), 
+  
+  NULL, 
+  
+  ggarrange(box_variation_plot,
+            NULL,
+            ggarrange(
+              box_intCon_kids,
+              box_intCon_adults,
+              box_retest_kids,
+              box_retest_adults,
+              nrow = 2, 
+              ncol = 2,
+              labels = c("G", "H", "I", "J")
+            ), 
+  
+            # box: space between vari and reli
+            nrow = 1, widths = c(1.2, 0.06, 1),
+            labels = c("F", "", "")
+  ), 
+  
+  # space between hedge & box
+  nrow = 3, heights = c(1.2, 0.1, 1.2)
+)
+
+ggsave("../figures/gafo_results.png", width = 6.5, height = 5, scale = 1.6, bg = "white")
+```
