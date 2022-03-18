@@ -38,7 +38,8 @@ testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>%
 
 ```{r vali_data}
 vali <- testtrials %>% 
-  filter(studytype == "vali" & (ageInYears < 6 | ageInYears == 18))
+  filter(studytype == "vali" & (ageInYears < 6 | ageInYears == 18)) %>% 
+  mutate(ageInYears = factor(ageInYears, levels = c("3", "4", "5", "18")))
 ```
 
 ```{r variation_hedge_preparateData}
@@ -57,13 +58,6 @@ variationHedge <- variationHedgeInd %>%
 ```
 
 ```{r variation_hedge_plot}
-tmp <- variationHedgeInd
-
-variationHedgeInd <- variationHedgeInd %>% 
-  mutate(
-    ageInYears = factor(ageInYears, levels = c("3", "4", "5", "18"))
-  )
-
 hedge_variation_plot <- ggplot() +
   # child data
   geom_smooth(
@@ -74,15 +68,14 @@ hedge_variation_plot <- ggplot() +
   
   geom_point(
     data = variationHedgeInd %>% filter(sample == "kids"), 
-    aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears), shape = datacollection, alpha = datacollection)
+    aes(x = ageInYearsExact, y = mean, col = ageInYears, shape = datacollection, alpha = datacollection)
   ) +
   
   geom_pointrange(
     data = variationHedge %>% filter(sample == "kids"), 
-    aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears), shape = datacollection, alpha = datacollection), size = 0.8, position=position_dodge(width = 0.1)
+    aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = ageInYears, shape = datacollection, alpha = datacollection), size = 0.8, position=position_dodge(width = 0.1)
   ) +
   
-  # scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
   scale_shape_manual(values = c(16, 18)) + 
   scale_alpha_discrete(range = c(1, 0.4)) + 
   scale_linetype_manual(values = c("solid", "dashed")) + 
@@ -90,7 +83,7 @@ hedge_variation_plot <- ggplot() +
   # adult data
   geom_jitter(
     data = variationHedgeInd %>% filter(sample == "adults"), 
-    aes(x = 6.5, y = mean, col = as.factor(ageInYears), shape = datacollection), alpha = 0.8, width = .05, height = .01,  
+    aes(x = 6.5, y = mean, col = ageInYears, shape = datacollection), alpha = 0.5, width = .05, height = .01,  
   ) +
 
   geom_pointrange(
@@ -103,12 +96,6 @@ hedge_variation_plot <- ggplot() +
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d", "darkgrey"), breaks = c("3", "4", "5", "18"), labels = c("3-year-olds", "4-year-olds", "5-year-olds", "Adults")) +
   scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) + 
   scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
-  
-  # theme(legend.text = element_text(size = 7),
-  #       legend.key.size = unit(0.4, "cm"), 
-  #       legend.direction = "vertical", 
-  #       legend.position = c(0.89, 0.8), 
-  #       legend.spacing.y = unit(0.25, 'cm'))
 
   theme(legend.text = element_text(size = 8),
         legend.key.size = unit(0.4, "cm"), 
@@ -155,15 +142,14 @@ box_variation_plot <- ggplot() +
   
   geom_point(
     data = variationBoxInd %>% filter(sample == "kids"), 
-    aes(x = ageInYearsExact, y = mean, col = as.factor(ageInYears), shape = datacollection, alpha = datacollection)
+    aes(x = ageInYearsExact, y = mean, col = ageInYears, shape = datacollection, alpha = datacollection)
   ) +
   
   geom_pointrange(
     data = variationBox %>% filter(sample == "kids"), 
-    aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = as.factor(ageInYears), shape = datacollection, alpha = datacollection), size = 0.8, position=position_dodge(width = 0.1)
+    aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = ageInYears, shape = datacollection, alpha = datacollection), size = 0.8, position=position_dodge(width = 0.1)
   ) +
   
-  scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), labels = c("3-year-olds", "4-year-olds", "5-year-olds")) +
   scale_shape_manual(values = c(16, 18)) + 
   scale_alpha_discrete(range = c(1, 0.4)) + 
   scale_linetype_manual(values = c("solid", "dashed")) + 
@@ -171,7 +157,7 @@ box_variation_plot <- ggplot() +
   # adult data
   geom_jitter(
     data = variationBoxInd %>% filter(sample == "adults"), 
-    aes(x = 6.5, y = mean, shape = datacollection), alpha = .15, width = .05, height = .01,  
+    aes(x = 6.5, y = mean, col = ageInYears, shape = datacollection), alpha = 0.5, width = .05, height = .01,  
   ) +
 
   geom_pointrange(
@@ -181,6 +167,7 @@ box_variation_plot <- ggplot() +
   ) +
   
   labs(x = "Age in years", y = "Proportion correct", col = "Age in years", shape = "Data collection mode", alpha = "Data collection mode", lty = "Data collection mode") + 
+  scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d", "darkgrey"), breaks = c("3", "4", "5", "18"), labels = c("3-year-olds", "4-year-olds", "5-year-olds", "Adults")) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) + 
   scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
   theme(legend.position="none")
@@ -194,7 +181,8 @@ ggsave("../figures/gafo_box_variation.png", width = 5, height = 4)
 
 ```{r reli_data}
 reli <- testtrials %>% 
-  filter(studytype == "reli" & (ageInYears < 6 | ageInYears == 18) & completedReli == TRUE)
+  filter(studytype == "reli" & (ageInYears < 6 | ageInYears == 18) & completedReli == TRUE) %>% 
+  mutate(ageInYears = factor(ageInYears, levels = c("3", "4", "5", "18")))
 
 reli %>%
   group_by(subjID) %>%
@@ -232,7 +220,7 @@ hedge_intCon_kids <- hedge_intCon %>%
   filter(sample == "kids") %>% 
   ggplot(., aes(x = mean_even_trials, y = mean_odd_trials)) + 
   geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
-  geom_point(aes(col = as.factor(ageInYears)), size = 0.7) + 
+  geom_point(aes(col = ageInYears), size = 0.7) + 
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), guide = "none") +
   geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
   stat_cor(method = "pearson", label.x = 0, label.y = 5, aes(label = paste(..r.label..)), size = 3.5, r.accuracy = 0.01, cor.coef.name = "r") + 
@@ -334,7 +322,7 @@ box_intCon_kids <- box_intCon %>%
   filter(sample == "kids") %>% 
   ggplot(., aes(x = mean_even_trials, y = mean_odd_trials)) + 
   geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
-  geom_point(aes(col = as.factor(ageInYears)), size = 0.7) + 
+  geom_point(aes(col = ageInYears), size = 0.7) + 
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), guide = "none") +
   geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
   stat_cor(method = "pearson", label.x = 0, label.y = 1, aes(label = paste(..r.label..)), size = 3.5, r.accuracy = 0.01, cor.coef.name = "r") + 
@@ -444,7 +432,7 @@ hedge_retest_kids <- hedge_retest %>%
   filter(sample == "kids") %>% 
   ggplot(., aes(x = mean_reliday1, y = mean_reliday2)) + 
   geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
-  geom_point(aes(col = as.factor(ageInYears)), size = 0.7) + 
+  geom_point(aes(col = ageInYears), size = 0.7) + 
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), guide = "none") +
   geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
   stat_cor(method = "pearson", label.x = 0, label.y = 4, aes(label = paste(..r.label..)), size = 3.5, r.accuracy = 0.01, cor.coef.name = "r") + 
@@ -498,7 +486,7 @@ box_retest_kids <- box_retest %>%
   filter(sample == "kids") %>% 
   ggplot(., aes(x = mean_reliday1, y = mean_reliday2)) + 
   geom_abline(intercept = 0, slope = 1, col = "darkgrey", linetype = "longdash") +
-  geom_point(aes(col = as.factor(ageInYears)), size = 0.7) + 
+  geom_point(aes(col = ageInYears), size = 0.7) + 
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), guide = "none") +
   geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
   stat_cor(method = "pearson", label.x = 0, label.y = 1, aes(label = paste(..r.label..)), size = 3.5, r.accuracy = 0.01, cor.coef.name = "r") + 
