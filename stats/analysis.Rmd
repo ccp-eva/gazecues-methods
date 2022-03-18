@@ -192,6 +192,7 @@ reli %>%
   ftable()
 ```
 
+## Internal consistency
 ```{r intCon_hedge_data}
 # take data of first reli day for internal consistency
 hedge_intCon <- reli %>% 
@@ -402,6 +403,8 @@ ggsave("../figures/gafo_box_intCon_adults.png", width = 6, height = 4)
 # saveRDS(save_splithalf, file = "gafo-splithalf.rds")
 ```
 
+## Test-retest reliability 
+
 ```{r retest_hedge_data}
 # take data of first reli day for internal consistency
 hedge_retest <- reli %>% 
@@ -516,6 +519,8 @@ box_retest_adults
 ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
 ```
 
+# Save plots
+
 ```{r arrange_plots}
 ggarrange(
 
@@ -532,7 +537,7 @@ ggarrange(
             ), 
             
             # hedge: space between vari and reli
-            nrow = 1, widths = c(1.2, 0.06, 1),
+            nrow = 1, widths = c(1, 0.06, 1),
             labels = c("A", "", "")
   ), 
   
@@ -551,7 +556,7 @@ ggarrange(
             ), 
   
             # box: space between vari and reli
-            nrow = 1, widths = c(1.2, 0.06, 1),
+            nrow = 1, widths = c(1, 0.06, 1),
             labels = c("F", "", "")
   ), 
   
