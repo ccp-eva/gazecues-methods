@@ -243,6 +243,13 @@ Small data points show the mean performance for each subject. Shape of data poin
 ```{r fig2, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
 knitr::include_graphics(c("../figures/gafo_results.png"))
 ``` 
+```{r}
+mAgeHedge <- readRDS(file = "../stats/mAgeHedge.rds") 
+mAgeBox <- readRDS(file = "../stats/mAgeBox.rds") 
+```
+
+We assessed the effect of data collection mode and age (in months, z-transformed) in a Bayesian generalized linear mixed model with target position and subject ID as random effects. In the hedge version, the estimate of age was `r fixef(mAgeHedge)["age", "Estimate"]` ([`r fixef(mAgeHedge)["age", "Q2.5"]`; `r fixef(mAgeHedge)["age", "Q97.5"]`]) and the estimate of data collection mode was `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Estimate"]` ([`r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q97.5"]`]; with remote unsupervised data collection as the reference category). 
+In the box version, the estimate of age was `r fixef(mAgeBox)["age", "Estimate"]` ([`r fixef(mAgeBox)["age", "Q2.5"]`; `r fixef(mAgeBox)["age", "Q97.5"]`]) and the estimate of data collection mode was `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Estimate"]` ([`r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q97.5"]`]; remote unsupervised data collection as reference category). 
 
 We captured a developmental trajectory of gaze cue understanding: with increasing age, participants get more and more accurate in their performance. In the hedge version, children's click imprecision drops with age, while in the box version the proportion of correct responses increases (see Figure 2 A and F). By the end of their sixth year of life, children come close to the adult's proficiency level. We find interindividual variation across studyversions and age groups: some three-year-olds are more accurate in their responses than some five-year-olds. 
 
