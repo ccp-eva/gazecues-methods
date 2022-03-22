@@ -30,7 +30,20 @@ testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>%
     studyversion = factor(studyversion, levels = c("hedge", "box")), 
     datacollection = factor(datacollection, levels = c("in-person - supervised", "remote - unsupervised")),
     sample = factor(sample, levels = c("kids", "adults")), 
-    studytype = factor(studytype, levels = c("vali", "vali2", "reli"))
+    studytype = factor(studytype, levels = c("vali", "vali2", "reli")),
+    
+    # for models, summarize targetPositions in a way that it's symmetrical for left/ right side
+    # the smaller the value, the more central the position
+    symmetricPosition = case_when(
+                                  targetPosition == "5" | targetPosition == "6" | targetPosition == "box3" ~ 1, 
+                                  targetPosition == "4" | targetPosition == "7" | targetPosition == "box2" | targetPosition == "box4" ~ 2,
+                                  targetPosition == "3" | targetPosition == "8" | targetPosition == "box1" | targetPosition == "box5" ~ 3, 
+                                  targetPosition == "2" | targetPosition == "9" ~ 4,
+                                  targetPosition == "1" | targetPosition == "10" ~ 5, 
+                       ), 
+    
+    # distance between target and click in balloon widths (balloon width is 160 SVG units)
+    clickDistInBalloons = clickDistInBalloons,
   )
 ```
 
@@ -50,7 +63,7 @@ variationHedgeInd <- vali %>%
     ageInMonthsCentered = scale(ageInYearsExact, center = TRUE, scale = TRUE)[,1],
   ) %>% 
   group_by(sample, datacollection, ageInYears, ageInYearsExact, ageInMonthsCentered, subjID) %>%
-  summarise(mean = mean(abs(clickDistFromTargetCenterX)/160, na.rm = TRUE))
+  summarise(mean = mean(clickDistInBalloons, na.rm = TRUE))
 
 variationHedge <- variationHedgeInd %>%
   group_by(sample, datacollection, ageInYears) %>%
@@ -109,6 +122,25 @@ hedge_variation_plot <- ggplot() +
 hedge_variation_plot
 
 ggsave("../figures/gafo_hedge_variation.png", width = 7, height = 4)
+```
+
+```{r age_hedge_model}
+mDataAgeHedge <- vali %>% 
+  filter(studyversion == "hedge" & sample == "kids") %>% 
+  mutate(
+    # scaled (centered around mean, SD = 1, i.e., z-transformed)
+    age = scale(ageInMonths, center = TRUE, scale = TRUE)[,1], 
+  ) %>% 
+  select(subjID, age, datacollection, symmetricPosition, targetPosition, clickDistInBalloons)
+
+mAgeHedge <- brm(clickDistInBalloons ~ age + datacollection + (symmetricPosition | subjID) + (1 | targetPosition),
+                    data = mDataAgeHedge,
+                    family = lognormal(),
+                    warmup = 1000, 
+                    iter   = 3000, 
+                    chains = 4, 
+                    inits  = "random",
+                    cores  = 4)
 ```
 
 ```{r variation_box_prepareData}
@@ -177,6 +209,26 @@ box_variation_plot
 ggsave("../figures/gafo_box_variation.png", width = 5, height = 4)
 ```
 
+```{r age_box_model}
+# define data
+mDataAgeBox <- vali %>% 
+  filter(studyversion == "box" & sample == "kids") %>% 
+  mutate(
+    # scaled (centered around mean, SD = 1, i.e., z-transformed)
+    age = scale(ageInMonths, center = TRUE, scale = TRUE)[,1], 
+  ) %>% 
+  select(subjID, age, datacollection, symmetricPosition, targetPosition, correctBox)
+
+mAgeBox <- brm(correctBox ~ age + datacollection + (symmetricPosition | subjID) + (1 | targetPosition),
+                    data = mDataAgeBox,
+                    family = bernoulli(link = "logit"),
+                    warmup = 1000, 
+                    iter   = 3000, 
+                    chains = 4, 
+                    inits  = "random",
+                    cores  = 4)
+```
+
 # RELI
 
 ```{r reli_data}
@@ -201,7 +253,7 @@ hedge_intCon <- reli %>%
     testhalf = ifelse(trialNr %% 2 == 0, "even_trials", "odd_trials")
   ) %>% 
   group_by(subjID, testhalf, sample, ageInYears) %>%
-  tidyboot_mean(column = abs(clickDistFromTargetCenterX)/160, na.rm = TRUE)
+  tidyboot_mean(column = clickDistInBalloons, na.rm = TRUE)
 
 hedge_intCon <- hedge_intCon %>% 
   select(-c(n, empirical_stat)) %>% 
@@ -311,30 +363,18 @@ ggsave("../figures/gafo_box_intCon_adults.png", width = 6, height = 4)
 
 ```{r splithalfr_hedge_kids}
 fn_score_hedge <- function(ds) {
-  return(mean(abs(ds$clickDistFromTargetCenterX)/160, na.rm = TRUE))
+  return(mean(clickDistInBalloons, na.rm = TRUE))
 }
 
 hedge_intCon_data <- reli %>% 
-  filter(studyversion == "hedge" & reliday == "reliday1") %>% 
-  mutate(
-    # summarize bins, so that 9 + 10 = bin 5
-    # bin = ceiling(as.numeric(targetPosition)/2) 
-    
-    # summarize so that 1 + 10 = bin 5
-    symmetricBin = case_when(targetPosition == "5" | targetPosition == "6" ~ 1, 
-                             targetPosition == "4" | targetPosition == "7" ~ 2,
-                             targetPosition == "3" | targetPosition == "8" ~ 3, 
-                             targetPosition == "2" | targetPosition == "9" ~ 4,
-                             targetPosition == "1" | targetPosition == "10"~ 5, 
-                       )
-  )
+  filter(studyversion == "hedge" & reliday == "reliday1")
 
 # random split
 splitscores_hedge_random_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  replications = 1,
+  replications = 10000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
@@ -358,8 +398,8 @@ splitscores_hedge_randomStrat_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricBin),
-  replications = 1,
+  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+  replications = 10000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
@@ -383,7 +423,7 @@ splitscores_hedge_oddeven_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  replications = 1,
+  replications = 10000,
   method = c("odd_even"),
 )
 
@@ -405,8 +445,8 @@ splitscores_hedge_oddevenStrat_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricBin),
-  replications = 1,
+  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+  replications = 10000,
   method = c("odd_even"),
 )
 
@@ -428,7 +468,7 @@ splitscores_hedge_firstsecond_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  replications = 1,
+  replications = 10000,
   method = c("first_second"),
 )
 
@@ -450,8 +490,8 @@ splitscores_hedge_firstsecondStrat_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricBin),
-  replications = 1,
+  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+  replications = 10000,
   method = c("odd_even"),
 )
 
@@ -475,7 +515,7 @@ splitscores_hedge_random_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults"),
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
-  replications = 1,
+  replications = 10000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
@@ -499,8 +539,8 @@ splitscores_hedge_randomStrat_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults"),
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
-  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricBin),
-  replications = 1,
+  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+  replications = 10000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
@@ -524,7 +564,7 @@ splitscores_hedge_oddeven_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults"),
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
-  replications = 1,
+  replications = 10000,
   method = c("odd_even"),
 )
 
@@ -546,8 +586,8 @@ splitscores_hedge_oddevenStrat_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults"),
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
-  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricBin),
-  replications = 1,
+  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+  replications = 10000,
   method = c("odd_even"),
 )
 
@@ -569,7 +609,7 @@ splitscores_hedge_firstsecond_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults"),
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
-  replications = 1,
+  replications = 10000,
   method = c("first_second"),
 )
 
@@ -591,8 +631,8 @@ splitscores_hedge_firstsecondStrat_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults"),
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
-  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricBin),
-  replications = 1,
+  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+  replications = 10000,
   method = c("odd_even"),
 )
 
@@ -628,7 +668,7 @@ splitscores_box_random_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids"),
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
-  replications = 1,
+  replications = 10000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
@@ -653,7 +693,7 @@ splitscores_box_randomStrat_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(targetPosition),
-  replications = 1,
+  replications = 10000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
@@ -678,7 +718,7 @@ splitscores_box_oddeven_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids"),
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
-  replications = 1,
+  replications = 10000,
   method = c("odd_even"),
 )
 
@@ -701,7 +741,7 @@ splitscores_box_oddevenStrat_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(targetPosition),
-  replications = 1,
+  replications = 10000,
   method = c("odd_even"),
   careful = FALSE
 )
@@ -724,7 +764,7 @@ splitscores_box_firstsecond_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids"),
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
-  replications = 1,
+  replications = 10000,
   method = c("first_second"),
 )
 
@@ -747,7 +787,7 @@ splitscores_box_firstsecondStrat_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(targetPosition),
-  replications = 1,
+  replications = 10000,
   method = c("odd_even"),
   careful = FALSE,
 )
@@ -772,7 +812,7 @@ splitscores_box_random_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults"),
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
-  replications = 1,
+  replications = 10000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
@@ -798,7 +838,7 @@ splitscores_box_randomStrat_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(targetPosition),
-  replications = 1,
+  replications = 10000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
@@ -823,7 +863,7 @@ splitscores_box_oddeven_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults"),
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
-  replications = 1,
+  replications = 10000,
   method = c("odd_even"),
 )
 
@@ -846,7 +886,7 @@ splitscores_box_oddevenStrat_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(targetPosition),
-  replications = 1,
+  replications = 10000,
   method = c("odd_even"),
   careful = FALSE,
 )
@@ -869,7 +909,7 @@ splitscores_box_firstsecond_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults"),
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
-  replications = 1,
+  replications = 10000,
   method = c("first_second"),
 )
 
@@ -892,7 +932,7 @@ splitscores_box_firstsecondStrat_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(targetPosition),
-  replications = 1,
+  replications = 10000,
   method = c("odd_even"),
   careful = FALSE,
 )
@@ -946,7 +986,7 @@ saveRDS(splithalf_data, file = "gafo-splithalf.rds")
 hedge_retest <- reli %>% 
   filter(studyversion == "hedge") %>% 
   group_by(subjID, reliday, sample, ageInYears) %>% 
-  tidyboot_mean(column = abs(clickDistFromTargetCenterX)/160, na.rm = TRUE)
+  tidyboot_mean(column = clickDistInBalloons, na.rm = TRUE)
 
 hedge_retest <- hedge_retest %>% 
   select(-c(n, empirical_stat)) %>% 
@@ -1020,6 +1060,7 @@ box_retest <- box_retest %>%
 # summary
 psych::describeBy(box_retest, box_retest$sample)
 ```
+
 ```{r retest_box_kids}
 box_retest_kids <- box_retest %>% 
   filter(sample == "kids") %>% 
@@ -1053,6 +1094,48 @@ box_retest_adults <- box_retest %>%
 box_retest_adults
 
 ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
+```
+
+```{r retest_hedge_model}
+# define data
+mDataRetestHedge <- reli %>% 
+  filter(studyversion == "hedge" & sample == "kids") %>% 
+  mutate(
+    # scaled (centered around mean, SD = 1, i.e., z-transformed)
+    age = scale(ageInMonths, center = TRUE, scale = TRUE)[,1], 
+  ) %>% 
+  select(subjID, age, reliday, clickDistInBalloons)
+
+# run model
+mRetestHedge <- brm(clickDistInBalloons ~ age + (0 + reliday | subjID), 
+                              data   = mDataRetestHedge, 
+                              family = lognormal(), 
+                              warmup = 1000, 
+                              iter   = 3000, 
+                              chains = 4, 
+                              inits  = "random",
+                              cores  = 4)
+```
+
+```{r retest_box_model}
+# define data
+mDataRetestBox <- reli %>% 
+  filter(studyversion == "box" & sample == "kids") %>% 
+  mutate(
+    # scaled (centered around mean, SD = 1, i.e., z-transformed)
+    age = scale(ageInMonths, center = TRUE, scale = TRUE)[,1], 
+  ) %>% 
+  select(subjID, age, reliday, correctBox)
+
+# run model
+mRetestBox <- brm(correctBox ~ age + (0 + reliday | subjID), 
+                              data   = mDataRetestBox, 
+                              family = bernoulli(link = "logit"),
+                              warmup = 1000, 
+                              iter   = 3000, 
+                              chains = 4, 
+                              inits  = "random",
+                              cores  = 4)
 ```
 
 # Save plots
@@ -1102,3 +1185,25 @@ ggarrange(
 
 ggsave("../figures/gafo_results.png", width = 6.5, height = 5, scale = 1.6, bg = "white")
 ```
+
+```{r save_model_output}
+# mcor <- model_cor %>%
+#     mutate(task = recode(task,
+#                     `mutual_exclusivity` = "Mutual Exclusivity",
+#                     `informativeness` = "Informativeness Inference (1)",
+#                     `simple_inf` = "Informativeness Inference (2)",
+#                     `preference` = "Speaker Preference",
+#                     `novelty` = "Discourse Novelty",
+#                     `card_sorting` = "Card Sorting",
+#                     `discourse_continuity` = "Discourse Continuity",
+#                     `ad_hoc_implicature` = "Ad-hoc Implicature",
+#                     `match_to_sample` = "Relational Match-to-sample"),
+#            term = task, 
+#            mcor = Estimate, 
+#            mcor_lci = `l-95% CI`, 
+#            mcor_uci = `u-95% CI`)%>%
+#   select(study, term, task, mcor, mcor_lci, mcor_uci)
+
+# saveRDS(mcor, "model_results.rds")
+```
+
