@@ -43,7 +43,7 @@ testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>%
                        ), 
     
     # distance between target and click in balloon widths (balloon width is 160 SVG units)
-    clickDistInBalloons = clickDistInBalloons,
+    clickDistInBalloons = abs(clickDistFromTargetCenterX)/160,
   )
 ```
 
