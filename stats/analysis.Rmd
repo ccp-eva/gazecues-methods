@@ -423,7 +423,7 @@ splitscores_hedge_oddeven_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
 )
 
@@ -446,7 +446,7 @@ splitscores_hedge_oddevenStrat_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
   stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
 )
 
@@ -468,7 +468,7 @@ splitscores_hedge_firstsecond_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  replications = 10000,
+  replications = 1,
   method = c("first_second"),
 )
 
@@ -491,7 +491,7 @@ splitscores_hedge_firstsecondStrat_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
   stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
 )
 
@@ -564,7 +564,7 @@ splitscores_hedge_oddeven_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults"),
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
 )
 
@@ -587,7 +587,7 @@ splitscores_hedge_oddevenStrat_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
   stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
 )
 
@@ -609,7 +609,7 @@ splitscores_hedge_firstsecond_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults"),
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
-  replications = 10000,
+  replications = 1,
   method = c("first_second"),
 )
 
@@ -632,7 +632,7 @@ splitscores_hedge_firstsecondStrat_adults <- by_split(
   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_hedge,
   stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
 )
 
@@ -718,7 +718,7 @@ splitscores_box_oddeven_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids"),
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
 )
 
@@ -741,9 +741,9 @@ splitscores_box_oddevenStrat_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(targetPosition),
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
-  careful = FALSE
+  # careful = FALSE
 )
 
 box_oddevenStrat_kids <- split_coefs(splitscores_box_oddevenStrat_kids, cor)
@@ -764,7 +764,7 @@ splitscores_box_firstsecond_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids"),
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
-  replications = 10000,
+  replications = 1,
   method = c("first_second"),
 )
 
@@ -787,9 +787,9 @@ splitscores_box_firstsecondStrat_kids <- by_split(
   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(targetPosition),
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
-  careful = FALSE,
+  # careful = FALSE,
 )
 
 box_firstsecondStrat_kids <- split_coefs(splitscores_box_firstsecondStrat_kids, cor)
@@ -863,7 +863,7 @@ splitscores_box_oddeven_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults"),
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
 )
 
@@ -886,9 +886,9 @@ splitscores_box_oddevenStrat_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(targetPosition),
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
-  careful = FALSE,
+  # careful = FALSE,
 )
 
 box_oddevenStrat_adults <- split_coefs(splitscores_box_oddevenStrat_adults, cor)
@@ -909,7 +909,7 @@ splitscores_box_firstsecond_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults"),
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
-  replications = 10000,
+  replications = 1,
   method = c("first_second"),
 )
 
@@ -932,9 +932,9 @@ splitscores_box_firstsecondStrat_adults <- by_split(
   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
   fn_score_box,
   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(targetPosition),
-  replications = 10000,
+  replications = 1,
   method = c("odd_even"),
-  careful = FALSE,
+  # careful = FALSE,
 )
 
 box_firstsecondStrat_adults <- split_coefs(splitscores_box_firstsecondStrat_adults, cor)
