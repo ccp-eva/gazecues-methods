@@ -228,16 +228,20 @@ Two or three sentences to provide a \textbf{broader perspective}, readily compre
 
 Idea for an opener :)
 
-Developmental psychology is facing a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to reliably measure these individual differences. For example \ldots{} .
+Developmental psychology is facing a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to reliably measure these individual differences. For example \ldots{}
 
 \begin{itemize}
 \tightlist
 \item
-  individual differences in developmental psychology:
+  why is social cognition important
 \item
-  reliable tasks, variation needed, more trials
+  what methods are currently been used?: wellman
 \item
-  existing tasks for social cognition: wellman
+  what are common issues?
+\item
+  what to aim at. individual differences in developmental psychology
+\item
+  what characteristics should a new task fulfill? reliable tasks, variation needed, more trials
 \item
   goal of the current project: standardized, easy to use continuous methods
 \end{itemize}
@@ -298,14 +302,12 @@ All agents and target colors appear equally often and are not repeated in more t
 \subsection{Implementation}\label{implementation}}
 
 Our balloon finding task is presented as an interactive web-app. The task is portable across devices and web browsers and does not require any installation. A great advantage of online testing is that our testing procedure is standardized across participants. By using pre-recorded study instructions, no interaction with the experimenter is necessary during the study. The code is open-source (\url{https://github.com/ccp-eva/gafo-demo}) and a live demo version can be found under: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
-
 The web-app was programmed in JavaScript (ECMAScript 2015, i.e., ES6), HTML5, CSS and PHP.
 We utilized the zero configuration bundler Parcel to enable a live server for debugging, easy imports and minified scripts in order to save data storage.
 For stimulus presentation, a scalable vector graphic (SVG) composition was parsed. This way, the composition scales according to the user's view port without loss of quality, while keeping the aspect ratio and relative object positions constant.
 Furthermore, SVGs allow us to define all composite parts of the scene (e.g., pupil of the agent) individually. This is needed for precisely calculating exact pupil and target locations and sizes. Additionally, it makes it easy to adjust the stimuli and, for example, add another agent to the scene.
 The GreenSock Animation Platform (GSAP; TODO: insert citation) library was used to animate the movement of single SVG elements.
 We use URL parameters to capture the participant's ID, language and study version.
-
 The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device. For child samples, we upload safety copies of the already collected responses after the fourth test trial. In cases where children want to stop participation earlier, no responses get lost.
 
@@ -352,8 +354,9 @@ For completing the study, subjects were payed above the fixed minimum wage (in a
 \hypertarget{procedure}{%
 \subsection{Procedure}\label{procedure}}
 
-Children were tested in a quiet room in their daycare. An experimenter guided the child through the different parts of the study.
-All participants received 15 test trials that were displayed as described above. In the box version, we decided to adjust the task difficulty according to the participant's age: children were presented with five boxes while adults were presented with eight boxes as possible hiding location of the target.
+Children were tested in a quiet room in their daycare center. An experimenter accompanied the child and helped them navigate through the online study. Adult participated remotely without supervision.
+
+All participants received 15 test trials that were displayed as described above. In the box version, we decided to adjust the task difficulty according to the sample: children were presented with five boxes while adults were presented with eight boxes as possible target locations.
 
 \hypertarget{results}{%
 \subsection{Results}\label{results}}
@@ -383,10 +386,7 @@ Large data points with 95\% CI (based on non-parametric bootstrap) represent per
 Small data points show the mean performance for each subject. Shape of data points represents data collection mode: opaque round circles with stand for in-person supervised data collection, translucent diamonds stand for remote unsupervised data collection. Color of data points represent each age group (binned by year).}\label{fig:fig2}
 \end{figure}
 
-We assessed the effect of data collection mode and age (in months, z-transformed) in a Bayesian generalized linear mixed model with target position and subject ID as random effects. In the hedge version, the estimate of age is -0.33 ({[}-0.42; -0.23{]}) and of data collection mode is -0.32 ({[}-0.50; -0.14{]}, with remote unsupervised data collection as the reference category).
-In the box version, the estimate of age is 0.64 ({[}0.41; 0.88{]}) and of data collection mode is 1.16 ({[}0.73; 1.61{]}, with remote unsupervised data collection as the reference category).
-
-We captured a developmental trajectory of gaze cue understanding: with increasing age, participants get more and more accurate in their performance. In the hedge version, children's click imprecision drops with age, while in the box version the proportion of correct responses increases (see Figure 2 A and F). By the end of their sixth year of life, children come close to the adult's proficiency level. We find interindividual variation across studyversions and age groups: some three-year-olds are more accurate in their responses than some five-year-olds.
+We captured a developmental trajectory of gaze cue understanding: with increasing age, participants got more and more accurate in locating the target. In the hedge version, children's click imprecision droped with age, while, congruently, the proportion of correct responses increased in the box version (see Figure 2 A and F). By the end of their sixth year of life, children came close to the adult's proficiency level. We found interindividual variation across study versions and age groups: some three-year-olds were more precise in their responses than some five-year-olds.
 
 \hypertarget{remote-data-collection}{%
 \subsubsection{Remote data collection}\label{remote-data-collection}}
@@ -411,21 +411,24 @@ SD = 3.77,
 range = 60
 - 71,
 27 girls).
-Families were recruited on a voluntary basis via email from the institute internal database. Every child received a personalized link and families could participate at any time or location they wanted.
-In the beginning of the online study, families were invited to enter ``our virtual institute'' and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. We stressed that caregivers should not help their children and that all kinds of child behavior were interesting to us. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves. After completion, families received a little crafting / coloring sheet as a small thank-you gift.
-Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen. Caregivers were then asked to act as the ``digital finger'' of their children and click on the indicated box.
+Families were recruited on a voluntary basis via email from the institute's internal database. Every child received a personalized link and families could participate at any time or location they wanted.
+In the beginning of the online study, families were invited to enter our ``virtual institute'' and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. We stressed that caregivers should not help their children. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves.
+Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen, while caregivers were asked to act as the ``digital finger'' of their children and click on the indicated box.
 
-As Figure 2 A and F show, our remotely collected data closely resembled the data from the kindergarten sample. We found a minor difference in that children that participate remotely are slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to help with the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
+As Figure 2 A and F show, our remotely collected data closely resembled the data from the kindergarten sample. We found a minor difference in that children that participate remotely were slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to help with the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
+
+To quantify the effect sizes, we formulated a Bayesian generalized linear mixed model with age (in months, z-transformed) and data collection mode (with remote unsupervised data collection as the reference category), and target position and subject ID as random effects. In the hedge version, we found an estimate of age of -0.33 ({[}-0.42; -0.23{]}) and an estimate of data collection mode of -0.32 ({[}-0.50; -0.14{]}).
+In the box version, the estimate of age was 0.64 ({[}0.41; 0.88{]}) and the estimate of data collection mode was 1.16 ({[}0.73; 1.61{]}; remote unsupervised data collection as reference category).
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
 
-Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation in across all age groups. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used.
+Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation across all age groups. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used.
 
 \hypertarget{can-we-capture-variation-reliably}{%
 \section{Can we capture variation reliably?}\label{can-we-capture-variation-reliably}}
 
-Based on the results of Study 1, we wanted to further investigate whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the internal consistency and test-retest reliability. The pre-registrations can be found here: \url{https://osf.io/xqm73} (child sample) and here: \url{https://osf.io/nu62m} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between XXX 2021 and XXX 2022.
+As a next step we aimed at investigating whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the internal consistency, as calculated by splithalf reliability, and the test-retest reliability. The pre-registrations can be found here: \url{https://osf.io/xqm73} (child sample) and here: \url{https://osf.io/nu62m} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between XXX 2021 and XXX 2022.
 
 \hypertarget{participants-1}{%
 \subsection{Participants}\label{participants-1}}
@@ -457,90 +460,38 @@ The adult sample was again recruited over \emph{Prolific} and consisted of 136 E
 \hypertarget{procedure-1}{%
 \subsection{Procedure}\label{procedure-1}}
 
-The procedure was as in the first study, with the following differences. Participants completed the study twice, with a delay of 14 ± 3 days.
-The target locations as well as the succession of animals and target colors was randomized once. Each participant then received this fixed randomized order of target location, animal, and target color.
+We applied the same procedure as in the first study, with the following differences. Participants completed the study twice, with a delay of 14 ± 3 days.
+The target locations as well as the succession of animals and target colors was randomized once and then held constant across participants.
 The child sample received 15 test trials. In the hedge version, each bin occurred once, making up ten of the test trials. For the remaining five test trials, we repeated one out of two adjacent bins (i.e., randomly chose between bin 1 \& 2, bin 3 \& 4, etc). In the box version, we ensured that each of the five boxes occurred exactly three times. For the remaining training trials, we repeated a fixed order of four random bins/boxes.
 Adults in the hedge version received 30 test trials, each of the ten bin occurring exactly three times. Adults in the box version received 32 test trials with each of the eight boxes occurring exactly four times.
 
 \hypertarget{results-1}{%
 \subsection{Results}\label{results-1}}
 
-\begin{itemize}
-\tightlist
-\item
-  internal consistency
-\item
-  test-retest
-\end{itemize}
+As a first step for estimating the reliability of our task, we focused on the internal consistency by calculating splithalf reliability coefficients. Trials were split into two equally big parts and the performance scores per part were correlated against each other. We used the raw performance per subject of the first test day. Traditional odd-even splits on our data and the corresponding \emph{Pearson} correlation coefficients are shown in Figure 2 B, C, G and H.
 
-For estimating the internal consistency, we analyzed the raw performance per subject of the first test day.
-Our main analysis focuses on an odd-even split on our data.\\
-In the hedge version, odd-even splitting yielded an estimate of 0.86 for the child sample (see Figure 2B), and an estimate of 0.77 for the adult sample (see Figure 2C).
-In the box version, odd-even splitting yielded an estimate of 0.55 for the child sample (see Figure 2G), and an estimate of 0.76 for the adult sample (see Figure 2H).
+As a recent paper by Pronk, Molenaar, Wiers and Murre (2021; TODO insert citation) suggested, there are various, more sophisticated split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design.
+To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position. First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling.
+In the hedge version, reliability coefficients ranged from 0.57 to 0.87. In the box version, reliability coefficients ranged from 0.43 to 0.76.
+Similarly to the results of Pronk, Molenaar, Wiers and Murre (2021), we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients. In the majority of cases, stratifying by target position lead to similar or even higher estimates compared to no stratification. As might be expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
 
-A recent paper by {[}TODO: insert citation splithalfr paper{]} presents new techniques to analyze internal consistency.
-The modern statistical approach of stratification allows for a better representation of the data and experimental structure.
-To compare our traditional approach of a simple odd-even split, we explored the results of random, odd-even and first-second-testhalf splits without and with stratification by target position. As can be seen in Table 1, stratifying by target position leads to similar or even higher estimates.
-As might be expected, we found higher coefficients for the samples with higher variation, i.e.~for our continuous hedge version of the task.
 
-\begin{tabular}{l|l|l|l|r|r|r}
-\hline
-study version & age group & splitting method & stratification & mean estimate & lower 95\%CI & upper 95\%CI\\
-\hline
-hedge & kids & random & none & 0.8043888 & 0.6920419 & 0.9164789\\
-\hline
-hedge & kids & random & target position & 0.9476184 & 0.8969928 & 0.9755679\\
-\hline
-hedge & kids & odd even & none & 0.8594840 & 0.7205078 & 0.9093440\\
-\hline
-hedge & kids & odd even & target position & 0.8024165 & 0.5332674 & 0.9298445\\
-\hline
-hedge & kids & first second & none & 0.8181923 & 0.6947852 & 0.9381469\\
-\hline
-hedge & kids & first second & target position & 0.8024165 & 0.5203456 & 0.9246955\\
-\hline
-hedge & adults & random & none & 0.8653142 & 0.7987080 & 0.9165413\\
-\hline
-hedge & adults & random & target position & 0.9239187 & 0.8751052 & 0.9518373\\
-\hline
-hedge & adults & odd even & none & 0.7686066 & 0.5965930 & 0.8631549\\
-\hline
-hedge & adults & odd even & target position & 0.8024056 & 0.6640335 & 0.8818732\\
-\hline
-hedge & adults & first second & none & 0.6752549 & 0.5261556 & 0.7964930\\
-\hline
-hedge & adults & first second & target position & 0.8024056 & 0.6561634 & 0.8822399\\
-\hline
-box & kids & random & none & 0.7660606 & 0.5458261 & 0.8598990\\
-\hline
-box & kids & random & target position & 0.9088431 & 0.8521932 & 0.9424099\\
-\hline
-box & kids & odd even & none & 0.5483231 & 0.3375113 & 0.6922869\\
-\hline
-box & kids & odd even & target position & 0.6137607 & 0.3960722 & 0.7393150\\
-\hline
-box & kids & first second & none & 0.5022750 & 0.2369860 & 0.6633424\\
-\hline
-box & kids & first second & target position & 0.6137607 & 0.3772301 & 0.7354956\\
-\hline
-box & adults & random & none & 0.8004204 & 0.6814629 & 0.8755589\\
-\hline
-box & adults & random & target position & 0.8657569 & 0.7669845 & 0.9221076\\
-\hline
-box & adults & odd even & none & 0.7597443 & 0.6424789 & 0.8387192\\
-\hline
-box & adults & odd even & target position & 0.6673433 & 0.4851349 & 0.7846746\\
-\hline
-box & adults & first second & none & 0.6685946 & 0.4850376 & 0.7642744\\
-\hline
-box & adults & first second & target position & 0.6673433 & 0.4845532 & 0.7820390\\
-\hline
-\end{tabular}
 
-Our results indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task.
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/gafo_splithalf} 
+
+}
+
+\caption{\textbf{Internal Consisteny}.
+Reliability coefficients per splitting method, stratification level, study version and age group. Error bars show the 95\% confidence intervals of the coefficient estimates.}\label{fig:fig3}
+\end{figure}
 
 \hypertarget{discussion-1}{%
 \subsection{Discussion}\label{discussion-1}}
+
+Our results indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task.
 
 \hypertarget{exploring-the-external-validity-of-our-task}{%
 \section{Exploring the external validity of our task}\label{exploring-the-external-validity-of-our-task}}
