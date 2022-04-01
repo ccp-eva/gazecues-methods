@@ -246,6 +246,18 @@ Developmental psychology is facing a dilemma: many research questions are questi
   goal of the current project: standardized, easy to use continuous methods
 \end{itemize}
 
+``Recently, it was suggested that a range of cognitive tasks may reliably measure group differences but not individual differences (Hedge et al., 2018). As cognitive tests are commonly used to make inferences about individuals, it seems a worthwhile pursuit to improve the reliability with which individual differences are assessed using these tests. To judge the success of such pursuits, accurate estimates of reliability are required.'' (Pronk, Molenaar, Wiers and Murre, 2021, p.~1)
+``Firstly, reliability is not only a function of task and population sample but also of scoring algorithms.'' (Pronk, Molenaar, Wiers and Murre, 2021, p.~9)
+``Hence, we conclude that for the datasets included in our reanalysis, cognitive tasks may well have been able to measure individual differences, but that these differences may be relatively unstable over time (Kopp et al., 2021). In practice, this may make cognitive tasks suitable for cross-sectional research of individual differences, but not for longitudinal research.'' (Pronk, Molenaar, Wiers and Murre, 2021, p.~10)
+
+Rakoczy, H. (2022). Foundations of theory of mind and its development in early childhood. Nature Reviews Psychology, 1--13. \url{https://doi.org/10.1038/s44159-022-00037-z}:
+``The way humans view agents, be it others or themselves, differs radically from the way humans view the rest of the world. This difference is because agents feel, perceive and think. Agents see the world from their own subjective perspective and they rationally plan, form intentions and act accordingly. This way of seeing others as rational subjects with individual perspectives on the world is termed theory of mind (ToM).'' (p.~1)
+``ToM also has specific real-life consequences. First, the development of ToM competence goes along with general measures of children's peer social skills in early and middle childhood. (\ldots) Second, ToM specifically predicts communicative competence. (\ldots) Third, ToM competence is related to the quality of peer relationships: children with more advanced ToM are rated as more likeable and popular among their peers. Fourth, children who are more proficient at ToM tasks tend to act more prosocially, including comforting, sharing or helping other individuals. Finally, preschool ToM competence predicts achievement in primary school, a relationship that is possibly mediated by social competence, in that preschool ToM abilities enable subsequent social competence development, which in turn contributes to school achievement.'' (p.~2)
+``Evidence for an emerging understanding of perception at 9 months of age comes from various sources. For example, children begin to follow the gaze of other agents in systematic and differential ways: they follow an agent's head turn only when the agent can actually see (has their eyes open rather than closed, or wears a transparent rather than an opaque blindfold).'' (p.~2)
+Developmental determinants: executive function, language (``that'' complementations), social (SES, siblings, mind-minded parents)
+Implicit tasks: ``A third class of implicit ToM tasks is interaction tasks, in which participants are involved in a communicative or cooperative interaction with another agent. This agent forms a mental state (such as a true or false belief regarding the contents of a box) and experimenters measure whether participants spontaneously take the agent's belief into account in their interaction with the agent (for instance by helping or by interpreting the agent's communicative acts accordingly)'' (p.~9)
+=\textgreater{} reliable \& valid tasks to assess coherent development of social-cognitive functions
+
 \hypertarget{design-of-our-balloon-finding-task}{%
 \section{Design of our balloon finding task}\label{design-of-our-balloon-finding-task}}
 
@@ -306,7 +318,7 @@ The web-app was programmed in JavaScript (ECMAScript 2015, i.e., ES6), HTML5, CS
 We utilized the zero configuration bundler Parcel to enable a live server for debugging, easy imports and minified scripts in order to save data storage.
 For stimulus presentation, a scalable vector graphic (SVG) composition was parsed. This way, the composition scales according to the user's view port without loss of quality, while keeping the aspect ratio and relative object positions constant.
 Furthermore, SVGs allow us to define all composite parts of the scene (e.g., pupil of the agent) individually. This is needed for precisely calculating exact pupil and target locations and sizes. Additionally, it makes it easy to adjust the stimuli and, for example, add another agent to the scene.
-The GreenSock Animation Platform (GSAP; TODO: insert citation) library was used to animate the movement of single SVG elements.
+The GreenSock Animation Platform (GSAP; Greensock (2022)) library was used to animate the movement of single SVG elements.
 We use URL parameters to capture the participant's ID, language and study version.
 The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device. For child samples, we upload safety copies of the already collected responses after the fourth test trial. In cases where children want to stop participation earlier, no responses get lost.
@@ -314,19 +326,21 @@ For our samples described in this paper, we deployed the web-app on servers loca
 \hypertarget{data-processing}{%
 \subsection{Data processing}\label{data-processing}}
 
-We used R (Version 4.1.2; R Core Team, 2021) and the R-packages \emph{brms} (Version 2.15.0; Bürkner, 2017, 2018), \emph{dplyr} (Version 1.0.8; Wickham, François, Henry, \& Müller, 2021), \emph{forcats} (Version 0.5.1; Wickham, 2021a), \emph{ggplot2} (Version 3.3.5; Wickham, 2016), \emph{ggpubr} (Version 0.4.0; Kassambara, 2020), \emph{ggthemes} (Version 4.2.4; Arnold, 2021), \emph{papaja} (Version 0.1.0.9997; Aust \& Barth, 2020), \emph{purrr} (Version 0.3.4; Henry \& Wickham, 2020), \emph{Rcpp} (Eddelbuettel \& Balamuta, 2018; Version 1.0.6; Eddelbuettel \& François, 2011), \emph{readr} (Version 1.4.0; Wickham \& Hester, 2020), \emph{splithalfr} (Version 2.1.1; Thomas, Dylan, Reinout, \& Jaap, 2021), \emph{stringr} (Version 1.4.0; Wickham, 2019), \emph{tibble} (Version 3.1.6; Müller \& Wickham, 2021), \emph{tidyboot} (Version 0.1.1; Braginsky \& Yurovsky, 2018), \emph{tidyr} (Version 1.2.0; Wickham, 2021b), \emph{tidyverse} (Version 1.3.1; Wickham et al., 2019), \emph{tinylabels} (Version 0.2.3; Barth, 2022), \emph{viridis} (Version 0.6.1; Garnier et al., 2021a, 2021b), and \emph{viridisLite} (Version 0.4.0; Garnier et al., 2021b) for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses.
+We used R version 4.1.3 (2022-03-10) (R Core Team, 2022), and the packages \emph{splithalfr} (Pronk, Molenaar, Wiers, \& Murre, 2021) and \emph{brms} (Bürkner, 2017, 2018) for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses.
 All test trials without voice over description are included in our analyses.
 
 \hypertarget{does-the-balloon-finding-task-induce-variation}{%
 \section{Does the balloon finding task induce variation?}\label{does-the-balloon-finding-task-induce-variation}}
 
-Our first aim was to assess whether our balloon finding task induces variation in a child and adult sample. The pre-registrations can be found here: \url{https://osf.io/snju6} (child sample) and here: \url{https://osf.io/r3bhn} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between May 2021 and XXX 2022.
+Our first aim was to assess whether our balloon finding task induces interindividual variation in a child and adult sample. Furthermore, we were interested in how the data collection mode influences responses. To analyze how the in-person collected data compares to data that gets collected in a online without supervision, we collected a remote child and adult sample.
+
+The pre-registrations can be found here: \url{https://osf.io/snju6} (child sample) and here: \url{https://osf.io/r3bhn} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between May and October 2021.
 
 \hypertarget{participants}{%
 \subsection{Participants}\label{participants}}
 
-For our child sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
-The child sample consisted of
+We collected data from an in-person child sample, a remote child sample, and a remote adult sample.
+In-person testing with children took place in kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. The in-person child sample consisted of
 120 children, including
 40 3-year-olds
 (mean = 41.45 months,
@@ -346,15 +360,38 @@ SD = 3.39,
 range = 60
 - 71,
 22 girls).
-Children received a small thank-you gift for their participation in the study.
 
-In addition, we recruited adult participants by advertising the study on \emph{Prolific}. \emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of 100 English-speakers with an average age of 31.34 years (SD = 10.77, range = 18 - 63, 64 females).
+For our remote child sample, we recruited families on a voluntary basis via email from the institute's internal database. Our remote child sample included 147 children, including
+45 3-year-olds
+(mean = 42.62 months,
+SD = 3.35,
+range = 36
+- 47,
+14 girls),
+47 4-year-olds
+(mean = 52.64 months,
+SD = 3.40,
+range = 48
+- 59,
+25 girls),
+and 55 5-year-olds
+(mean = 65.11 months,
+SD = 3.77,
+range = 60
+- 71,
+27 girls). Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
+
+In addition, we recruited a remote adult sample by advertising the study on \emph{Prolific}. \emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of 100 English-speakers with an average age of 31.34 years (SD = 10.77, range = 18 - 63, 64 females).
 For completing the study, subjects were payed above the fixed minimum wage (in average £10.00 per hour). \emph{Prolific} distributed our study link to potential participants, while the hosting of the online study was done by local servers in the Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany.
 
 \hypertarget{procedure}{%
 \subsection{Procedure}\label{procedure}}
 
-Children were tested in a quiet room in their daycare center. An experimenter accompanied the child and helped them navigate through the online study. Adult participated remotely without supervision.
+Children in our in-person sample were tested on a tablet in a quiet room in their daycare center. An experimenter accompanied the child and helped them navigate through the online study.
+Children in the remote sample received a personalized link to the study websites and families could participate at any time or location they wanted. In the beginning of the online study, families were invited to enter our ``virtual institute'' and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. We stressed that caregivers should not help their children. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves.
+Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen, while caregivers were asked to act as the ``digital finger'' of their children and click on the indicated box.
+
+Our adult sample participated remotely without supervision.
 
 All participants received 15 test trials that were displayed as described above. In the box version, we decided to adjust the task difficulty according to the sample: children were presented with five boxes while adults were presented with eight boxes as possible target locations.
 
@@ -388,47 +425,26 @@ Small data points show the mean performance for each subject. Shape of data poin
 
 We captured a developmental trajectory of gaze cue understanding: with increasing age, participants got more and more accurate in locating the target. In the hedge version, children's click imprecision droped with age, while, congruently, the proportion of correct responses increased in the box version (see Figure 2 A and F). By the end of their sixth year of life, children came close to the adult's proficiency level. We found interindividual variation across study versions and age groups: some three-year-olds were more precise in their responses than some five-year-olds.
 
-\hypertarget{remote-data-collection}{%
-\subsubsection{Remote data collection}\label{remote-data-collection}}
+As Figure 2 A and F show, our remotely collected data resembled the data from the kindergarten sample.
+To quantify the effect sizes, we formulated a Bayesian generalized linear mixed model with age (in months, z-transformed) and data collection mode (with in-person supervised data collection as the reference category), and target position and subject ID as random effects. In the hedge version, we found an estimate of age of -0.33 (95\% CI {[}-0.42; -0.23{]}) and an estimate of data collection mode of -0.32 (95\% CI {[}-0.50; -0.14{]}).
+In the box version, the estimate of age was 0.64 (95\% CI {[}0.41; 0.88{]}) and the estimate of data collection mode was 1.16 (95\% CI {[}0.73; 1.61{]}). Note that the effect of data collection appears to be present, but confidence intervals are wide.
 
-Since our task is implemented in a way that no experimenter interaction is necessary, data can also be collected without supervision.
-To assess whether we would gain similar results in a remote testing context, we recruited an additional online sample of 147 children, including
-45 3-year-olds
-(mean = 42.62 months,
-SD = 3.35,
-range = 36
-- 47,
-14 girls),
-47 4-year-olds
-(mean = 52.64 months,
-SD = 3.40,
-range = 48
-- 59,
-25 girls),
-and 55 5-year-olds
-(mean = 65.11 months,
-SD = 3.77,
-range = 60
-- 71,
-27 girls).
-Families were recruited on a voluntary basis via email from the institute's internal database. Every child received a personalized link and families could participate at any time or location they wanted.
-In the beginning of the online study, families were invited to enter our ``virtual institute'' and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. We stressed that caregivers should not help their children. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves.
-Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen, while caregivers were asked to act as the ``digital finger'' of their children and click on the indicated box.
-
-As Figure 2 A and F show, our remotely collected data closely resembled the data from the kindergarten sample. We found a minor difference in that children that participate remotely were slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to help with the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
-
-To quantify the effect sizes, we formulated a Bayesian generalized linear mixed model with age (in months, z-transformed) and data collection mode (with remote unsupervised data collection as the reference category), and target position and subject ID as random effects. In the hedge version, we found an estimate of age of -0.33 ({[}-0.42; -0.23{]}) and an estimate of data collection mode of -0.32 ({[}-0.50; -0.14{]}).
-In the box version, the estimate of age was 0.64 ({[}0.41; 0.88{]}) and the estimate of data collection mode was 1.16 ({[}0.73; 1.61{]}; remote unsupervised data collection as reference category).
+Our GLMM analysis, therefore, corroborated the effects of age and data collection mode that we already identified by visual inspection.
+We found evidence that responses of children participating remotely were slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.\footnote{In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing. Due to the incredible time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = 16). We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
+  A trial was defined as the time between two eye blinking sounds. We transcribed all utterances by parents and children and counted the words uttered by each. We then classified the utterances into several categories: question asked by child, repeated testquestion by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive \& negative feedback, motivational statements, and incomprehensible utterances.
+  In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial.
+  We ran exploratory analyses . Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample. Our null model explained the the response behavior by age, while including random effects for subject and target position. We compared this null model to models including the number of words utterred by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect.
+  On the trial level, the model including the verification of choice as a main effect won: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. On a subject level, the effect reversed - possibly due to greatest learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. Additionally, number of repeated testquestions displayed a negative estimate on the subject level: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. {[}TODO:{]} In all cases, however, standard errors of the WAIC score differences where greater than the ELPD difference scores themselves. Similarly, 95\% CI of the model estimates included zero and were rather wide. Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis.}
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
 
-Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation across all age groups. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used.
+Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found interindividual variation across all age groups. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used.
 
 \hypertarget{can-we-capture-variation-reliably}{%
 \section{Can we capture variation reliably?}\label{can-we-capture-variation-reliably}}
 
-As a next step we aimed at investigating whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the internal consistency, as calculated by splithalf reliability, and the test-retest reliability. The pre-registrations can be found here: \url{https://osf.io/xqm73} (child sample) and here: \url{https://osf.io/nu62m} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between XXX 2021 and XXX 2022.
+As a next step we aimed at investigating whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the internal consistency, as calculated by splithalf reliability, and the test-retest reliability. The pre-registrations can be found here: \url{https://osf.io/xqm73} (child sample) and here: \url{https://osf.io/nu62m} (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between July 2021 and April 2022.
 
 \hypertarget{participants-1}{%
 \subsection{Participants}\label{participants-1}}
@@ -470,10 +486,10 @@ Adults in the hedge version received 30 test trials, each of the ten bin occurri
 
 As a first step for estimating the reliability of our task, we focused on the internal consistency by calculating splithalf reliability coefficients. Trials were split into two equally big parts and the performance scores per part were correlated against each other. We used the raw performance per subject of the first test day. Traditional odd-even splits on our data and the corresponding \emph{Pearson} correlation coefficients are shown in Figure 2 B, C, G and H.
 
-As a recent paper by Pronk, Molenaar, Wiers and Murre (2021; TODO insert citation) suggested, there are various, more sophisticated split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design.
+As a recent paper by Pronk et al. (2021) suggested, there are various, more sophisticated split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design.
 To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position. First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling.
 In the hedge version, reliability coefficients ranged from 0.57 to 0.87. In the box version, reliability coefficients ranged from 0.43 to 0.76.
-Similarly to the results of Pronk, Molenaar, Wiers and Murre (2021), we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients. In the majority of cases, stratifying by target position lead to similar or even higher estimates compared to no stratification. As might be expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
+Similarly to the results of Pronk et al. (2021), we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients. In the majority of cases, stratifying by target position lead to similar or even higher estimates compared to no stratification. As might be expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
 
 
 
@@ -501,7 +517,7 @@ Our third aim was to assess whether the captured individual variation in gaze cu
 \hypertarget{participants-2}{%
 \subsection{Participants}\label{participants-2}}
 
-For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This ub sample consisted of
+For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This subsample consisted of
 130 children, including
 39 3-year-olds
 (mean = 43.02 months,
@@ -597,71 +613,20 @@ optional: please review the submission guidelines from the journal whether state
 
 \hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-R-ggthemes}{}}%
-Arnold, J. B. (2021). \emph{Ggthemes: Extra themes, scales and geoms for 'ggplot2'}. Retrieved from \url{https://CRAN.R-project.org/package=ggthemes}
+\leavevmode\vadjust pre{\hypertarget{ref-burkner2017brms}{}}%
+Bürkner, P.-C. (2017). Brms: {An R Package} for {Bayesian Multilevel Models Using Stan}. \emph{Journal of Statistical Software}, \emph{80}(1). \url{https://doi.org/10.18637/jss.v080.i01}
 
-\leavevmode\vadjust pre{\hypertarget{ref-R-papaja}{}}%
-Aust, F., \& Barth, M. (2020). \emph{{papaja}: {Create} {APA} manuscripts with {R Markdown}}. Retrieved from \url{https://github.com/crsh/papaja}
+\leavevmode\vadjust pre{\hypertarget{ref-burkner2018advanced}{}}%
+Bürkner, P.-C. (2018). Advanced {Bayesian Multilevel Modeling} with the {R Package} brms. \emph{The R Journal}, \emph{10}(1), 395. \url{https://doi.org/10.32614/RJ-2018-017}
 
-\leavevmode\vadjust pre{\hypertarget{ref-R-tinylabels}{}}%
-Barth, M. (2022). \emph{{tinylabels}: Lightweight variable labels}. Retrieved from \url{https://cran.r-project.org/package=tinylabels}
+\leavevmode\vadjust pre{\hypertarget{ref-greensock2022gsap}{}}%
+Greensock. (2022). \emph{{GSAP} ({GreenSock Animation Platform})}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-R-tidyboot}{}}%
-Braginsky, M., \& Yurovsky, D. (2018). \emph{Tidyboot: Tidyverse-compatible bootstrapping}. Retrieved from \url{https://CRAN.R-project.org/package=tidyboot}
+\leavevmode\vadjust pre{\hypertarget{ref-pronk2021methods}{}}%
+Pronk, T., Molenaar, D., Wiers, R. W., \& Murre, J. (2021). Methods to split cognitive task data for estimating split-half reliability: {A} comprehensive review and systematic assessment. \emph{Psychonomic Bulletin \& Review}. \url{https://doi.org/10.3758/s13423-021-01948-3}
 
-\leavevmode\vadjust pre{\hypertarget{ref-R-brms_a}{}}%
-Bürkner, P.-C. (2017). {brms}: An {R} package for {Bayesian} multilevel models using {Stan}. \emph{Journal of Statistical Software}, \emph{80}(1), 1--28. \url{https://doi.org/10.18637/jss.v080.i01}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-brms_b}{}}%
-Bürkner, P.-C. (2018). Advanced {Bayesian} multilevel modeling with the {R} package {brms}. \emph{The R Journal}, \emph{10}(1), 395--411. \url{https://doi.org/10.32614/RJ-2018-017}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-Rcpp_b}{}}%
-Eddelbuettel, D., \& Balamuta, J. J. (2018). {Extending extit{R} with extit{C++}: A Brief Introduction to extit{Rcpp}}. \emph{The American Statistician}, \emph{72}(1), 28--36. \url{https://doi.org/10.1080/00031305.2017.1375990}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-Rcpp_a}{}}%
-Eddelbuettel, D., \& François, R. (2011). {Rcpp}: Seamless {R} and {C++} integration. \emph{Journal of Statistical Software}, \emph{40}(8), 1--18. \url{https://doi.org/10.18637/jss.v040.i08}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-viridis}{}}%
-Garnier, Simon, Ross, Noam, Rudis, Robert, \ldots{} Cédric. (2021a). \emph{{viridis} - colorblind-friendly color maps for r}. \url{https://doi.org/10.5281/zenodo.4679424}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-viridisLite}{}}%
-Garnier, Simon, Ross, Noam, Rudis, Robert, \ldots{} Cédric. (2021b). \emph{{viridis} - colorblind-friendly color maps for r}. \url{https://doi.org/10.5281/zenodo.4679424}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-purrr}{}}%
-Henry, L., \& Wickham, H. (2020). \emph{Purrr: Functional programming tools}. Retrieved from \url{https://CRAN.R-project.org/package=purrr}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-ggpubr}{}}%
-Kassambara, A. (2020). \emph{Ggpubr: 'ggplot2' based publication ready plots}. Retrieved from \url{https://CRAN.R-project.org/package=ggpubr}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-tibble}{}}%
-Müller, K., \& Wickham, H. (2021). \emph{Tibble: Simple data frames}. Retrieved from \url{https://CRAN.R-project.org/package=tibble}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-base}{}}%
-R Core Team. (2021). \emph{R: A language and environment for statistical computing}. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from \url{https://www.R-project.org/}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-splithalfr}{}}%
-Thomas, P., Dylan, M., Reinout, W., \& Jaap, M. (2021). Methods to split cognitive task data for estimating split-half reliability: A comprehensive review and systematic assessment. \emph{Psychonomic Bulletin \& Review}, 1--11. \url{https://doi.org/10.3758/s13423-021-01948-3}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-ggplot2}{}}%
-Wickham, H. (2016). \emph{ggplot2: Elegant graphics for data analysis}. Springer-Verlag New York. Retrieved from \url{https://ggplot2.tidyverse.org}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-stringr}{}}%
-Wickham, H. (2019). \emph{Stringr: Simple, consistent wrappers for common string operations}. Retrieved from \url{https://CRAN.R-project.org/package=stringr}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-forcats}{}}%
-Wickham, H. (2021a). \emph{Forcats: Tools for working with categorical variables (factors)}. Retrieved from \url{https://CRAN.R-project.org/package=forcats}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-tidyr}{}}%
-Wickham, H. (2021b). \emph{Tidyr: Tidy messy data}. Retrieved from \url{https://CRAN.R-project.org/package=tidyr}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-tidyverse}{}}%
-Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., \ldots{} Yutani, H. (2019). Welcome to the {tidyverse}. \emph{Journal of Open Source Software}, \emph{4}(43), 1686. \url{https://doi.org/10.21105/joss.01686}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-dplyr}{}}%
-Wickham, H., François, R., Henry, L., \& Müller, K. (2021). \emph{Dplyr: A grammar of data manipulation}. Retrieved from \url{https://CRAN.R-project.org/package=dplyr}
-
-\leavevmode\vadjust pre{\hypertarget{ref-R-readr}{}}%
-Wickham, H., \& Hester, J. (2020). \emph{Readr: Read rectangular text data}. Retrieved from \url{https://CRAN.R-project.org/package=readr}
+\leavevmode\vadjust pre{\hypertarget{ref-rcoreteam2022language}{}}%
+R Core Team. (2022). \emph{R: {A} language and environment for statistical computing} {[}Manual{]}. {Vienna, Austria}: {R Foundation for Statistical Computing}.
 
 \end{CSLReferences}
 
@@ -738,7 +703,7 @@ Of the additional 50 participants that completed testday 1, 28 subjects finished
 The validation of our task in a in-person and remote child sample can be found here: \url{https://osf.io/snju6}.
 We chose to have at least 20 data points per cell (i.e.~unique combination of data collection mode, study version, and age-group). Across the two data collection modes, a total of \ldots{} children participated. Participants received a small gift as thank you for their participation in the study.
 
-For our in-person supervised testing sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. For our remote unsupervised testing sample, families were recruited on a voluntary basis via email from the database of the Max Planck Institute for Evolutionary Anthropology. Children in both sub samples live in Leipzig, Germany or surrounding areas and grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
+For our in-person supervised testing sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. For our remote unsupervised testing sample, families were recruited on a voluntary basis via email from the database of the Max Planck Institute for Evolutionary Anthropology. Children in both subsamples live in Leipzig, Germany or surrounding areas and grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
 Written informed consent was obtained from at least one caregiver prior to testing.
 TODO: how to phrase for kiga testing?
 

@@ -49,7 +49,7 @@ abstract: |
 keywords          : "social cognition, individual differences, gaze cues, psychometrics"
 wordcount         : "X"
 
-bibliography      : ["r-references.bib"]
+bibliography      : ["../../references.bib"]
 
 floatsintext      : yes
 figurelist        : no
@@ -70,7 +70,7 @@ header-includes:
 
 ```{r setup, include = FALSE}
 library("papaja")
-r_refs("r-references.bib")
+# r_refs("r-references.bib")
 ```
 
 ```{r analysis-preferences}
@@ -109,6 +109,14 @@ Developmental psychology is facing a dilemma: many research questions are questi
 "Firstly, reliability is not only a function of task and population sample but also of scoring algorithms." (Pronk, Molenaar, Wiers and Murre, 2021, p. 9)
 "Hence, we conclude that for the datasets included in our reanalysis, cognitive tasks may well have been able to measure individual differences, but that these differences may be relatively unstable over time (Kopp et al., 2021). In practice, this may make cognitive tasks suitable for cross-sectional research of individual differences, but not for longitudinal research." (Pronk, Molenaar, Wiers and Murre, 2021, p. 10)
 
+Rakoczy, H. (2022). Foundations of theory of mind and its development in early childhood. Nature Reviews Psychology, 1–13. https://doi.org/10.1038/s44159-022-00037-z:
+"The way humans view agents, be it others or themselves, differs radically from the way humans view the rest of the world. This difference is because agents feel, perceive and think. Agents see the world from their own subjective perspective and they rationally plan, form intentions and act accordingly. This way of seeing others as rational subjects with individual perspectives on the world is termed theory of mind (ToM)." (p. 1)
+"ToM also has specific real-life consequences. First, the development of ToM competence goes along with general measures of children’s peer social skills in early and middle childhood. (...) Second, ToM specifically predicts communicative competence. (...) Third, ToM competence is related to the quality of peer relationships: children with more advanced ToM are rated as more likeable and popular among their peers. Fourth, children who are more proficient at ToM tasks tend to act more prosocially, including comforting, sharing or helping other individuals. Finally, preschool ToM competence predicts achievement in primary school, a relationship that is possibly mediated by social competence, in that preschool ToM abilities enable subsequent social competence development, which in turn contributes to school achievement." (p. 2)
+"Evidence for an emerging understanding of perception at 9 months of age comes from various sources. For example, children begin to follow the gaze of other agents in systematic and differential ways: they follow an agent’s head turn only when the agent can actually see (has their eyes open rather than closed, or wears a transparent rather than an opaque blindfold)." (p. 2)
+Developmental determinants: executive function, language ("that" complementations), social (SES, siblings, mind-minded parents)
+Implicit tasks: "A third class of implicit ToM tasks is interaction tasks, in which participants are involved in a communicative or cooperative interaction with another agent. This agent forms a mental state (such as a true or false belief regarding the contents of a box) and experimenters measure whether participants spontaneously take the agent’s belief into account in their interaction with the agent (for instance by helping or by interpreting the agent’s communicative acts accordingly)" (p. 9)
+=> reliable & valid tasks to assess coherent development of social-cognitive functions
+
 # Design of our balloon finding task
 - face value of task (or maybe in intro already?)
 
@@ -145,17 +153,19 @@ The web-app was programmed in JavaScript (ECMAScript 2015, i.e., ES6), HTML5, CS
 We utilized the zero configuration bundler Parcel to enable a live server for debugging, easy imports and minified scripts in order to save data storage.
 For stimulus presentation, a scalable vector graphic (SVG) composition was parsed. This way, the composition scales according to the user's view port without loss of quality, while keeping the aspect ratio and relative object positions constant. 
 Furthermore, SVGs allow us to define all composite parts of the scene (e.g., pupil of the agent) individually. This is needed for precisely calculating exact pupil and target locations and sizes. Additionally, it makes it easy to adjust the stimuli and, for example, add another agent to the scene.
-The GreenSock Animation Platform (GSAP; TODO: insert citation) library was used to animate the movement of single SVG elements. 
+The GreenSock Animation Platform (GSAP; @greensock2022gsap) library was used to animate the movement of single SVG elements. 
 We use URL parameters to capture the participant's ID, language and study version. 
 The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device. For child samples, we upload safety copies of the already collected responses after the fourth test trial. In cases where children want to stop participation earlier, no responses get lost.
 
 ## Data processing
-We used `r cite_r("r-references.bib")` for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses. 
+We used `r R.version$version.string` [@rcoreteam2022language], and the packages *splithalfr* [@pronk2021methods] and *brms* [@burkner2017brms; @burkner2018advanced] for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses. 
 All test trials without voice over description are included in our analyses.
 
 # Does the balloon finding task induce variation?
-Our first aim was to assess whether our balloon finding task induces variation in a child and adult sample. The pre-registrations can be found here: https://osf.io/snju6 (child sample) and here: https://osf.io/r3bhn (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between May 2021 and XXX 2022.
+Our first aim was to assess whether our balloon finding task induces interindividual variation in a child and adult sample. Furthermore, we were interested in how the data collection mode influences responses. To analyze how the in-person collected data compares to data that gets collected in a online without supervision, we collected a remote child and adult sample. 
+
+The pre-registrations can be found here: https://osf.io/snju6 (child sample) and here: https://osf.io/r3bhn (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between May and October 2021.
 
 ```{r vali_sample}
 vali <- testtrials %>% 
@@ -203,8 +213,8 @@ vali_adults <- vali_adults %>%
   full_join(vali_adults_gender, by = character())
 ```
 ## Participants
-For our child sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education. 
-The child sample consisted of 
+We collected data from an in-person child sample, a remote child sample, and a remote adult sample.
+In-person testing with children took place in kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. The in-person child sample consisted of 
 `r sum(vali_kids$nTotal[vali_kids$datacollection == "in-person - supervised"])` children, including 
 `r sum(vali_kids$nTotal[vali_kids$datacollection == "in-person - supervised" & vali_kids$ageInYears == "3"])` 3-year-olds 
 (mean = `r sum(vali_kids$meanAgeInMonths[vali_kids$datacollection == "in-person - supervised" & vali_kids$ageInYears == "3"])` months, 
@@ -224,13 +234,36 @@ SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "in-person - sup
 range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "in-person - supervised" & vali_kids$ageInYears == "5"])`
 - `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "in-person - supervised" & vali_kids$ageInYears == "5"])`, 
 `r sum(vali_kids$nFemales[vali_kids$datacollection == "in-person - supervised" & vali_kids$ageInYears == "5"])` girls). 
-Children received a small thank-you gift for their participation in the study. 
 
-In addition, we recruited adult participants by advertising the study on *Prolific*. *Prolific* is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of `r vali_adults$nTotal` English-speakers with an average age of `r vali_adults$meanAge` years (SD = `r vali_adults$sdAge`, range = `r vali_adults$minAge` - `r vali_adults$maxAge`, `r vali_adults$nFemales` females). 
+For our remote child sample, we recruited families on a voluntary basis via email from the institute's internal database. Our remote child sample included `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised"])` children, including 
+`r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` 3-year-olds 
+(mean = `r sum(vali_kids$meanAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` months, 
+SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])`, 
+range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])`
+- `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])`, 
+`r sum(vali_kids$nFemales[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` girls),
+`r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])` 4-year-olds 
+(mean = `r sum(vali_kids$meanAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])` months, 
+SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])`, 
+range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])`
+- `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])`, 
+`r sum(vali_kids$nFemales[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])` girls),
+and `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])` 5-year-olds 
+(mean = `r sum(vali_kids$meanAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])` months, 
+SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`, 
+range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`
+- `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`, 
+`r sum(vali_kids$nFemales[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])` girls). Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education. 
+
+In addition, we recruited a remote adult sample by advertising the study on *Prolific*. *Prolific* is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of `r vali_adults$nTotal` English-speakers with an average age of `r vali_adults$meanAge` years (SD = `r vali_adults$sdAge`, range = `r vali_adults$minAge` - `r vali_adults$maxAge`, `r vali_adults$nFemales` females). 
 For completing the study, subjects were payed above the fixed minimum wage (in average £10.00 per hour). *Prolific* distributed our study link to potential participants, while the hosting of the online study was done by local servers in the Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany.
 
 ## Procedure
-Children were tested in a quiet room in their daycare center. An experimenter accompanied the child and helped them navigate through the online study. Adult participated remotely without supervision.
+Children in our in-person sample were tested on a tablet in a quiet room in their daycare center. An experimenter accompanied the child and helped them navigate through the online study.
+Children in the remote sample received a personalized link to the study websites and families could participate at any time or location they wanted. In the beginning of the online study, families were invited to enter our "virtual institute" and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. We stressed that caregivers should not help their children. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves.
+Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen, while caregivers were  asked to act as the "digital finger" of their children and click on the indicated box.
+
+Our adult sample participated remotely without supervision.
 
 All participants received 15 test trials that were displayed as described above. In the box version, we decided to adjust the task difficulty according to the sample: children were presented with five boxes while adults were presented with eight boxes as possible target locations. 
 
@@ -254,41 +287,24 @@ mAgeBox <- readRDS(file = "../stats/mAgeBox.rds")
 
 We captured a developmental trajectory of gaze cue understanding: with increasing age, participants got more and more accurate in locating the target. In the hedge version, children's click imprecision droped with age, while, congruently, the proportion of correct responses increased in the box version (see Figure 2 A and F). By the end of their sixth year of life, children came close to the adult's proficiency level. We found interindividual variation across study versions and age groups: some three-year-olds were more precise in their responses than some five-year-olds. 
 
-### Remote data collection
-Since our task is implemented in a way that no experimenter interaction is necessary, data can also be collected without supervision. 
-To assess whether we would gain similar results in a remote testing context, we recruited an additional online sample of `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised"])` children, including 
-`r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` 3-year-olds 
-(mean = `r sum(vali_kids$meanAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` months, 
-SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])`, 
-range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])`
-- `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])`, 
-`r sum(vali_kids$nFemales[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "3"])` girls),
-`r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])` 4-year-olds 
-(mean = `r sum(vali_kids$meanAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])` months, 
-SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])`, 
-range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])`
-- `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])`, 
-`r sum(vali_kids$nFemales[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "4"])` girls),
-and `r sum(vali_kids$nTotal[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])` 5-year-olds 
-(mean = `r sum(vali_kids$meanAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])` months, 
-SD = `r sum(vali_kids$sdAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`, 
-range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`
-- `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`, 
-`r sum(vali_kids$nFemales[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])` girls). 
-Families were recruited on a voluntary basis via email from the institute's internal database. Every child received a personalized link and families could participate at any time or location they wanted.
-In the beginning of the online study, families were invited to enter our "virtual institute" and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. We stressed that caregivers should not help their children. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves.
-Depending on the participant's device, the website automatically presented the hedge or box version of the study. For families that used a tablet with touchscreen, the hedge version was shown. Here, children could directly click on the touchscreen themselves to indicate where the target is. For families that used a computer without touchscreen, the website presented the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen, while caregivers were  asked to act as the "digital finger" of their children and click on the indicated box.
+As Figure 2 A and F show, our remotely collected data resembled the data from the kindergarten sample. 
+To quantify the effect sizes, we formulated a Bayesian generalized linear mixed model with age (in months, z-transformed) and data collection mode (with in-person supervised data collection as the reference category), and target position and subject ID as random effects. In the hedge version, we found an estimate of age of `r fixef(mAgeHedge)["age", "Estimate"]` (95% CI [`r fixef(mAgeHedge)["age", "Q2.5"]`; `r fixef(mAgeHedge)["age", "Q97.5"]`]) and an estimate of data collection mode of `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q97.5"]`]). 
+In the box version, the estimate of age was `r fixef(mAgeBox)["age", "Estimate"]` (95% CI [`r fixef(mAgeBox)["age", "Q2.5"]`; `r fixef(mAgeBox)["age", "Q97.5"]`]) and the estimate of data collection mode was `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q97.5"]`]). Note that the effect of data collection appears to be present, but confidence intervals are wide. 
 
-As Figure 2 A and F show, our remotely collected data closely resembled the data from the kindergarten sample. We found a minor difference in that children that participate remotely were slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to help with the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children. 
+Our GLMM analysis, therefore, corroborated the effects of age and data collection mode that we already identified by visual inspection. 
+We found evidence that responses of children participating remotely were slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.[^p]
 
-To quantify the effect sizes, we formulated a Bayesian generalized linear mixed model with age (in months, z-transformed) and data collection mode (with remote unsupervised data collection as the reference category), and target position and subject ID as random effects. In the hedge version, we found an estimate of age of `r fixef(mAgeHedge)["age", "Estimate"]` ([`r fixef(mAgeHedge)["age", "Q2.5"]`; `r fixef(mAgeHedge)["age", "Q97.5"]`]) and an estimate of data collection mode of `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Estimate"]` ([`r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q97.5"]`]). 
-In the box version, the estimate of age was `r fixef(mAgeBox)["age", "Estimate"]` ([`r fixef(mAgeBox)["age", "Q2.5"]`; `r fixef(mAgeBox)["age", "Q97.5"]`]) and the estimate of data collection mode was `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Estimate"]` ([`r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q97.5"]`]; remote unsupervised data collection as reference category). 
+[^p]: In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing. Due to the incredible time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = `r n_distinct(vali$subjID[vali$datacollection == "remote - unsupervised" & vali$ageInYears == 3 & vali$studyversion == "box" & vali$webcam == TRUE])`). We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
+A trial was defined as the time between two eye blinking sounds. We transcribed all utterances by parents and children and counted the words uttered by each. We then classified the utterances into several categories: question asked by child, repeated testquestion by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive & negative feedback, motivational statements, and incomprehensible utterances.
+In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial. 
+We ran exploratory analyses . Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample. Our null model explained the the response behavior by age, while including random effects for subject and target position. We compared this null model to models including the number of words utterred by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. 
+On the trial level, the model including the verification of choice as a main effect won: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. On a subject level, the effect reversed - possibly due to greatest learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. Additionally, number of repeated testquestions displayed a negative estimate on the subject level: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. [TODO:] In all cases, however, standard errors of the WAIC score differences where greater than the ELPD difference scores themselves. Similarly, 95% CI of the model estimates included zero and were rather wide. Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis. 
 
 ## Discussion
-Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found inter-individual variation across all age groups. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used. 
+Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found interindividual variation across all age groups. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used. 
 
 # Can we capture variation reliably?
-As a next step we aimed at investigating whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the internal consistency, as calculated by splithalf reliability, and the test-retest reliability. The pre-registrations can be found here: https://osf.io/xqm73 (child sample) and here: https://osf.io/nu62m (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between XXX 2021 and XXX 2022.
+As a next step we aimed at investigating whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the internal consistency, as calculated by splithalf reliability, and the test-retest reliability. The pre-registrations can be found here: https://osf.io/xqm73 (child sample) and here: https://osf.io/nu62m (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between July 2021 and April 2022.
 
 ```{r reli_sample}
 reli <- testtrials %>% 
@@ -374,10 +390,10 @@ splithalf <- readRDS(file = "../stats/gafo-splithalf.rds")
 
 As a first step for estimating the reliability of our task, we focused on the internal consistency by calculating splithalf reliability coefficients. Trials were split into two equally big parts and the performance scores per part were correlated against each other. We used the raw performance per subject of the first test day. Traditional odd-even splits on our data and the corresponding *Pearson* correlation coefficients are shown in Figure 2 B, C, G and H.  
 
-As a recent paper by Pronk, Molenaar, Wiers and Murre (2021; TODO insert citation) suggested, there are various, more sophisticated split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design.
+As a recent paper by @pronk2021methods suggested, there are various, more sophisticated split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design.
 To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position. First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling. 
 In the hedge version, reliability coefficients ranged from `r min(splithalf$coefficient[splithalf$studyversion == "hedge"])` to `r max(splithalf$coefficient[splithalf$studyversion == "hedge"])`. In the box version, reliability coefficients ranged from `r min(splithalf$coefficient[splithalf$studyversion == "box"])` to `r max(splithalf$coefficient[splithalf$studyversion == "box"])`. 
-Similarly to the results of Pronk, Molenaar, Wiers and Murre (2021), we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients. In the majority of cases, stratifying by target position lead to similar or even higher estimates compared to no stratification. As might be expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
+Similarly to the results of @pronk2021methods, we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients. In the majority of cases, stratifying by target position lead to similar or even higher estimates compared to no stratification. As might be expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
 
 (ref:figlab3) **Internal Consisteny**. 
 Reliability coefficients per splitting method, stratification level, study version and age group. Error bars show the 95% confidence intervals of the coefficient estimates. 
@@ -418,7 +434,7 @@ pe_sample <- pe_sample %>%
 ```
 
 ## Participants
-For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This ub sample consisted of 
+For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This subsample consisted of 
 `r sum(pe_sample$nTotal)` children, including 
 `r sum(pe_sample$nTotal[pe_sample$ageInYears == "3"])` 3-year-olds 
 (mean = `r sum(pe_sample$meanAgeInMonths[pe_sample$ageInYears == "3"])` months, 
@@ -540,7 +556,7 @@ Of the additional 50 participants that completed testday 1, 28 subjects finished
 The validation of our task in a in-person and remote child sample can be found here: https://osf.io/snju6. 
 We chose to have at least 20 data points per cell (i.e. unique combination of data collection mode, study version, and age-group). Across the two data collection modes, a total of ... children participated. Participants received a small gift as thank you for their participation in the study. 
 
-For our in-person supervised testing sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. For our remote unsupervised testing sample, families were recruited on a voluntary basis via email from the database of the Max Planck Institute for Evolutionary Anthropology. Children in both sub samples live in Leipzig, Germany or surrounding areas and grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
+For our in-person supervised testing sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. For our remote unsupervised testing sample, families were recruited on a voluntary basis via email from the database of the Max Planck Institute for Evolutionary Anthropology. Children in both subsamples live in Leipzig, Germany or surrounding areas and grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
 Written informed consent was obtained from at least one caregiver prior to testing. 
 TODO: how to phrase for kiga testing?
 
