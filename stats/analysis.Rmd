@@ -141,6 +141,9 @@ mAgeHedge <- brm(clickDistInBalloons ~ age + datacollection + (symmetricPosition
                     chains = 4, 
                     inits  = "random",
                     cores  = 4)
+
+write.csv(mAgeHedge, "../saves/mAgeHedge.csv", quote = F, row.names = F)
+saveRDS(mAgeHedge, "../saves/mAgeHedge.rds")
 ```
 
 ```{r variation_box_prepareData}
@@ -227,6 +230,9 @@ mAgeBox <- brm(correctBox ~ age + datacollection + (symmetricPosition | subjID) 
                     chains = 4, 
                     inits  = "random",
                     cores  = 4)
+
+write.csv(mAgeBox, "../saves/mAgeBox.csv", quote = F, row.names = F)
+saveRDS(mAgeBox, "../saves/mAgeBox.rds")
 ```
 
 # RELI
@@ -1188,8 +1194,8 @@ knitr::kable(splithalf_data)
 ```
 
 ```{r save_splithalf_data}
-write.csv(splithalf_data, "gafo-splithalf.csv", quote = F, row.names = F)
-saveRDS(splithalf_data, file = "gafo-splithalf.rds")
+write.csv(splithalf_data, "../saves/gafo-splithalf.csv", quote = F, row.names = F)
+saveRDS(splithalf_data, file = "../saves/gafo-splithalf.rds")
 ```
 
 ## Test-retest reliability 
@@ -1213,9 +1219,25 @@ hedge_retest <- hedge_retest %>%
 # summary
 psych::describeBy(hedge_retest, hedge_retest$sample)
 
+# calculate at which values we would start seing data as outliers
+hedge_retest %>% 
+  summarize(
+    lower_reliday1 = mean(mean_reliday1) - 3*sd(mean_reliday1), 
+    upper_reliday1 = mean(mean_reliday1) + 3*sd(mean_reliday1),
+    lower_reliday2 = mean(mean_reliday2) - 3*sd(mean_reliday2),
+    upper_reliday2 = mean(mean_reliday2) + 3*sd(mean_reliday2),
+  )
+
+# check how many there are
+hedge_retest %>% 
+  filter(mean_reliday1 >= mean(mean_reliday1) + 3*sd(mean_reliday1) | 
+         mean_reliday1 <= mean(mean_reliday1) - 3*sd(mean_reliday1) |
+         mean_reliday2 >= mean(mean_reliday2) + 3*sd(mean_reliday2) |
+         mean_reliday2 <= mean(mean_reliday2) - 3*sd(mean_reliday2))
+
 # exclude 1 outlier
-hedge_retest <- hedge_retest %>% 
-  filter(mean_reliday1 < mean(mean_reliday1) + 3*sd(mean_reliday1), mean_reliday1 > mean(mean_reliday1) - 3*sd(mean_reliday1), 
+hedge_retest <- hedge_retest %>%
+  filter(mean_reliday1 < mean(mean_reliday1) + 3*sd(mean_reliday1), mean_reliday1 > mean(mean_reliday1) - 3*sd(mean_reliday1),
          mean_reliday2 < mean(mean_reliday2) + 3*sd(mean_reliday2), mean_reliday2 > mean(mean_reliday2) - 3*sd(mean_reliday2))
 ```
 
@@ -1228,8 +1250,8 @@ hedge_retest_kids <- hedge_retest %>%
   scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d"), guide = "none") +
   geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
   stat_cor(method = "pearson", label.x = 0, label.y = 4, aes(label = paste(..r.label..)), size = 3.5, r.accuracy = 0.01, cor.coef.name = "r") + 
-  scale_x_continuous(limits = c(0, 4), breaks = seq(0, 4, 1)) +
-  scale_y_continuous(limits = c(0, 4), breaks = seq(0, 4, 1)) +
+  scale_x_continuous(limits = c(0, 4.1), breaks = seq(0, 4, 1)) +
+  scale_y_continuous(limits = c(0, 4.1), breaks = seq(0, 4, 1)) +
   labs(x = "Testday 1", y = "Testday 2")
 
 hedge_retest_kids
@@ -1252,6 +1274,30 @@ hedge_retest_adults <- hedge_retest %>%
 hedge_retest_adults
 
 ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
+```
+
+```{r retest_hedge_model}
+# define data
+mDataRetestHedge <- reli %>% 
+  filter(studyversion == "hedge" & sample == "kids") %>% 
+  mutate(
+    # scaled (centered around mean, SD = 1, i.e., z-transformed)
+    age = scale(ageInMonths, center = TRUE, scale = TRUE)[,1], 
+  ) %>% 
+  select(subjID, age, reliday, clickDistInBalloons)
+
+# run model
+mRetestHedge <- brm(clickDistInBalloons ~ age + (0 + reliday | subjID), 
+                              data   = mDataRetestHedge, 
+                              family = lognormal(), 
+                              warmup = 1000, 
+                              iter   = 3000, 
+                              chains = 4, 
+                              inits  = "random",
+                              cores  = 4)
+
+write.csv(mRetestHedge, "../saves/mRetestHedge.csv", quote = F, row.names = F)
+saveRDS(mRetestHedge, "../saves/mRetestHedge.rds")
 ```
 
 ```{r retest_box_data}
@@ -1309,27 +1355,6 @@ box_retest_adults
 ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
 ```
 
-```{r retest_hedge_model}
-# define data
-mDataRetestHedge <- reli %>% 
-  filter(studyversion == "hedge" & sample == "kids") %>% 
-  mutate(
-    # scaled (centered around mean, SD = 1, i.e., z-transformed)
-    age = scale(ageInMonths, center = TRUE, scale = TRUE)[,1], 
-  ) %>% 
-  select(subjID, age, reliday, clickDistInBalloons)
-
-# run model
-mRetestHedge <- brm(clickDistInBalloons ~ age + (0 + reliday | subjID), 
-                              data   = mDataRetestHedge, 
-                              family = lognormal(), 
-                              warmup = 1000, 
-                              iter   = 3000, 
-                              chains = 4, 
-                              inits  = "random",
-                              cores  = 4)
-```
-
 ```{r retest_box_model}
 # define data
 mDataRetestBox <- reli %>% 
@@ -1349,6 +1374,9 @@ mRetestBox <- brm(correctBox ~ age + (0 + reliday | subjID),
                               chains = 4, 
                               inits  = "random",
                               cores  = 4)
+
+write.csv(mRetestBox, "../saves/mRetestBox.csv", quote = F, row.names = F)
+saveRDS(mRetestBox, "../saves/mRetestBox.rds")
 ```
 
 # Save plots
@@ -1398,25 +1426,3 @@ ggarrange(
 
 ggsave("../figures/gafo_results.png", width = 6.5, height = 5, scale = 1.6, bg = "white")
 ```
-
-```{r save_model_output}
-# mcor <- model_cor %>%
-#     mutate(task = recode(task,
-#                     `mutual_exclusivity` = "Mutual Exclusivity",
-#                     `informativeness` = "Informativeness Inference (1)",
-#                     `simple_inf` = "Informativeness Inference (2)",
-#                     `preference` = "Speaker Preference",
-#                     `novelty` = "Discourse Novelty",
-#                     `card_sorting` = "Card Sorting",
-#                     `discourse_continuity` = "Discourse Continuity",
-#                     `ad_hoc_implicature` = "Ad-hoc Implicature",
-#                     `match_to_sample` = "Relational Match-to-sample"),
-#            term = task, 
-#            mcor = Estimate, 
-#            mcor_lci = `l-95% CI`, 
-#            mcor_uci = `u-95% CI`)%>%
-#   select(study, term, task, mcor, mcor_lci, mcor_uci)
-
-# saveRDS(mcor, "model_results.rds")
-```
-

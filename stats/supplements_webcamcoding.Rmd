@@ -1,0 +1,367 @@
+---
+title: "supplements_webcamcoding"
+author: "Julia Prein"
+date: '2022-04-06'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(brms)
+library(ggridges)
+
+options(scipen = 999)
+theme_set(theme_classic())
+```
+
+```{r load_data}
+webcam_data <- readRDS(file = "../data/gafo-testtrials.rds") %>% 
+  filter(studytype == "vali" & datacollection == "remote - unsupervised" & studyversion == "box" & webcam == TRUE & ageInYears == 3) %>% 
+  group_by(subjID) %>% 
+  # determine order of factors
+  mutate(
+    targetPosition = factor(targetPosition, levels = c("box1", "box2", "box3", "box4", "box5")), 
+    proportionCorrectBox = mean(correctBox, na.rm = TRUE),
+  )
+```
+
+### VISUAL EXPLORATION 
+
+```{r webcam_exploring}
+### nrRepeatedTestquestion
+webcam_data %>% 
+  group_by(subjID) %>% 
+  mutate(repeatedTestquestion = mean(nrRepeatedTestquestion, na.rm = TRUE)) %>% 
+  ggplot(., aes(x = repeatedTestquestion, y = proportionCorrectBox)) + 
+  geom_point(col = "#006c66", size = 0.7) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(r.accuracy = 0.01, p.accuracy = 0.01) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2))
+
+### nrHintsEyes
+webcam_data %>% 
+  group_by(subjID) %>% 
+  mutate(hintsEyes = mean(nrHintsEyes, na.rm = TRUE)) %>% 
+  ggplot(., aes(x = hintsEyes, y = proportionCorrectBox)) + 
+  geom_point(col = "#006c66", size = 0.7) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(r.accuracy = 0.01, p.accuracy = 0.01) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2))
+
+### nrVerificationChoice
+webcam_data %>% 
+  group_by(subjID) %>% 
+  mutate(verificationChoice = mean(nrVerificationChoice, na.rm = TRUE)) %>% 
+  ggplot(., aes(x = verificationChoice, y = proportionCorrectBox)) + 
+  geom_point(col = "#006c66", size = 0.7) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(r.accuracy = 0.01, p.accuracy = 0.01) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2))
+
+### nrParentSpeech
+webcam_data %>% 
+  group_by(subjID) %>% 
+  mutate(parentSpeech = mean(nrParentSpeech, na.rm = TRUE)) %>% 
+  ggplot(., aes(x = parentSpeech, y = proportionCorrectBox)) + 
+  geom_point(col = "#006c66", size = 0.7) + 
+  geom_smooth(method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(r.accuracy = 0.01, p.accuracy = 0.01) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2))
+```
+
+### MODELS ON TRIAL LEVEL
+
+```{r webcam_perTrial_datapreparation}
+# prepare data
+mData <- webcam_data %>% 
+  ungroup() %>% 
+  mutate(
+    correct = as.numeric(correctBox), 
+    
+    # centered around minimum
+    age = ageInMonths - min(ageInMonths), 
+    
+    # centered around mean
+    trial = scale(trialNr, center = TRUE, scale = FALSE), 
+    repeatedTestquestion = scale(nrRepeatedTestquestion, center = TRUE, scale = FALSE),
+    verificationChoice = scale(nrVerificationChoice, center = TRUE, scale = FALSE),
+    hintsEyes = scale(nrHintsEyes, center = TRUE, scale = FALSE),
+    nrParentSpeech = replace_na(nrParentSpeech, 0), 
+    parentSpeech = scale(nrParentSpeech, center = TRUE, scale = FALSE),
+    
+    # calculating index
+    parentalInterference = -(repeatedTestquestion) + -(verificationChoice) + hintsEyes, 
+    
+    # scaled (centered around mean, SD = 1, i.e., z-transformed)
+    pi = scale(parentalInterference, scale = TRUE, center = TRUE), 
+  ) %>% 
+  select(trial, subjID, correct, targetPosition, age, parentalInterference, pi, repeatedTestquestion, verificationChoice, hintsEyes, parentSpeech)
+
+```
+
+```{r webcam_perTrial_models}
+# originally: 
+# brm(correct ~ age + (trial + targetPosition | subjID) + (age | targetPosition)
+# age + person effect + trial effect
+# simplified the model, since not a lot of data / info to estimate all the parameters. 
+# therefore, remove trial & targetposition
+
+mPerTrialNull <- brm(correct ~ age + (1 | subjID) + (1 | targetPosition), 
+                              data   = mData, 
+                              family = bernoulli(link = "logit"), 
+                              warmup = 1000, 
+                              iter   = 3000, 
+                              chains = 4, 
+                              inits  = "random",
+                              cores  = 4)
+
+# we decided to build an index since we're rather interested in the additive effect of the parameters; general parental inference
+# we don't want to know what happens if we e.g. set repeatedQuestion & verfication to zero how does hintsEyes influence correct
+
+# index: repeated testquestion & verification choice tend to lean into negative effect, 
+# hints eyes rather positive. therefore -, - + for summing up
+mPerTrialPI <- update(mPerTrialNull,
+                      newdata = mData,
+                      formula = correct ~ age + pi + (1 | subjID) + (1 | targetPosition), 
+                      family = bernoulli(link = "logit"),
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mPerTrialRepeatedTestquestion <- update(mPerTrialNull,
+                      newdata = mData,
+                      formula = correct ~ age + repeatedTestquestion + (1 | subjID) + (1 | targetPosition), 
+                      family = bernoulli(link = "logit"),
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mPerTrialVerificationChoice <- update(mPerTrialNull,
+                      newdata = mData,
+                      formula = correct ~ age + verificationChoice + (1 | subjID) + (1 | targetPosition), 
+                      family = bernoulli(link = "logit"),
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mPerTrialHintsEyes <- update(mPerTrialNull,
+                      newdata = mData,
+                      formula = correct ~ age + hintsEyes + (1 | subjID) + (1 | targetPosition), 
+                      family = bernoulli(link = "logit"),
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+
+mPerTrialParentSpeech <- update(mPerTrialNull,
+                      newdata = mData,
+                      formula = correct ~ age + parentSpeech + (1 | subjID) + (1 | targetPosition), 
+                      family = bernoulli(link = "logit"),
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+```
+
+```{r webcam_perTrial_comparisons}
+mPerTrialNull <- add_criterion(mPerTrialNull, "waic")
+mPerTrialPI <- add_criterion(mPerTrialPI, "waic")
+mPerTrialRepeatedTestquestion <- add_criterion(mPerTrialRepeatedTestquestion, "waic")
+mPerTrialVerificationChoice <- add_criterion(mPerTrialVerificationChoice, "waic")
+mPerTrialHintsEyes <- add_criterion(mPerTrialHintsEyes, "waic")
+mPerTrialParentSpeech <- add_criterion(mPerTrialParentSpeech, "waic")
+
+mPerTrialComparison <- loo_compare(mPerTrialNull, mPerTrialPI, mPerTrialRepeatedTestquestion, mPerTrialVerificationChoice, mPerTrialHintsEyes, mPerTrialParentSpeech, criterion = "waic")
+
+mPerTrialComparison <- as_tibble(mPerTrialComparison, rownames = "model")
+write.csv(mPerTrialComparison, "../saves/supplements-webcamcoding-mPerTrialComparison-WAIC.csv", quote = F, row.names = F)
+saveRDS(mPerTrialComparison, "../saves/supplements-webcamcoding-mPerTrialComparison-WAIC.rds")
+
+mPerTrialComparisonWeights <- as_tibble(model_weights(mPerTrialNull, mPerTrialPI, mPerTrialRepeatedTestquestion, mPerTrialVerificationChoice, mPerTrialHintsEyes, mPerTrialParentSpeech, criterion = "waic"), rownames = "model")
+write.csv(mPerTrialComparisonWeights, "../saves/supplements-webcamcoding-mPerTrialComparison-weights.csv", quote = F, row.names = F)
+saveRDS(mPerTrialComparisonWeights, "../saves/supplements-webcamcoding-mPerTrialComparison-weights.rds")
+```
+
+```{r webcam_perTrial_plot}
+postSamplesPerTrial <- bind_rows(
+  # posterior_samples(mPerTrialNull, pars = "age") %>% mutate(model = "mPerTrialNull - age") %>% rename(estimate = b_age),
+  posterior_samples(mPerTrialPI, pars = "pi") %>% mutate(model = "mPerTrialPI") %>% rename(estimate = b_pi), 
+  posterior_samples(mPerTrialRepeatedTestquestion, pars = "repeatedTestquestion") %>% mutate(model = "mPerTrialRepeatedTestquestion") %>% rename(estimate = b_repeatedTestquestion), 
+  posterior_samples(mPerTrialVerificationChoice, pars = "verificationChoice") %>% mutate(model = "mPerTrialVerificationChoice") %>% rename(estimate = b_verificationChoice), 
+  posterior_samples(mPerTrialHintsEyes, pars = "hintsEyes") %>% mutate(model = "mPerTrialHintsEyes") %>% rename(estimate = b_hintsEyes), 
+  posterior_samples(mPerTrialParentSpeech, pars = "parentSpeech") %>% mutate(model = "mPerTrialParentSpeech") %>% rename(estimate = b_parentSpeech), 
+)
+
+postSamplesPerTrial <- postSamplesPerTrial %>% 
+  mutate(
+        model = factor(model, levels = c("mPerTrialParentSpeech", "mPerTrialHintsEyes", "mPerTrialVerificationChoice", "mPerTrialRepeatedTestquestion", "mPerTrialPI")),
+  )
+
+ggplot(postSamplesPerTrial, aes(x = estimate, y = model, fill = factor(stat(quantile)))) +
+  geom_vline(xintercept = 0, lty = 2, alpha = .75) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = c(0.025, 0.975)
+  ) +	
+  scale_fill_manual(values = c("firebrick", "NA", "firebrick"), guide = "none") +
+  scale_x_continuous(limits = c(-2, 2), breaks = seq(-2, 2, by = 0.5))
+
+ggsave("../figures/supplements-webcamcoding-mPerTrialComparison-posteriorsample.png")
+```
+
+### MODELS ON SUBJECT LEVEL
+
+```{r webcam_perSubject_datapreparation}
+mDataSubj <- webcam_data %>% 
+  group_by(subjID) %>% 
+  mutate(
+    trials = n(),
+    correctTrials = sum(correctBox), 
+    repeatedTestquestion = sum(nrRepeatedTestquestion), 
+    verificationChoice = sum(nrVerificationChoice), 
+    hintsEyes = sum(nrHintsEyes), 
+    parentalInterference = -(repeatedTestquestion) + verificationChoice + -(hintsEyes),
+    nrParentSpeech = replace_na(nrParentSpeech, 0), 
+    parentSpeech = sum(nrParentSpeech), 
+  ) %>% 
+  slice(1) %>% 
+  # for scaling we need ungrouped data!
+  ungroup() %>% 
+  mutate(
+    age = ageInMonths - mean(ageInMonths), 
+    pi = scale(parentalInterference, scale = TRUE, center = TRUE), 
+  ) %>% 
+  select(subjID, correctTrials, trials, age, repeatedTestquestion, verificationChoice, hintsEyes, parentSpeech, pi)
+```
+
+```{r webcam_perSubject_models}
+mPerSubjectNull <- brm(correctTrials |  trials(trials) ~ age, 
+                              data   = mDataSubj, 
+                              family = binomial(link = "logit"), 
+                              warmup = 1000, 
+                              iter   = 3000, 
+                              chains = 4, 
+                              inits  = "random",
+                              cores  = 4)
+
+mPerSubjectPI <- update(mPerSubjectNull,
+                      newdata = mDataSubj,
+                      formula = correctTrials |  trials(trials) ~ age + pi, 
+                      family = binomial(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mPerSubjectRepeatedTestquestion <- update(mPerSubjectNull,
+                      newdata = mDataSubj,
+                      formula = correctTrials |  trials(trials) ~ age + repeatedTestquestion, 
+                      family = binomial(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mPerSubjectVerificationChoice <- update(mPerSubjectNull,
+                      newdata = mDataSubj,
+                      formula = correctTrials |  trials(trials) ~ age + verificationChoice, 
+                      family = binomial(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mPerSubjectHintsEyes <- update(mPerSubjectNull,
+                      newdata = mDataSubj,
+                      formula = correctTrials |  trials(trials) ~ age + hintsEyes, 
+                      family = binomial(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mPerSubjectParentSpeech <- update(mPerSubjectNull,
+                      newdata = mDataSubj,
+                      formula = correctTrials |  trials(trials) ~ age + parentSpeech, 
+                      family = binomial(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+```
+
+```{r webcam_perTrial_comparisons}
+mPerSubjectNull <- add_criterion(mPerSubjectNull, "waic")
+mPerSubjectPI <- add_criterion(mPerSubjectPI, "waic")
+mPerSubjectRepeatedTestquestion <- add_criterion(mPerSubjectRepeatedTestquestion, "waic")
+mPerSubjectVerificationChoice <- add_criterion(mPerSubjectVerificationChoice, "waic")
+mPerSubjectHintsEyes <- add_criterion(mPerSubjectHintsEyes, "waic")
+mPerSubjectParentSpeech <- add_criterion(mPerSubjectParentSpeech, "waic")
+
+mPerSubjectComparison <- loo_compare(mPerSubjectNull, mPerSubjectPI, mPerSubjectRepeatedTestquestion, mPerSubjectVerificationChoice, mPerSubjectHintsEyes, mPerSubjectParentSpeech, criterion = "waic")
+
+mPerSubjectComparison <- as_tibble(mPerSubjectComparison, rownames = "model")
+write.csv(mPerSubjectComparison, "../saves/supplements-webcamcoding-mPerSubjectComparison-WAIC.csv", quote = F, row.names = F)
+saveRDS(mPerSubjectComparison, "../saves/supplements-webcamcoding-mPerSubjectComparison-WAIC.rds")
+
+mPerSubjectComparisonWeights <- as_tibble(model_weights(mPerSubjectNull, mPerSubjectPI, mPerSubjectRepeatedTestquestion, mPerSubjectVerificationChoice, mPerSubjectHintsEyes, mPerSubjectParentSpeech, criterion = "waic"), rownames = "model")
+write.csv(mPerSubjectComparisonWeights, "../saves/supplements-webcamcoding-mPerSubjectComparison-weights.csv", quote = F, row.names = F)
+saveRDS(mPerSubjectComparisonWeights, "../saves/supplements-webcamcoding-mPerSubjectComparison-weights.rds")
+```
+
+```{r webcam_perTrial_plot}
+postSamplesPerSubject <- bind_rows(
+  # posterior_samples(mPerTrialNull, pars = "age") %>% mutate(model = "mPerTrialNull - age") %>% rename(estimate = b_age),
+  posterior_samples(mPerSubjectPI, pars = "pi") %>% mutate(model = "mPerSubjectPI") %>% rename(estimate = b_pi), 
+  posterior_samples(mPerSubjectRepeatedTestquestion, pars = "repeatedTestquestion") %>% mutate(model = "mPerSubjectRepeatedTestquestion") %>% rename(estimate = b_repeatedTestquestion), 
+  posterior_samples(mPerSubjectVerificationChoice, pars = "verificationChoice") %>% mutate(model = "mPerSubjectVerificationChoice") %>% rename(estimate = b_verificationChoice), 
+  posterior_samples(mPerSubjectHintsEyes, pars = "hintsEyes") %>% mutate(model = "mPerSubjectHintsEyes") %>% rename(estimate = b_hintsEyes), 
+  posterior_samples(mPerSubjectParentSpeech, pars = "parentSpeech") %>% mutate(model = "mPerSubjectParentSpeech") %>% rename(estimate = b_parentSpeech), 
+)
+
+postSamplesPerSubject <- postSamplesPerSubject %>% 
+  mutate(
+        model = factor(model, levels = c("mPerSubjectParentSpeech", "mPerSubjectHintsEyes", "mPerSubjectVerificationChoice", "mPerSubjectRepeatedTestquestion", "mPerSubjectPI")),
+  )
+
+ggplot(postSamplesPerSubject, aes(x = estimate, y = model, fill = factor(stat(quantile)))) +
+  geom_vline(xintercept = 0, lty = 2, alpha = .75) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = c(0.025, 0.975)
+  ) +	
+  scale_fill_manual(values = c("firebrick", "NA", "firebrick"), guide = "none")
+
+ggsave("../figures/supplements-webcamcoding-mPerSubjectComparison-posteriorsample.png")
+```
+
+```{r overall_save}
+overall_resuls <- bind_rows(mPerTrialComparison, mPerSubjectComparison) %>% 
+  left_join(bind_rows(mPerTrialComparisonWeights, mPerSubjectComparisonWeights)) %>% 
+  select(model, waic, value, elpd_diff, se_diff) %>% 
+  rename(waic_weight = value)
+
+write.csv(overall_resuls, "../saves/supplements-webcamcoding-resuls.csv", quote = F, row.names = F)
+saveRDS(overall_resuls, "../saves/supplements-webcamcoding-results.rds")
+```
+

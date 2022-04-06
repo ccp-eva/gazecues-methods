@@ -158,12 +158,8 @@ We use URL parameters to capture the participant's ID, language and study versio
 The web-app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 For our samples described in this paper, we deployed the web-app on servers located in Leipzig, Germany. Data got automatically collected and safely stored on these in-house servers. If no internet connection or server is available, researchers could download a local version of the experiment which stores the generated data automatically on the used device. For child samples, we upload safety copies of the already collected responses after the fourth test trial. In cases where children want to stop participation earlier, no responses get lost.
 
-## Data processing
-We used `r R.version$version.string` [@rcoreteam2022language], and the packages *splithalfr* [@pronk2021methods] and *brms* [@burkner2017brms; @burkner2018advanced] for all our analyses. Regression models were fitted as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses. 
-All test trials without voice over description are included in our analyses.
-
 # Does the balloon finding task induce variation?
-Our first aim was to assess whether our balloon finding task induces interindividual variation in a child and adult sample. Furthermore, we were interested in how the data collection mode influences responses. To analyze how the in-person collected data compares to data that gets collected in a online without supervision, we collected a remote child and adult sample. 
+Our first aim was to assess whether our balloon finding task induces interindividual variation in a child and adult sample. Furthermore, we were interested in how the data collection mode influences responses.
 
 The pre-registrations can be found here: https://osf.io/snju6 (child sample) and here: https://osf.io/r3bhn (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between May and October 2021.
 
@@ -267,44 +263,51 @@ Our adult sample participated remotely without supervision.
 
 All participants received 15 test trials that were displayed as described above. In the box version, we decided to adjust the task difficulty according to the sample: children were presented with five boxes while adults were presented with eight boxes as possible target locations. 
 
+## Analysis
+All test trials without voice over description were included in our analyses.
+We ran all analyses in `r R.version$version.string` [@rcoreteam2022language]. 
+Regression models were fit as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses, using the function `brm` from the package `brms` [@burkner2017brms; @burkner2018advanced].
+
+To estimate the developmental trajectory of gaze cue understanding and the effect of data collection mode, we fit a GLMM predicting the task performance by age (in months, z-transformed) and data collection mode (reference category: in-person supervised). The model included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants (model notation in `R: performance ~ age + datacollection + (symmetricPosition | subjID) + (1 | targetPosition)`). Here, `targetPosition` refers to the absolute bin/box of the target, while `symmetricPosition` refers to the distance from the stimulus center (i.e., smaller value meaning more central target position). We expected that trials could differ in their difficulty depending on the target centrality and that these these item effects could vary between participants.
+
+For the hedge version, performance was defined as the absolute click distance between the target center and the click X coordinate, scaled according to target widths, and modeled by a lognormal distribution. 
+For the box version, the model predicted correct responses (0/1) using a Bernoulli distribution with a logit link function.
+We inspected the posterior distribution (mean and 95% Confidence Interval (CI)) for the age and data collection estimates.
+
 ## Results
 (ref:figlab2) **Measuring interindividual variation**. 
 (a) Developmental trajectory in continuous *hedge* version. Performance is measured as average imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. 
 (b) Internal consistency (odd-even split) in hedge child sample. (c) Internal consistency in hedge adult sample. (d) Test-retest reliability in hedge child sample. (e) Test-retest reliability in hedge adult sample.
 (f) Developmental trajectory in discrete *box* version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. Dotted black line shows level of performance expected by chance (for child sample 20%, i.e., 1 out of 5 boxes; for adult sample 12.5%, i.e., 1 out of 8 boxes).
 (g) Internal consistency (odd-even split) in box child sample. (h) Internal consistency in box adult sample. (i) Test-retest reliability in box child sample. (j) Test-retest reliability in box adult sample.
-Regression lines with 95% CI show product-moment-correlations with Pearson's correlation coefficient r. 
+Regression lines with 95% CI show product-moment-correlations with *Pearson*'s correlation coefficient *r.* 
 Large data points with 95% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year). 
-Small data points show the mean performance for each subject. Shape of data points represents data collection mode: opaque round circles with stand for in-person supervised data collection, translucent diamonds stand for remote unsupervised data collection. Color of data points represent each age group (binned by year).
+Small data points show the mean performance for each subject. Shape of data points represents data collection mode: opaque round circles stand for in-person supervised data collection, translucent diamonds stand for remote unsupervised data collection. Color of data points represent each age group (binned by year).
 
 ```{r fig2, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
 knitr::include_graphics(c("../figures/gafo_results.png"))
 ``` 
 ```{r agemodels}
-mAgeHedge <- readRDS(file = "../stats/mAgeHedge.rds") 
-mAgeBox <- readRDS(file = "../stats/mAgeBox.rds") 
+mAgeHedge <- readRDS(file = "../saves/mAgeHedge.rds") 
+mAgeBox <- readRDS(file = "../saves/mAgeBox.rds") 
 ```
 
-We captured a developmental trajectory of gaze cue understanding: with increasing age, participants got more and more accurate in locating the target. In the hedge version, children's click imprecision droped with age, while, congruently, the proportion of correct responses increased in the box version (see Figure 2 A and F). By the end of their sixth year of life, children came close to the adult's proficiency level. We found interindividual variation across study versions and age groups: some three-year-olds were more precise in their responses than some five-year-olds. 
+We captured a developmental trajectory of gaze cue understanding: with increasing age, participants got more and more accurate in locating the target. In the hedge version, children's click imprecision droped with age, while, congruently, the proportion of correct responses increased in the box version (see Figure 2 A and F). Most participants in the box version performed above chance level. By the end of their sixth year of life, children came close to the adult's proficiency level. We found interindividual variation across study versions and age groups. For instance, this can be seen in that some three-year-olds were more precise in their responses than some five-year-olds. 
 
-As Figure 2 A and F show, our remotely collected data resembled the data from the kindergarten sample. 
-To quantify the effect sizes, we formulated a Bayesian generalized linear mixed model with age (in months, z-transformed) and data collection mode (with in-person supervised data collection as the reference category), and target position and subject ID as random effects. In the hedge version, we found an estimate of age of `r fixef(mAgeHedge)["age", "Estimate"]` (95% CI [`r fixef(mAgeHedge)["age", "Q2.5"]`; `r fixef(mAgeHedge)["age", "Q97.5"]`]) and an estimate of data collection mode of `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q97.5"]`]). 
+As Figure 2 A and F show, our remotely collected child data resembled the data from the kindergarten sample. 
+We found evidence that responses of children participating remotely were slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.[^fn1]
+
+[^fn1]: In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing. We focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = `r n_distinct(vali$subjID[vali$datacollection == "remote - unsupervised" & vali$ageInYears == 3 & vali$studyversion == "box" & vali$webcam == TRUE])`). We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample. Based on our model comparison, we conclude that there is no clear evidence of a stable effect of parental interference. See Supplements for further detail.
+
+Our GLMM analysis corroborated the effects of age and data collection mode that we already identified by visual inspection: in the hedge version, we found an estimate of age of `r fixef(mAgeHedge)["age", "Estimate"]` (95% CI [`r fixef(mAgeHedge)["age", "Q2.5"]`; `r fixef(mAgeHedge)["age", "Q97.5"]`]) and an estimate of data collection mode of `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeHedge)["datacollectionremoteMunsupervised", "Q97.5"]`]). 
 In the box version, the estimate of age was `r fixef(mAgeBox)["age", "Estimate"]` (95% CI [`r fixef(mAgeBox)["age", "Q2.5"]`; `r fixef(mAgeBox)["age", "Q97.5"]`]) and the estimate of data collection mode was `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q97.5"]`]). Note that the effect of data collection appears to be present, but confidence intervals are wide. 
-
-Our GLMM analysis, therefore, corroborated the effects of age and data collection mode that we already identified by visual inspection. 
-We found evidence that responses of children participating remotely were slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.[^p]
-
-[^p]: In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing. Due to the incredible time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = `r n_distinct(vali$subjID[vali$datacollection == "remote - unsupervised" & vali$ageInYears == 3 & vali$studyversion == "box" & vali$webcam == TRUE])`). We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
-A trial was defined as the time between two eye blinking sounds. We transcribed all utterances by parents and children and counted the words uttered by each. We then classified the utterances into several categories: question asked by child, repeated testquestion by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive & negative feedback, motivational statements, and incomprehensible utterances.
-In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial. 
-We ran exploratory analyses . Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample. Our null model explained the the response behavior by age, while including random effects for subject and target position. We compared this null model to models including the number of words utterred by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. 
-On the trial level, the model including the verification of choice as a main effect won: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. On a subject level, the effect reversed - possibly due to greatest learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. Additionally, number of repeated testquestions displayed a negative estimate on the subject level: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. [TODO:] In all cases, however, standard errors of the WAIC score differences where greater than the ELPD difference scores themselves. Similarly, 95% CI of the model estimates included zero and were rather wide. Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis. 
 
 ## Discussion
 Study 1 showed that our newly implemented balloon finding task can be used to study gaze cue understanding in both children and adults. With increasing age, participants got more and more precise in locating the target. We found interindividual variation across all age groups. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This underlines how flexibly our new task can be used. 
 
 # Can we capture variation reliably?
-As a next step we aimed at investigating whether the variation that we captured with our balloon finding task is reliable. For this aim, we assessed the internal consistency, as calculated by splithalf reliability, and the test-retest reliability. The pre-registrations can be found here: https://osf.io/xqm73 (child sample) and here: https://osf.io/nu62m (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between July 2021 and April 2022.
+As a next step, we aimed at investigating whether the variation that we captured with our balloon finding task is reliable (i.e.,
+systematically order individuals in the same way). For this aim, we assessed the internal consistency, as calculated by splithalf reliability, and the test-retest reliability. The pre-registrations can be found here: https://osf.io/xqm73 (child sample) and here: https://osf.io/nu62m (adult sample). Participants were equally distributed across the two study versions. The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology. Data was collected between July 2021 and April 2022.
 
 ```{r reli_sample}
 reli <- testtrials %>% 
@@ -352,7 +355,7 @@ reli_adults <- reli_adults %>%
   full_join(reli_adults_gender, by = character())
 ```
 ## Participants
-For our child sample, we again went to kindergartens in Leipzig and surroundings.
+For our child sample, we went to kindergartens in Leipzig and surroundings.
 The child sample consisted of 
 `r sum(reli_kids$nTotal[reli_kids$datacollection == "in-person - supervised"])` children, including 
 `r sum(reli_kids$nTotal[reli_kids$datacollection == "in-person - supervised" & reli_kids$ageInYears == "3"])` 3-year-olds 
@@ -374,34 +377,52 @@ range = `r sum(reli_kids$minAgeInMonths[reli_kids$datacollection == "in-person -
 - `r sum(reli_kids$maxAgeInMonths[reli_kids$datacollection == "in-person - supervised" & reli_kids$ageInYears == "5"])`, 
 `r sum(reli_kids$nFemales[reli_kids$datacollection == "in-person - supervised" & reli_kids$ageInYears == "5"])` girls). 
 
-The adult sample was again recruited over *Prolific* and consisted of `r reli_adults$nTotal` English-speakers with an average age of `r reli_adults$meanAge` years (SD = `r reli_adults$sdAge`, range = `r reli_adults$minAge` - `r reli_adults$maxAge`, `r reli_adults$nFemales` females). 
+The adult sample was recruited over *Prolific* and consisted of `r reli_adults$nTotal` English-speakers with an average age of `r reli_adults$meanAge` years (SD = `r reli_adults$sdAge`, range = `r reli_adults$minAge` - `r reli_adults$maxAge`, `r reli_adults$nFemales` females). 
 
 ## Procedure
 We applied the same procedure as in the first study, with the following differences. Participants completed the study twice, with a delay of 14 ± 3 days. 
-The target locations as well as the succession of animals and target colors was randomized once and then held constant across participants.
+The target locations as well as the succession of agents and target colors was randomized once and then held constant across participants.
 The child sample received 15 test trials. In the hedge version, each bin occurred once, making up ten of the test trials. For the remaining five test trials, we repeated one out of two adjacent bins (i.e., randomly chose between bin 1 & 2, bin 3 & 4, etc). In the box version, we ensured that each of the five boxes occurred exactly three times. For the remaining training trials, we repeated a fixed order of four random bins/boxes.
 Adults in the hedge version received 30 test trials, each of the ten bin occurring exactly three times. Adults in the box version received 32 test trials with each of the eight boxes occurring exactly four times. 
 
-## Results
+## Analysis
+We assessed reliability in two ways. 
+First, we focused on the internal consistency by calculating splithalf reliability coefficients. For each subject, trials were split into odd and even and performance scores per part were correlated against each other using *Pearson* correlation coefficients. We took the data of the first test day and defined performance according to study version: in the hedge version, performance referred to the absolute difference between the target center and the click coordinate, scaled according to target widths; in the box version, we computed the proportion of correct choices. 
+As a recent paper by @pronk2021methods suggested, there are various less well-known split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design. To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position. First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling. Analyses were run using the function `by_split`from the `splithalfr` package [@pronk2021methods].
+Second, we assessed the test-retest reliability. We calculated performance scores (depending on study version as described above) for each individual in each test session and correlated those using *Pearson* correlation coefficients. Furthermore, for our child sample we report an age-corrected correlation between the two test days using a GLMM based approach. We fit trial by trial data with a fixed effect of age, a random intercept for each subject and a random slope for test day (model notation in `R: performance ~ age (0 + reliday | subjID)`). For the hedge version, performance was modeled by a lognormal distribution, while the model for the box version used a Bernoulli distribution with a logit link function.
+The model computes a correlation between the participant specific estimates for each test day. This can be interpreted as the test-retest reliability. By using this approach, we do not need to compromise on data aggregation and, therefore, loss of information. Most importantly, the model allows us to get an age-independent estimate for reliability. This rules out the possibility that a high correlation between test days arises from domain general cognitive maturation processes instead of study-specific inter-individual differences. 
 
+## Results
 ```{r splithalf}
-splithalf <- readRDS(file = "../stats/gafo-splithalf.rds")
+splithalf <- readRDS(file = "../saves/gafo-splithalf.rds")
 ```
 
-As a first step for estimating the reliability of our task, we focused on the internal consistency by calculating splithalf reliability coefficients. Trials were split into two equally big parts and the performance scores per part were correlated against each other. We used the raw performance per subject of the first test day. Traditional odd-even splits on our data and the corresponding *Pearson* correlation coefficients are shown in Figure 2 B, C, G and H.  
+We found that our balloon finding task induced systematic variation: splithalf and test-retest reliability was high for most samples. 
 
-As a recent paper by @pronk2021methods suggested, there are various, more sophisticated split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design.
-To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position. First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling. 
-In the hedge version, reliability coefficients ranged from `r min(splithalf$coefficient[splithalf$studyversion == "hedge"])` to `r max(splithalf$coefficient[splithalf$studyversion == "hedge"])`. In the box version, reliability coefficients ranged from `r min(splithalf$coefficient[splithalf$studyversion == "box"])` to `r max(splithalf$coefficient[splithalf$studyversion == "box"])`. 
+For the internal consistency, we show traditional odd-even splits on our data and the corresponding *Pearson* correlation coefficients in Figure 2 B, C, G and H.
+
+Figure 3 compares splithalf reliability coefficients by splitting and stratification method, following @pronk2021methods.
+In the hedge version, the splithalf reliability coefficients ranged from `r min(splithalf$coefficient[splithalf$studyversion == "hedge"])` to `r max(splithalf$coefficient[splithalf$studyversion == "hedge"])`. In the box version, splithalf reliability coefficients ranged from `r min(splithalf$coefficient[splithalf$studyversion == "box"])` to `r max(splithalf$coefficient[splithalf$studyversion == "box"])`. 
 Similarly to the results of @pronk2021methods, we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients. In the majority of cases, stratifying by target position lead to similar or even higher estimates compared to no stratification. As might be expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
 
-(ref:figlab3) **Internal Consisteny**. 
-Reliability coefficients per splitting method, stratification level, study version and age group. Error bars show the 95% confidence intervals of the coefficient estimates. 
+(ref:figlab3) **Internal Consistency**. 
+Reliability coefficients per splitting method, stratification level, study version and age group. Error bars show the 95% confidence intervals of the coefficient estimates, calculated with the function `by_split` from the `splithalfr` package [@pronk2021methods].
 ```{r fig3, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab3)"}
 knitr::include_graphics("../figures/gafo_splithalf.png")
 ``` 
+```{r retestmodels}
+mRetestHedge <- readRDS(file = "../saves/mRetestHedge.rds") 
+mRetestBox <- readRDS(file = "../saves/mRetestBox.rds") 
+```
+For the test-retest reliability, we show the association between raw performance scores of the two test days and corresponding *Pearson* correlation coefficients in Figure 2 D, E, I and J.[^fn2]
+
+[^fn2]: In the hedge version, we excluded one 5-year-old child from the test-retest analysis. The performance of the mentioned child lay 3 standard deviations above the mean on both test days. Including the child yielded a *Pearson* correlation coefficient of *r* = 0.87. 
+
+Taking age into account in our GLMM based approach yielded similar results. The age-independent retest reliability estimate in the hedge version amounted to `r posterior_summary(mRetestHedge)["cor_subjID__relidayreliday1__relidayreliday2", "Estimate"]` (95% CI [`r posterior_summary(mRetestHedge)["cor_subjID__relidayreliday1__relidayreliday2", "Q2.5"]`;`r posterior_summary(mRetestHedge)["cor_subjID__relidayreliday1__relidayreliday2", "Q97.5"]`]). 
+In the box version of the task, the age-independent correlation between participant specific test day estimates was `r posterior_summary(mRetestBox)["cor_subjID__relidayreliday1__relidayreliday2", "Estimate"]` (95% CI [`r posterior_summary(mRetestBox)["cor_subjID__relidayreliday1__relidayreliday2", "Q2.5"]`;`r posterior_summary(mRetestBox)["cor_subjID__relidayreliday1__relidayreliday2", "Q97.5"]`]). The results suggest that our novel balloon finding task did capture individual differences beyond general cognitive maturation processes. This corroborates what we already see in Figure 2: there was a clear overlap between age groups, indicating that age is predictive of performance for the mean, but is not the driving force acccounting for individual differences. 
+
 ## Discussion
-Our results indicated that the measured variation was systematic. These results hold for both the continuous hedge version as well as the discrete box version of the task.
+Our results indicated that the measured variation was systematic. As could be expected, the continuous measure of the hedge version yielded higher reliability estimates than the discrete box version. 
 
 # Exploring the external validity of our task
 Our third aim was to assess whether the captured individual variation in gaze cue understanding relates to factors in children's real live social surroundings. 
@@ -458,6 +479,10 @@ range = `r sum(pe_sample$minAgeInMonths[pe_sample$ageInYears == "5"])`
 ## Procedure
 Families of our kindergarten and online child sample were asked to fill out a brief demographic questionnaire (print out / online questionnaire). We asked for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day. 
 
+
+## Analysis
+We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
+
 ## Results
 - peer exposure (hedge & box combined?)
 
@@ -504,9 +529,23 @@ optional: please review the submission guidelines from the journal whether state
 \newpage
 
 # Supplements
+## Child sample
+### Webcam coding
+Comparing the performances of children across our two data collection modes, we found that children participating remotely were slightly more precise. This difference was especially prominent in younger participants in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
+In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing. Due to the incredible time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = `r n_distinct(vali$subjID[vali$datacollection == "remote - unsupervised" & vali$ageInYears == 3 & vali$studyversion == "box" & vali$webcam == TRUE])`). We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
+A trial was defined as the time between two eye blinking sounds. We transcribed all utterances by parents and children and counted the words uttered by each. We then classified the utterances into several categories: question asked by child, repeated testquestion by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive & negative feedback, motivational statements, and incomprehensible utterances.
+In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial. 
+We conducted a model comparison to estimate the effects of parental interference. Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in `R: correct ~ age + (1 | subjID) + (1 | targetPosition)`. We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample. 
+We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
+On the trial level, the model including the verification of choice as a main effect won: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greatest learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated testquestions won: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95% CI of the model estimates included zero and were rather wide. Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis. 
+
+```{r webcam_coding}
+webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds")
+
+knitr::kable(webcam_models)
+```
 
 ## Adult sample
-
 ### Recruitment
 We recruited participants using the online participant recruitment service *Prolific* from the University of Oxford. *Prolific*'s subject pool consists of a mostly European and US-american sample although subjects from all over the world are included. The recruitment platform realises ethical payment of participants, which requires researchers to pay participants a fixed minimum wage of £5.00 (around US$6.50 or €6.00) per hour. We decided to pay all participants the same fixed fee which was in relation to the estimated average time taken to complete the task.
 *Prolific* distributed our study link to potential participants, while the hosting of the online study was done by local servers in the Max Planck Institute for Evolutionary Anthropology, Leipzig. Therefore, study data was saved only on our internal servers, while *Prolific* provided demographic information of the participants.
@@ -551,48 +590,30 @@ Since we aimed for a minimum sample size of 60 subjects participating on both te
 
 Of the additional 50 participants that completed testday 1, 28 subjects finished testday 2. Additional three subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion. One additional participant timed out, i.e., did not finish the survey within the allowed maximum time. Again, participants were compensated with £1.50 for completing the second part of the study (estimated average completion time 9 minutes, estimated hourly rate of £10). In average, participants took 06:30min to complete the second part of the study.
 
-## Child sample
-### Study 1 - Validation Remote and in-person
-The validation of our task in a in-person and remote child sample can be found here: https://osf.io/snju6. 
-We chose to have at least 20 data points per cell (i.e. unique combination of data collection mode, study version, and age-group). Across the two data collection modes, a total of ... children participated. Participants received a small gift as thank you for their participation in the study. 
-
-For our in-person supervised testing sample, we went to kindergartens in Leipzig and surroundings that cooperate with the Max Planck Institute for Evolutionary Anthropology. For our remote unsupervised testing sample, families were recruited on a voluntary basis via email from the database of the Max Planck Institute for Evolutionary Anthropology. Children in both subsamples live in Leipzig, Germany or surrounding areas and grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
-Written informed consent was obtained from at least one caregiver prior to testing. 
-TODO: how to phrase for kiga testing?
-
-## Procedure Remote Testing
-In the beginning of the online study, families were invited to enter "our virtual institute" and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure. Then, caregivers were informed about data security and were asked for their informed consent. They were asked to enable the sound and seat their child centrally in front of their device. Subsequently, a brief demographic questionnaire was displayed, asking for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day. Before the study started, families were instructed how to setup their webcam and enable the recording permissions. Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves. 
-Then, families were guided through the online study with pre-recorded audio instructions. After completion, families received a little crafting / coloring sheet as a small thank-you gift.
-
-Depending on the participant's device, the website automatically presents the hedge or box version of the study. For families that use a tablet with touchscreen, the hedge version is shown. Here, children can directly click on the screen themselves to indicate where the target is. For families that use a computer without touchscreen, the website presents the box version of the task. We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse. Therefore, we asked children to point to the screen. Caregivers were then asked to act as the "digital finger" of their children and click on the indicated box. In order to facilitate the translation of children's pointing and caregivers' clicking, we decided to implement this categorical version of the task.
-
-### Study 2 - Reliability in-person 
-https://osf.io/xqm73
-
 # Instructions and voice over descriptions
-This is the content of our voice recordings. Children listen to this during the game.
+This is the content of our audio recordings that were played as instructions and during voice over trials.
 
-|     |     |     |     |     |
-| --- | --- | --- | --- | --- |
-| **Nr** | **Timeline** | **German** | **English** | **Filename** |
-| **1** | **welcome** | Hallo! Schön, dass du da bist. Wir spielen jetzt das Ballon-Spiel! Siehst du die Tiere auf dem Bild da? Wir möchten gleich zusammen mit den Tieren mit einem Ballon spielen. Was genau passiert, erklären wir dir jetzt ganz in Ruhe. | Hello! Great that you’re here. We’ll now play a balloon game. Can you see the animals in the picture over there? We want to play together with the animals using the balloon. We’ll now talk you through exactly what will happen. | welcome.mp3 |
-| **2** | **touch** | Schau mal, da steht ein Tier im Fenster. Und siehst du den Ballon da? Der Ballon fällt immer runter und landet auf dem Boden. Und du musst ihn dann finden. Das Tier hilft Dir und schaut immer den Ballon an. | Look, an animal is standing in the window. And can you see the balloon over there? The balloon always falls down and lands on the ground. And you have to find it! The animal helps you and always looks at the balloon. | touch-1.mp3 |
-| **3** |     | Wo ist der Ballon? Drück auf den Ballon! | Where is the balloon? Click on the balloon! | prompt-touch-long.mp3 |
-| **4** | **fam - HEDGE** | Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er hinter eine Hecke. Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. | Perfect, that was great! Now, we’ll continue playing. Can you see the animal and the balloon again? The balloon will fall down again. This time, it will fall behind a hedge. And you have to find it! The animal helps you and looks at the balloon. | fam-hedge-1.mp3 |
-| **5** |     | Wo ist der Ballon? Drücke auf die Hecke - wo der Ballon ist. | Where is the balloon? On the hedge, click where the balloon is. | prompt-hedge-long.mp3 |
-| **6** | **fam - BOX** | Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er in eine Kiste.  <br>Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. | Perfect, that was great! Now, we’ll continue playing. Can you see the animal and the balloon again? The balloon falls down again. This time, it falls into a box. And you have to find it! The animal helps you and looks at the balloon. | fam-box-1.mp3 |
-| **7** |     | Wo ist der Ballon? Drücke auf die Kiste mit dem Ballon. | Where is the balloon? Click on the box with the balloon. | prompt-box-long.mp3 |
-| **8** | **test - HEDGE** | Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Hecke. Die Hecke wächst jetzt hoch. | Nice, good job! Now, we’ll continue playing. There is the balloon, the animal and the hedge. The hedge is growing a bit now. | test-hedge-1.mp3 |
-| **9** |     | Der Ballon ist nun hinter der Hecke. Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon auf den Boden und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an. | The balloon is behind the hedge now. You can’t see it - but the animal can! The balloon falls to the ground and you have to find it. Remember - the animal always looks at the balloon! | test-hedge-2.mp3 |
-| **10** |     | Dann schrumpft die Hecke. Drücke auf die Hecke - wo der Ballon ist. | Now, the hedge is shrinking. On the hedge, click where the balloon is. | test-hedge-3.mp3 |
-| **11** | **test - BOX** | Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Kisten. Jetzt wächst eine Hecke hoch. | Nice, good job! Now, we’ll continue playing. There is the balloon and the animal. Now, a hedge is growing. | test-box-1.mp3 |
-| **12** |     | Der Ballon ist nun hinter der Hecke. Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon in eine Kiste und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an. | The balloon is behind the hedge now. You can’t see it - but the animal can! The balloon falls into a box and you have to find it. Remember - the animal always looks at the balloon! | test-box-2.mp3 |
-| **13** |     | Dann schrumpft die Hecke. Drücke auf die Kiste mit dem Ballon. | Now, the hedge is shrinking. Click on the box with the balloon. | test-box-3.mp3 |
-| **14** | **goodbye** | Geschafft! Die Tiere sind schon ganz glücklich vom Spielen! Vielen Dank für deine Hilfe! Bis zum nächsten Mal und liebe Grüße vom Schwein, Affen und Schaf | The animals are super happy after playing. Thanks a lot for your help! See you soon and goodbye from the pig, monkey and sheep | goodbye.mp3 |
-| **15** | **general prompt** | Wo ist der Ballon? | Where is the balloon? | prompt-general.mp3 |
-| **16** | **touch - no response** | Drück auf den Ballon! | Click on the balloon! | prompt-touch.mp3 |
-| **17** | **hedge - no response** | Drücke auf die Hecke - wo der Ballon ist! | On the hedge, click where the balloon is! | prompt-hedge.mp3 |
-| **18** | **box - no response** | Drücke auf die Kiste mit dem Ballon! | Click on the box with the balloon! | prompt-box.mp3 |
-| **19** | **landing sound of balloon** | \-  | \-  | balloon-lands.mp3 |
-| **20** | **sound of blinking eyes** | \-  | \-  | blink.mp3 |
-| **21** | **sound for target click** | \-  | \-  | positive-feedback.mp3 |
+|     |     |     |     |
+| --- | --- | --- | --- |
+| **Timeline** | **German** | **English** | **Filename** |
+| **welcome** | Hallo! Schön, dass du da bist. Wir spielen jetzt das Ballon-Spiel! Siehst du die Tiere auf dem Bild da? Wir möchten gleich zusammen mit den Tieren mit einem Ballon spielen. Was genau passiert, erklären wir dir jetzt ganz in Ruhe. | Hello! Great that you’re here. We’ll now play a balloon game. Can you see the animals in the picture over there? We want to play together with the animals using the balloon. We’ll now talk you through exactly what will happen. | welcome.mp3 |
+| **touch** | Schau mal, da steht ein Tier im Fenster. Und siehst du den Ballon da? Der Ballon fällt immer runter und landet auf dem Boden. Und du musst ihn dann finden. Das Tier hilft Dir und schaut immer den Ballon an. | Look, an animal is standing in the window. And can you see the balloon over there? The balloon always falls down and lands on the ground. And you have to find it! The animal helps you and always looks at the balloon. | touch-1.mp3 |
+|     | Wo ist der Ballon? Drück auf den Ballon! | Where is the balloon? Click on the balloon! | prompt-touch-long.mp3 |
+| **fam - HEDGE** | Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er hinter eine Hecke. Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. | Perfect, that was great! Now, we’ll continue playing. Can you see the animal and the balloon again? The balloon will fall down again. This time, it will fall behind a hedge. And you have to find it! The animal helps you and looks at the balloon. | fam-hedge-1.mp3 |
+|     | Wo ist der Ballon? Drücke auf die Hecke - wo der Ballon ist. | Where is the balloon? On the hedge, click where the balloon is. | prompt-hedge-long.mp3 |
+| **fam - BOX** | Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er in eine Kiste.  <br>Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. | Perfect, that was great! Now, we’ll continue playing. Can you see the animal and the balloon again? The balloon falls down again. This time, it falls into a box. And you have to find it! The animal helps you and looks at the balloon. | fam-box-1.mp3 |
+|     | Wo ist der Ballon? Drücke auf die Kiste mit dem Ballon. | Where is the balloon? Click on the box with the balloon. | prompt-box-long.mp3 |
+| **test - HEDGE** | Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Hecke. Die Hecke wächst jetzt hoch. | Nice, good job! Now, we’ll continue playing. There is the balloon, the animal and the hedge. The hedge is growing a bit now. | test-hedge-1.mp3 |
+|     | Der Ballon ist nun hinter der Hecke. Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon auf den Boden und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an. | The balloon is behind the hedge now. You can’t see it - but the animal can! The balloon falls to the ground and you have to find it. Remember - the animal always looks at the balloon! | test-hedge-2.mp3 |
+|     | Dann schrumpft die Hecke. Drücke auf die Hecke - wo der Ballon ist. | Now, the hedge is shrinking. On the hedge, click where the balloon is. | test-hedge-3.mp3 |
+| **test - BOX** | Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Kisten. Jetzt wächst eine Hecke hoch. | Nice, good job! Now, we’ll continue playing. There is the balloon and the animal. Now, a hedge is growing. | test-box-1.mp3 |
+|     | Der Ballon ist nun hinter der Hecke. Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon in eine Kiste und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an. | The balloon is behind the hedge now. You can’t see it - but the animal can! The balloon falls into a box and you have to find it. Remember - the animal always looks at the balloon! | test-box-2.mp3 |
+|     | Dann schrumpft die Hecke. Drücke auf die Kiste mit dem Ballon. | Now, the hedge is shrinking. Click on the box with the balloon. | test-box-3.mp3 |
+| **goodbye** | Geschafft! Die Tiere sind schon ganz glücklich vom Spielen! Vielen Dank für deine Hilfe! Bis zum nächsten Mal und liebe Grüße vom Schwein, Affen und Schaf | The animals are super happy after playing. Thanks a lot for your help! See you soon and goodbye from the pig, monkey and sheep | goodbye.mp3 |
+| **general prompt** | Wo ist der Ballon? | Where is the balloon? | prompt-general.mp3 |
+| **touch - no response** | Drück auf den Ballon! | Click on the balloon! | prompt-touch.mp3 |
+| **hedge - no response** | Drücke auf die Hecke - wo der Ballon ist! | On the hedge, click where the balloon is! | prompt-hedge.mp3 |
+| **box - no response** | Drücke auf die Kiste mit dem Ballon! | Click on the box with the balloon! | prompt-box.mp3 |
+| **landing sound of balloon** | \-  | \-  | balloon-lands.mp3 |
+| **sound of blinking eyes** | \-  | \-  | blink.mp3 |
+| **sound for target click** | \-  | \-  | positive-feedback.mp3 |
