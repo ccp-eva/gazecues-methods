@@ -564,16 +564,30 @@ Families of our kindergarten and online child sample were asked to fill out a br
 \hypertarget{analysis-2}{%
 \subsection{Analysis}\label{analysis-2}}
 
-We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
+To estimate the effects of social surrounding on gaze cue understanding, we fit GLMMs predicting the task performance by each of our questionnaire variables, controlling for age (in months, z-transformed), data collection mode (reference category: in-person supervised) and study version (reference category: hedge version). The models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants. Therefore, our null model closely resembled the structure from our first analysis (section \emph{Does the balloon finding task induce variation?}; here: \texttt{performance\ \textasciitilde{}\ age\ +\ datacollection\ +\ studyversion\ +\ (symmetricPosition\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}).
+In order to combine data of our two study versions, we transformed continuous click responses from the hedge version into a discrete outcome. For the target position, we summarized the two adjacent bins into one imaginary box. For the click responses, we created imaginary box boundaries around the target's landing position and assessed whether the participant's response fell into this imaginary box. Across the two study versions, we could consequently model the participant's correct response (0/1) using a Bernoulli distribution with a logit link function.
+For model comparisons, we respectively added the following predictors as fixed effects to the null model: number of household members, number of children aged 0-18 in household, number of children aged 1-12 in household, hours spent in childcare each day, and age when subjects entered childcare.
+In addition, we calculated three index scores. First, we calculated a sibling variety score according to Peterson (2000). Second, we implemented the modified version of Cassidy, Fineberg, Brown, and Perkins (2005) (for more details, see Supplements). Third, based on our own data exploration we calculated the amount of peer exposure as the number of siblings and the average hours spent in childcare (all z-transformed).
+We compared the models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
 
 \hypertarget{results-2}{%
 \subsection{Results}\label{results-2}}
 
-\begin{itemize}
-\tightlist
-\item
-  peer exposure (hedge \& box combined?)
-\end{itemize}
+{[}TODO{]} All effects except when a child entered childcare positively influence performance.
+The effect sizes are all small and 95\% CIs mostly include zero. It is remarkable, however, that we were able to detect a relationship between a fundamental social-cognitive ability and very distant, real life demographics.
+
+
+
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/extvali-posteriorsample} 
+
+}
+
+\caption{\textbf{External validity of the balloon finding task}.
+{[}TODO{]} WAIC scores and weights can be found in the Supplements section.}\label{fig:fig4}
+\end{figure}
 
 \hypertarget{discussion-2}{%
 \section{Discussion}\label{discussion-2}}
@@ -642,8 +656,14 @@ Bürkner, P.-C. (2017). Brms: {An R Package} for {Bayesian Multilevel Models Usi
 \leavevmode\vadjust pre{\hypertarget{ref-burkner2018advanced}{}}%
 Bürkner, P.-C. (2018). Advanced {Bayesian Multilevel Modeling} with the {R Package} brms. \emph{The R Journal}, \emph{10}(1), 395. \url{https://doi.org/10.32614/RJ-2018-017}
 
+\leavevmode\vadjust pre{\hypertarget{ref-cassidy2005theory}{}}%
+Cassidy, K. W., Fineberg, D. S., Brown, K., \& Perkins, A. (2005). Theory of {Mind May Be Contagious}, but {You Don}'t {Catch It} from {Your Twin}. \emph{Child Development}, \emph{76}(1), 97--106.
+
 \leavevmode\vadjust pre{\hypertarget{ref-greensock2022gsap}{}}%
 Greensock. (2022). \emph{{GSAP} ({GreenSock Animation Platform})}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-peterson2000kindred}{}}%
+Peterson, C. C. (2000). Kindred spirits: {Influences} of siblings' perspectives on theory of mind. \emph{Cognitive Development}, \emph{15}(4), 435--455. \url{https://doi.org/10.1016/S0885-2014(01)00040-5}
 
 \leavevmode\vadjust pre{\hypertarget{ref-pronk2021methods}{}}%
 Pronk, T., Molenaar, D., Wiers, R. W., \& Murre, J. (2021). Methods to split cognitive task data for estimating split-half reliability: {A} comprehensive review and systematic assessment. \emph{Psychonomic Bulletin \& Review}. \url{https://doi.org/10.3758/s13423-021-01948-3}
@@ -701,6 +721,48 @@ mPerSubjectVerificationChoice & 89.85833 & 0.2966959 & -3.1665822 & 4.484388\\
 mPerSubjectParentSpeech & 90.44632 & 0.0000018 & -3.4605795 & 4.204938\\
 \hline
 mPerSubjectHintsEyes & 92.76122 & 0.0000001 & -4.6180264 & 3.773420\\
+\hline
+\end{tabular}
+
+\hypertarget{appendix-to-external-validity-section}{%
+\subsubsection{Appendix to external validity section}\label{appendix-to-external-validity-section}}
+
+\hypertarget{scoring-of-sibling-variety-scores}{%
+\paragraph{Scoring of sibling variety scores}\label{scoring-of-sibling-variety-scores}}
+
+For assessing the external validity of our balloon finding task, we calculated two sibling variety scores based on the existing Theory of Mind literature.
+First, we followed the approach by Peterson (2000). Here, only-children as well as firstborns with siblings under one year scored 0 points; lastborns with siblings above 12 years scored 0.5 points; children with twins, firstborns with siblings over one year, and lastborns with at least one sibling under 13 years scored 1 point, middleborns with at least one older and younger sibling aged one to 12 years scored 2 points.
+
+Second, we implemented the sibling variety score by Cassidy et al. (2005). The authors adjusted the original score of Peterson (2000) in the following way: only-children scored 0 points; children with a sibling under one year or above 12 years, and twins with no other sibling scored 0.5 points; children with a sibling above one year or under 13 years scored 1 point; middleborns with at least one older and younger sibling aged one to 12 years scored 2 points. Twins with additional siblings scored depending on the age and number of their siblings.
+
+The reasoning was that children between one and 13 years of age would engage in sibling play, while the youngest and most mature siblings would be less likely to participate in such. However, teenage siblings might provide opportunities for interesting discussions (Peterson, 2000).
+
+\hypertarget{waic-scores-and-weights-of-the-model-comparison}{%
+\paragraph{WAIC scores and weights of the model comparison}\label{waic-scores-and-weights-of-the-model-comparison}}
+
+As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially. All effects except when a child entered childcare positively influence performance.
+
+\begin{tabular}{l|r|r|r|r}
+\hline
+model & waic & waic\_weight & elpd\_diff & se\_diff\\
+\hline
+PE & 2391.092 & 0.4516270 & 0.0000000 & 0.0000000\\
+\hline
+siblingsVarietyScoreP & 2391.433 & 0.2009621 & -0.1703600 & 1.1084142\\
+\hline
+siblingsVarietyScoreW & 2391.612 & 0.0489847 & -0.2602340 & 1.1033051\\
+\hline
+hhSibs & 2391.654 & 0.0932701 & -0.2809574 & 0.9592453\\
+\hline
+null & 2391.963 & 0.0003588 & -0.4355391 & 1.3235267\\
+\hline
+ccAge & 2392.770 & 0.2047406 & -0.8390844 & 1.7165235\\
+\hline
+sibsChildAged & 2393.059 & 0.0000352 & -0.9836425 & 1.0349722\\
+\hline
+ccHours & 2393.156 & 0.0000134 & -1.0320103 & 1.0784916\\
+\hline
+hhTotal & 2393.647 & 0.0000082 & -1.2775838 & 0.9703247\\
 \hline
 \end{tabular}
 

@@ -356,12 +356,12 @@ ggsave("../figures/supplements-webcamcoding-mPerSubjectComparison-posteriorsampl
 ```
 
 ```{r overall_save}
-overall_resuls <- bind_rows(mPerTrialComparison, mPerSubjectComparison) %>% 
+overall_results <- bind_rows(mPerTrialComparison, mPerSubjectComparison) %>% 
   left_join(bind_rows(mPerTrialComparisonWeights, mPerSubjectComparisonWeights)) %>% 
   select(model, waic, value, elpd_diff, se_diff) %>% 
   rename(waic_weight = value)
 
-write.csv(overall_resuls, "../saves/supplements-webcamcoding-resuls.csv", quote = F, row.names = F)
-saveRDS(overall_resuls, "../saves/supplements-webcamcoding-results.rds")
+write.csv(overall_results, "../saves/supplements-webcamcoding-results.csv", quote = F, row.names = F)
+saveRDS(overall_results, "../saves/supplements-webcamcoding-results.rds")
 ```
 

@@ -410,6 +410,7 @@ Reliability coefficients per splitting method, stratification level, study versi
 ```{r fig3, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab3)"}
 knitr::include_graphics("../figures/gafo_splithalf.png")
 ``` 
+
 ```{r retestmodels}
 mRetestHedge <- readRDS(file = "../saves/mRetestHedge.rds") 
 mRetestBox <- readRDS(file = "../saves/mRetestBox.rds") 
@@ -426,14 +427,24 @@ Our results indicated that the measured variation was systematic. As could be ex
 
 # Exploring the external validity of our task
 Our third aim was to assess whether the captured individual variation in gaze cue understanding relates to factors in children's real live social surroundings. 
-```{r peerexposure_sample}
-pe <- testtrials %>% 
-  filter(ageInYears < 6) %>% 
-  select(datacollection, studyversion, subjID, gender, trialNr, ageInMonths, ageInYears, correctBox, childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, targetPosition, targetCentralityX) %>% 
+```{r extvali_sample}
+extvali <- testtrials %>% 
+  filter(ageInYears < 6) %>%
+  mutate(
+        symmetricPosition = case_when(
+                                  targetPosition == "5" | targetPosition == "6" | targetPosition == "box3" ~ 1, 
+                                  targetPosition == "4" | targetPosition == "7" | targetPosition == "box2" | targetPosition == "box4" ~ 2,
+                                  targetPosition == "3" | targetPosition == "8" | targetPosition == "box1" | targetPosition == "box5" ~ 3, 
+                                  targetPosition == "2" | targetPosition == "9" ~ 4,
+                                  targetPosition == "1" | targetPosition == "10" ~ 5, 
+                       ), 
+  ) %>% 
+  select(datacollection, studyversion, subjID, gender, trialNr, ageInMonths, ageInYears, correctBox, childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, targetPosition, symmetricPosition) %>% 
+  group_by(subjID) %>% 
   # so that all models run with same nr of subjects
   drop_na()
 
-pe_sample <- pe %>%
+extvali_sample <- extvali %>%
   group_by(ageInYears) %>%
   summarise(
     nTotal = n_distinct(subjID), 
@@ -443,48 +454,58 @@ pe_sample <- pe %>%
     maxAgeInMonths = max(ageInMonths, na.rm = T),
   )
 
-pe_gender <- pe %>% 
+extvali_gender <- extvali %>% 
   group_by(ageInYears) %>%
   filter(gender == "f") %>% 
   summarise(
     nFemales = length(unique(subjID))
   )
 
-pe_sample <- pe_sample %>% 
-  left_join(pe_gender, by = c("ageInYears"))
+extvali_sample <- extvali_sample %>% 
+  left_join(extvali_gender, by = c("ageInYears"))
 ```
 
 ## Participants
 For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This subsample consisted of 
-`r sum(pe_sample$nTotal)` children, including 
-`r sum(pe_sample$nTotal[pe_sample$ageInYears == "3"])` 3-year-olds 
-(mean = `r sum(pe_sample$meanAgeInMonths[pe_sample$ageInYears == "3"])` months, 
-SD = `r sum(pe_sample$sdAgeInMonths[pe_sample$ageInYears == "3"])`, 
-range = `r sum(pe_sample$minAgeInMonths[pe_sample$ageInYears == "3"])`
-- `r sum(pe_sample$maxAgeInMonths[pe_sample$ageInYears == "3"])`, 
-`r sum(pe_sample$nFemales[pe_sample$ageInYears == "3"])` girls),
-`r sum(pe_sample$nTotal[pe_sample$ageInYears == "4"])` 4-year-olds 
-(mean = `r sum(pe_sample$meanAgeInMonths[pe_sample$ageInYears == "4"])` months, 
-SD = `r sum(pe_sample$sdAgeInMonths[pe_sample$ageInYears == "4"])`, 
-range = `r sum(pe_sample$minAgeInMonths[pe_sample$ageInYears == "4"])`
-- `r sum(pe_sample$maxAgeInMonths[pe_sample$ageInYears == "4"])`, 
-`r sum(pe_sample$nFemales[pe_sample$ageInYears == "4"])` girls),
-and `r sum(pe_sample$nTotal[pe_sample$ageInYears == "5"])` 5-year-olds 
-(mean = `r sum(pe_sample$meanAgeInMonths[pe_sample$ageInYears == "5"])` months, 
-SD = `r sum(pe_sample$sdAgeInMonths[pe_sample$ageInYears == "5"])`, 
-range = `r sum(pe_sample$minAgeInMonths[pe_sample$ageInYears == "5"])`
-- `r sum(pe_sample$maxAgeInMonths[pe_sample$ageInYears == "5"])`, 
-`r sum(pe_sample$nFemales[pe_sample$ageInYears == "5"])` girls). 
+`r sum(extvali_sample$nTotal)` children, including 
+`r sum(extvali_sample$nTotal[extvali_sample$ageInYears == "3"])` 3-year-olds 
+(mean = `r sum(extvali_sample$meanAgeInMonths[extvali_sample$ageInYears == "3"])` months, 
+SD = `r sum(extvali_sample$sdAgeInMonths[extvali_sample$ageInYears == "3"])`, 
+range = `r sum(extvali_sample$minAgeInMonths[extvali_sample$ageInYears == "3"])`
+- `r sum(extvali_sample$maxAgeInMonths[extvali_sample$ageInYears == "3"])`, 
+`r sum(extvali_sample$nFemales[extvali_sample$ageInYears == "3"])` girls),
+`r sum(extvali_sample$nTotal[extvali_sample$ageInYears == "4"])` 4-year-olds 
+(mean = `r sum(extvali_sample$meanAgeInMonths[extvali_sample$ageInYears == "4"])` months, 
+SD = `r sum(extvali_sample$sdAgeInMonths[extvali_sample$ageInYears == "4"])`, 
+range = `r sum(extvali_sample$minAgeInMonths[extvali_sample$ageInYears == "4"])`
+- `r sum(extvali_sample$maxAgeInMonths[extvali_sample$ageInYears == "4"])`, 
+`r sum(extvali_sample$nFemales[extvali_sample$ageInYears == "4"])` girls),
+and `r sum(extvali_sample$nTotal[extvali_sample$ageInYears == "5"])` 5-year-olds 
+(mean = `r sum(extvali_sample$meanAgeInMonths[extvali_sample$ageInYears == "5"])` months, 
+SD = `r sum(extvali_sample$sdAgeInMonths[extvali_sample$ageInYears == "5"])`, 
+range = `r sum(extvali_sample$minAgeInMonths[extvali_sample$ageInYears == "5"])`
+- `r sum(extvali_sample$maxAgeInMonths[extvali_sample$ageInYears == "5"])`, 
+`r sum(extvali_sample$nFemales[extvali_sample$ageInYears == "5"])` girls). 
 
 ## Procedure
 Families of our kindergarten and online child sample were asked to fill out a brief demographic questionnaire (print out / online questionnaire). We asked for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day. 
 
-
 ## Analysis
-We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
+To estimate the effects of social surrounding on gaze cue understanding, we fit GLMMs predicting the task performance by each of our questionnaire variables, controlling for age (in months, z-transformed), data collection mode (reference category: in-person supervised) and study version (reference category: hedge version). The models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants. Therefore, our null model closely resembled the structure from our first analysis (section *Does the balloon finding task induce variation?*; here: `performance ~ age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition)`). 
+In order to combine data of our two study versions, we transformed continuous click responses from the hedge version into a discrete outcome. For the target position, we summarized the two adjacent bins into one imaginary box. For the click responses, we created imaginary box boundaries around the target's landing position and assessed whether the participant's response fell into this imaginary box. Across the two study versions, we could consequently model the participant's correct response (0/1) using a Bernoulli distribution with a logit link function.
+For model comparisons, we respectively added the following predictors as fixed effects to the null model: number of household members, number of children aged 0-18 in household, number of children aged 1-12 in household, hours spent in childcare each day, and age when subjects entered childcare. 
+In addition, we calculated three index scores. First, we calculated a sibling variety score according to @peterson2000kindred. Second, we implemented the modified version of @cassidy2005theory (for more details, see Supplements). Third, based on our own data exploration we calculated the amount of peer exposure as the number of siblings and the average hours spent in childcare (all z-transformed). 
+We compared the models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
 
 ## Results
-- peer exposure (hedge & box combined?)
+[TODO] All effects except when a child entered childcare positively influence performance. 
+The effect sizes are all small and 95% CIs mostly include zero. It is remarkable, however, that we were able to detect a relationship between a fundamental social-cognitive ability and very distant, real life demographics. 
+
+(ref:figlab4) **External validity of the balloon finding task**. 
+[TODO] WAIC scores and weights can be found in the Supplements section. 
+```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
+knitr::include_graphics("../figures/extvali-posteriorsample.png")
+```
 
 # Discussion
 ## Limitations
@@ -543,6 +564,22 @@ On the trial level, the model including the verification of choice as a main eff
 webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds")
 
 knitr::kable(webcam_models)
+```
+
+### Appendix to external validity section
+#### Scoring of sibling variety scores
+For assessing the external validity of our balloon finding task, we calculated two sibling variety scores based on the existing Theory of Mind literature. 
+First, we followed the approach by @peterson2000kindred. Here, only-children as well as firstborns with siblings under one year scored 0 points; lastborns with siblings above 12 years scored 0.5 points; children with twins, firstborns with siblings over one year, and lastborns with at least one sibling under 13 years scored 1 point, middleborns with at least one older and younger sibling aged one to 12 years scored 2 points. 
+
+Second, we implemented the sibling variety score by @cassidy2005theory. The authors adjusted the original score of @peterson2000kindred in the following way: only-children scored 0 points; children with a sibling under one year or above 12 years, and twins with no other sibling scored 0.5 points; children with a sibling above one year or under 13 years scored 1 point; middleborns with at least one older and younger sibling aged one to 12 years scored 2 points. Twins with additional siblings scored depending on the age and number of their siblings. 
+
+The reasoning was that children between one and 13 years of age would engage in sibling play, while the youngest and most mature siblings would be less likely to participate in such. However, teenage siblings might provide opportunities for interesting discussions [@peterson2000kindred]. 
+
+#### WAIC scores and weights of the model comparison
+As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially. All effects except when a child entered childcare positively influence performance. 
+```{r extvali_results}
+extvali_models <- readRDS(file = "../saves/extvali-results.rds")
+knitr::kable(extvali_models)
 ```
 
 ## Adult sample
@@ -617,3 +654,4 @@ This is the content of our audio recordings that were played as instructions and
 | **landing sound of balloon** | \-  | \-  | balloon-lands.mp3 |
 | **sound of blinking eyes** | \-  | \-  | blink.mp3 |
 | **sound for target click** | \-  | \-  | positive-feedback.mp3 |
+

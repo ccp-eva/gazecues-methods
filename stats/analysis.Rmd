@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse) # data handling etc.
 library(viridis) # col scales, plotting...
 library(ggpubr)
+library(ggridges)
 library(ggthemes)
 library(tidyboot) # for bootstrap CIs
 library(brms) # modeling
@@ -1426,3 +1427,194 @@ ggarrange(
 
 ggsave("../figures/gafo_results.png", width = 6.5, height = 5, scale = 1.6, bg = "white")
 ```
+
+# EXTERNAL VALIDITY
+
+```{r extvali_prepareData}
+mDataExtvali <- testtrials %>% 
+  filter(ageInYears < 6) %>% 
+  select(datacollection, studyversion, subjID, gender, trialNr, ageInMonths, ageInYears, correctBox, childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, targetPosition, symmetricPosition) %>% 
+  group_by(subjID) %>% 
+  # so that all models run with same nr of subjects
+  drop_na() %>% 
+  ungroup() %>% 
+  mutate(
+    # centered around minimum
+    hhSibs = siblingsNr, 
+    sibsChildAged = siblingsChildAged, 
+    
+    # centered around mean
+    trial = scale(trialNr, center = TRUE, scale = FALSE)[,1],
+    ccAge = scale(childcareAge, center = TRUE, scale = FALSE)[,1],
+    ccHours = scale(childcareHours, center = TRUE, scale = FALSE)[,1],
+    hhTotal = scale(householdTotal, center = TRUE, scale = FALSE)[,1],
+    
+    # scaled (centered around mean, SD = 1, i.e., z-transformed)
+    age = scale(ageInMonths, center = TRUE, scale = TRUE)[,1], 
+    peerExposure = scale(childcareHours, center = TRUE, scale = TRUE) + scale(siblingsNr, center = TRUE, scale = TRUE)[,1],
+    pe = scale(peerExposure, center = TRUE, scale = TRUE)[,1], 
+  ) %>% 
+  select(datacollection, studyversion, subjID, trial, age, targetPosition, symmetricPosition, correctBox, ccAge, ccHours, hhTotal, hhSibs, sibsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, pe) %>% 
+  mutate_if(is.character, as.factor)
+
+n_distinct(extvali$subjID)
+```
+
+```{r extvali_nullmodel}
+mExtvalinull <- brm(correctBox ~ age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                    data = mDataExtvali,
+                    family = bernoulli(link = "logit"),
+                    warmup = 1000, 
+                    iter   = 3000, 
+                    chains = 4, 
+                    inits  = "random",
+                    cores  = 4)
+```
+
+```{r extvali_fullmodels}
+mExtvaliccAge <- update(mExtvalinull,
+                      newdata = mDataExtvali,
+                      formula = correctBox ~ ccAge + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                      family = bernoulli(link = "logit"),
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mExtvaliccHours <- update(mExtvalinull,
+                      newdata = mDataExtvali,
+                      formula = correctBox ~ ccHours + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                      family = bernoulli(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mExtvalihhTotal <- update(mExtvalinull,
+                      newdata = mDataExtvali,
+                      formula = correctBox ~ hhTotal + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                      family = bernoulli(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mExtvalihhSibs <- update(mExtvalinull,
+                      newdata = mDataExtvali,
+                      formula = correctBox ~ hhSibs + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                      family = bernoulli(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mExtvalisibsChildAged <- update(mExtvalinull,
+                      newdata = mDataExtvali,
+                      formula = correctBox ~ sibsChildAged + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                      family = bernoulli(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mExtvalisiblingsVarietyScoreP <- update(mExtvalinull,
+                      newdata = mDataExtvali,
+                      formula = correctBox ~ siblingsVarietyScoreP + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                      family = bernoulli(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mExtvalisiblingsVarietyScoreW <- update(mExtvalinull,
+                      newdata = mDataExtvali,
+                      formula = correctBox ~ siblingsVarietyScoreW + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                      family = bernoulli(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+
+mExtvaliPE <- update(mExtvalinull,
+                      newdata = mDataExtvali,
+                      formula = correctBox ~ pe + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
+                      family = bernoulli(link = "logit"), 
+                      warmup = 1000, 
+                      iter   = 3000, 
+                      chains = 4, 
+                      inits  = "random",
+                      cores  = 4)
+```
+
+```{r extvali_modelcomparisons}
+mExtvalinull <- add_criterion(mExtvalinull, "waic")
+mExtvaliccAge <- add_criterion(mExtvaliccAge, "waic")
+mExtvaliccHours <- add_criterion(mExtvaliccHours, "waic")
+mExtvalihhTotal <- add_criterion(mExtvalihhTotal, "waic")
+mExtvalihhSibs <- add_criterion(mExtvalihhSibs, "waic")
+mExtvalisibsChildAged <- add_criterion(mExtvalisibsChildAged, "waic")
+mExtvalisiblingsVarietyScoreP <- add_criterion(mExtvalisiblingsVarietyScoreP, "waic")
+mExtvalisiblingsVarietyScoreW <- add_criterion(mExtvalisiblingsVarietyScoreW, "waic")
+mExtvaliPE <- add_criterion(mExtvaliPE, "waic")
+
+mExtvaliComparison <- as_tibble(loo_compare(mExtvalinull, mExtvaliccAge, mExtvaliccHours, mExtvalihhTotal, mExtvalihhSibs, mExtvalisibsChildAged, mExtvalisiblingsVarietyScoreP, mExtvalisiblingsVarietyScoreW, mExtvaliPE, criterion = "waic"), rownames = "model")
+
+mExtvaliComparison
+
+mExtvaliComparisonWeights <- as_tibble(model_weights(mExtvalinull, mExtvaliccAge, mExtvaliccHours, mExtvalihhTotal, mExtvalihhSibs, mExtvalisibsChildAged, mExtvalisiblingsVarietyScoreP, mExtvalisiblingsVarietyScoreW, mExtvaliPE, criterion = "waic"), rownames = "model")
+
+mExtvaliComparisonWeights %>% arrange(-value)
+
+extvaliModelorder <- mExtvaliComparisonWeights %>% arrange(value) %>%  pull(model)
+```
+
+```{r extvali_plot}
+extvaliPostSamples <- bind_rows(
+  posterior_samples(mExtvaliccAge, pars = "b_ccAge") %>% mutate(model = "mExtvaliccAge") %>% rename(estimate = b_ccAge), 
+  posterior_samples(mExtvaliccHours, pars = "b_ccHours") %>% mutate(model = "mExtvaliccHours") %>% rename(estimate = b_ccHours), 
+  posterior_samples(mExtvalihhTotal, pars = "b_hhTotal") %>% mutate(model = "mExtvalihhTotal") %>% rename(estimate = b_hhTotal), 
+  posterior_samples(mExtvalihhSibs, pars = "b_hhSibs") %>% mutate(model = "mExtvalihhSibs") %>% rename(estimate = b_hhSibs),
+  posterior_samples(mExtvalisibsChildAged, pars = "b_sibsChildAged") %>% mutate(model = "mExtvalisibsChildAged") %>% rename(estimate = b_sibsChildAged),
+  posterior_samples(mExtvalisiblingsVarietyScoreP, pars = "b_siblingsVarietyScoreP") %>% mutate(model = "mExtvalisiblingsVarietyScoreP") %>% rename(estimate = b_siblingsVarietyScoreP),
+  posterior_samples(mExtvalisiblingsVarietyScoreW, pars = "b_siblingsVarietyScoreW") %>% mutate(model = "mExtvalisiblingsVarietyScoreW") %>% rename(estimate = b_siblingsVarietyScoreW),
+  posterior_samples(mExtvaliPE, pars = "b_pe") %>% mutate(model = "mExtvaliPE") %>% rename(estimate = b_pe)
+) %>% 
+  mutate(
+    model = factor(model, levels = extvaliModelorder) %>% str_remove(., "mExtvali"), 
+  )
+
+write.csv(extvali_results, "../saves/extvali-posteriorsamples.csv", quote = F, row.names = F)
+saveRDS(extvali_results, "../saves/extvali-posteriorsamples.rds")
+
+ggplot(extvaliPostSamples, aes(x = estimate, y = model, fill = factor(stat(quantile)))) +
+  geom_vline(xintercept = 0, lty = 2, alpha = .75) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = c(0.025, 0.975)
+  ) +	
+  scale_fill_manual(values = c("#006c66", "NA", "#006c66"), guide = "none")
+
+ggsave("../figures/extvali-posteriorsample.png")
+```
+
+```{r extvali_save}
+extvali_results <- mExtvaliComparison %>%
+  left_join(mExtvaliComparisonWeights) %>%
+  select(model, waic, value, elpd_diff, se_diff) %>%
+  rename(waic_weight = value) %>% 
+  mutate(
+    model = str_remove(model, "mExtvali")
+  )
+
+write.csv(extvali_results, "../saves/extvali-results.csv", quote = F, row.names = F)
+saveRDS(extvali_results, "../saves/extvali-results.rds")
+```
+
