@@ -129,23 +129,23 @@ To keep participants engaged and interested, the presentation of events is accom
 Before the test trials start, we present four training trials during which participants familiarize themselves with selection positions on the screen. In the first training trial, participants have full visual access to the target flight and the target's end location and are simply asked to click on the visible balloon. In the second and third training trials, participants have partial visual access: they witness the target flight but cannot see the target's end location. They are then asked to click on the invisible balloon, i.e., the location where they saw the target land. In test trials, participants have no visual access to the target flight nor the end location. Participants are expected to use the agent’s gaze as a cue to locate the target. The first trial of each type comprises a voice-over description of the presented events. The audio descriptions explicitly state that the agent is always looking at the target (see Appendix for audio script). After these four training and audio guided trials, participants receive 15 test trials. The complete sequence of four training trials and 15 test trials can be administered within 5-10 minutes of testing time.
 
 ## Study versions
-We designed two study versions which can be chosen according to the researchers' need: there is a continuous *hedge* version and a discrete *box* version. Both versions use the same first training trial and then differ in the consecutive training and test trials. 
-In the *hedge* version, participants have to indicate their estimated target location directly on a hedge (i.e., hedge version). 
+We designed two study versions which can be chosen according to the researchers' need: there is a continuous hedge version and a discrete box version. Both versions use the same first training trial and then differ in the consecutive training and test trials. 
+In the hedge version, participants have to indicate their estimated target location directly on a hedge (i.e., hedge version). 
 Here, the dependent variable is imprecision, which is defined as the absolute difference between the target's true x coordinate and the x coordinate of the participant’s click.
-In the *box* version, participants are asked to click on a box that hides the target. Researchers have the choice of how many boxes are shown: one up to eight boxes can be displayed as potential hiding locations. Here, we use a categorical outcome (i.e., which box was clicked) to calculate the proportion of correct responses. 
-Note that in the test trials of both study versions, the target flight is covered by a hedge. In the *hedge* version, the hedge then shrinks to a minimum height required to cover the target's end location. In the *box* version, the hedge shrinks completely. The boxes then hide the target's final destination. 
+In the box version, participants are asked to click on a box that hides the target. Researchers have the choice of how many boxes are shown: one up to eight boxes can be displayed as potential hiding locations. Here, we use a categorical outcome (i.e., which box was clicked) to calculate the proportion of correct responses. 
+Note that in the test trials of both study versions, the target flight is covered by a hedge. In the hedge version, the hedge then shrinks to a minimum height required to cover the target's end location. In the box version, the hedge shrinks completely. The boxes then hide the target's final destination. 
 
 (ref:figlab1) **Study setup**. 
 (a) Infrastructure for online testing. (i) Subjects aged 3 – 99+ can participate. Data collection can take place anywhere: at home, in kindergartens or research institutes. (ii) The task is presented as a website that works across devices. (iii) The scripts for the website and the recorded data are stored on secure local servers.
-(b) Continuous *hedge* version of the balloon finding task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground. The agent's eyes track the movement of the target. 
-(c) Discrete *box* version of the balloon finding task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set individually.
+(b) Continuous hedge version of the balloon finding task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground. The agent's eyes track the movement of the target. 
+(c) Discrete box version of the balloon finding task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set individually.
 
 ```{r fig1, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab1)"}
 knitr::include_graphics("../figures/gafo_procedure.jpg")
 ``` 
 
 ## Randomization
-All agents and target colors appear equally often and are not repeated in more than two consecutive trials. The randomization of the target end location depends on the study version. In the *hedge* version, the full width of the screen is divided into ten bins. Exact coordinates within each bin are then randomly generated. In the *box* version, the target randomly lands in one of the boxes. As with agent and color choice, each bin/box occurs equally often and can only occur twice in a row.
+All agents and target colors appear equally often and are not repeated in more than two consecutive trials. The randomization of the target end location depends on the study version. In the hedge version, the full width of the screen is divided into ten bins. Exact coordinates within each bin are then randomly generated. In the box version, the target randomly lands in one of the boxes. As with agent and color choice, each bin/box occurs equally often and can only occur twice in a row.
 
 ## Implementation
 Our balloon finding task is presented as an interactive web-app. The task is portable across devices and web browsers and does not require any installation. A great advantage of online testing is that our testing procedure is standardized across participants. By using pre-recorded study instructions, no interaction with the experimenter is necessary during the study. The code is open-source (https://github.com/ccp-eva/gafo-demo) and a live demo version can be found under: https://ccp-odc.eva.mpg.de/gafo-demo/.
@@ -276,9 +276,9 @@ We inspected the posterior distribution (mean and 95% Confidence Interval (CI)) 
 
 ## Results
 (ref:figlab2) **Measuring interindividual variation**. 
-(a) Developmental trajectory in continuous *hedge* version. Performance is measured as average imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. 
+(a) Developmental trajectory in continuous hedge version. Performance is measured as average imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. 
 (b) Internal consistency (odd-even split) in hedge child sample. (c) Internal consistency in hedge adult sample. (d) Test-retest reliability in hedge child sample. (e) Test-retest reliability in hedge adult sample.
-(f) Developmental trajectory in discrete *box* version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. Dotted black line shows level of performance expected by chance (for child sample 20%, i.e., 1 out of 5 boxes; for adult sample 12.5%, i.e., 1 out of 8 boxes).
+(f) Developmental trajectory in discrete box version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. Dotted black line shows level of performance expected by chance (for child sample 20%, i.e., 1 out of 5 boxes; for adult sample 12.5%, i.e., 1 out of 8 boxes).
 (g) Internal consistency (odd-even split) in box child sample. (h) Internal consistency in box adult sample. (i) Test-retest reliability in box child sample. (j) Test-retest reliability in box adult sample.
 Regression lines with 95% CI show product-moment-correlations with *Pearson*'s correlation coefficient *r.* 
 Large data points with 95% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year). 
@@ -287,6 +287,7 @@ Small data points show the mean performance for each subject. Shape of data poin
 ```{r fig2, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
 knitr::include_graphics(c("../figures/gafo_results.png"))
 ``` 
+
 ```{r agemodels}
 mAgeHedge <- readRDS(file = "../saves/mAgeHedge.rds") 
 mAgeBox <- readRDS(file = "../saves/mAgeBox.rds") 
@@ -388,7 +389,7 @@ Adults in the hedge version received 30 test trials, each of the ten bin occurri
 ## Analysis
 We assessed reliability in two ways. 
 First, we focused on the internal consistency by calculating splithalf reliability coefficients. For each subject, trials were split into odd and even and performance scores per part were correlated against each other using *Pearson* correlation coefficients. We took the data of the first test day and defined performance according to study version: in the hedge version, performance referred to the absolute difference between the target center and the click coordinate, scaled according to target widths; in the box version, we computed the proportion of correct choices. 
-As a recent paper by @pronk2021methods suggested, there are various less well-known split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design. To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position. First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling. Analyses were run using the function `by_split`from the `splithalfr` package [@pronk2021methods].
+As a recent paper by @pronk2021methods suggested, there are various less well-known split-half methods that differ in how the trials are split into parts and whether they are combined with stratification by task design. To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position. First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling. Analyses were run using the function `by_split` from the `splithalfr` package [@pronk2021methods].
 Second, we assessed the test-retest reliability. We calculated performance scores (depending on study version as described above) for each individual in each test session and correlated those using *Pearson* correlation coefficients. Furthermore, for our child sample we report an age-corrected correlation between the two test days using a GLMM based approach. We fit trial by trial data with a fixed effect of age, a random intercept for each subject and a random slope for test day (model notation in `R: performance ~ age (0 + reliday | subjID)`). For the hedge version, performance was modeled by a lognormal distribution, while the model for the box version used a Bernoulli distribution with a logit link function.
 The model computes a correlation between the participant specific estimates for each test day. This can be interpreted as the test-retest reliability. By using this approach, we do not need to compromise on data aggregation and, therefore, loss of information. Most importantly, the model allows us to get an age-independent estimate for reliability. This rules out the possibility that a high correlation between test days arises from domain general cognitive maturation processes instead of study-specific inter-individual differences. 
 
@@ -427,6 +428,7 @@ Our results indicated that the measured variation was systematic. As could be ex
 
 # Exploring the external validity of our task
 Our third aim was to assess whether the captured individual variation in gaze cue understanding relates to factors in children's real live social surroundings. 
+
 ```{r extvali_sample}
 extvali <- testtrials %>% 
   filter(ageInYears < 6) %>%
@@ -492,22 +494,35 @@ Families of our kindergarten and online child sample were asked to fill out a br
 
 ## Analysis
 To estimate the effects of social surrounding on gaze cue understanding, we fit GLMMs predicting the task performance by each of our questionnaire variables, controlling for age (in months, z-transformed), data collection mode (reference category: in-person supervised) and study version (reference category: hedge version). The models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants. Therefore, our null model closely resembled the structure from our first analysis (section *Does the balloon finding task induce variation?*; here: `performance ~ age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition)`). 
-In order to combine data of our two study versions, we transformed continuous click responses from the hedge version into a discrete outcome. For the target position, we summarized the two adjacent bins into one imaginary box. For the click responses, we created imaginary box boundaries around the target's landing position and assessed whether the participant's response fell into this imaginary box. Across the two study versions, we could consequently model the participant's correct response (0/1) using a Bernoulli distribution with a logit link function.
-For model comparisons, we respectively added the following predictors as fixed effects to the null model: number of household members, number of children aged 0-18 in household, number of children aged 1-12 in household, hours spent in childcare each day, and age when subjects entered childcare. 
-In addition, we calculated three index scores. First, we calculated a sibling variety score according to @peterson2000kindred. Second, we implemented the modified version of @cassidy2005theory (for more details, see Supplements). Third, based on our own data exploration we calculated the amount of peer exposure as the number of siblings and the average hours spent in childcare (all z-transformed). 
+In order to combine data of our two study versions, we transformed continuous click responses from the hedge version into a discrete outcome. For the target position, we categorized two adjacent bins as one imaginary box. To measure participants' performance, we created imaginary box boundaries around the target's landing position and examined whether the participant's click response fell into this imaginary box. Across the two study versions, we could consequently model the participant's correct response (0/1) using a Bernoulli distribution with a logit link function.
+For model comparisons, we respectively added the following predictors as fixed effects to the null model: number of household members, number of children aged 0-18 in household, number of children aged 1-12 in household, hours spent in childcare each day, and age when subject entered childcare. 
+In addition, we calculated three index scores. First, we calculated a sibling variety score according to @peterson2000kindred. Second, we implemented the modified version of @cassidy2005theory (for more details, see Supplements). Third, based on our own data exploration, we calculated the amount of peer exposure determined as the number of siblings and the average hours spent in childcare (both z-transformed). 
 We compared the models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
 
 ## Results
-[TODO] All effects except when a child entered childcare positively influence performance. 
-The effect sizes are all small and 95% CIs mostly include zero. It is remarkable, however, that we were able to detect a relationship between a fundamental social-cognitive ability and very distant, real life demographics. 
+```{r extvali_winningmodel}
+mExtvaliPE <- readRDS(file = "../saves/extvali-mExtvaliPE.rds") 
+```
+
+
+The model including our peer exposure index, as defined as the number of other children in the household and average hours spent in childcare, showed the best out-of-sample predictive accuracy. Note that we did not find a great difference in WAIC scores between the compared models (see Supplements for WAIC scores and weights). The model estimates were all considerably smaller than estimates of age, study version and data collection, and all 95% CIs included zero. For example, for our winning model, we found an estimate of
+`r fixef(mExtvaliPE)["pe", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["pe", "Q2.5"]`; `r fixef(mExtvaliPE)["pe", "Q97.5"]`]),
+with the estimates of age being `r fixef(mExtvaliPE)["age", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["age", "Q2.5"]`; `r fixef(mExtvaliPE)["age", "Q97.5"]`]), data collection mode being `r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Q97.5"]`]), and study version `r fixef(mExtvaliPE)["studyversionbox", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["studyversionbox", "Q2.5"]`; `r fixef(mExtvaliPE)["studyversionbox", "Q97.5"]`]). Nevertheless, a general direction of effect can be seen: there seems to be small evidence that a social surrounding positively influenced children's gaze cue understanding. The number of people and, more specifically, children, as well as the more diverse their age, the more likely children were to follow the agent's gaze. The only predictor resulting in a negative estimate was the age at which a participant entered childcare, i.e., the later a child entered, the more likely children found the target.
 
 (ref:figlab4) **External validity of the balloon finding task**. 
-[TODO] WAIC scores and weights can be found in the Supplements section. 
+Factors of children's social surroundings and their influence on the probability of responding correctly. Models are ordered according to their WAIC scores, with the uppermost winning the model comparison. The graph shows the estimated density curves of a model's predictor coefficient. Red tails display the 2.5% and 97.5% quantiles, respectively. 
+
 ```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
 knitr::include_graphics("../figures/extvali-posteriorsample.png")
 ```
 
+## Discussion
+Factors of children's social surrounding influenced their gaze cue understanding performance only slightly. Nevertheless, it is remarkable that we were able to detect relationships between this fundamental social-cognitive ability and very distant, real life variables at all. 
+
 # Discussion
+We were able to show that our balloon finding task measures inter-individual variation between children and adults, alike. Our results suggest that the measured variation is systematic during the course of the same and different test days. Impressively, the ability that our task measures related to factors in children's everyday life experience. 
+
+
 ## Limitations
 ## Future development / extending the task
 
@@ -577,6 +592,7 @@ The reasoning was that children between one and 13 years of age would engage in 
 
 #### WAIC scores and weights of the model comparison
 As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially. All effects except when a child entered childcare positively influence performance. 
+
 ```{r extvali_results}
 extvali_models <- readRDS(file = "../saves/extvali-results.rds")
 knitr::kable(extvali_models)

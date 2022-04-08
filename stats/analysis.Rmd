@@ -1457,7 +1457,7 @@ mDataExtvali <- testtrials %>%
   select(datacollection, studyversion, subjID, trial, age, targetPosition, symmetricPosition, correctBox, ccAge, ccHours, hhTotal, hhSibs, sibsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, pe) %>% 
   mutate_if(is.character, as.factor)
 
-n_distinct(extvali$subjID)
+n_distinct(mDataExtvali$subjID)
 ```
 
 ```{r extvali_nullmodel}
@@ -1575,6 +1575,36 @@ mExtvaliComparisonWeights %>% arrange(-value)
 extvaliModelorder <- mExtvaliComparisonWeights %>% arrange(value) %>%  pull(model)
 ```
 
+```{r extvali_savemodels}
+write.csv(mExtvalinull, "../saves/extvali-mExtvalinull.csv", quote = F, row.names = F)
+saveRDS(mExtvalinull, "../saves/extvali-mExtvalinull.rds")
+
+write.csv(mExtvaliccAge, "../saves/extvali-mExtvaliccAge.csv", quote = F, row.names = F)
+saveRDS(mExtvaliccAge, "../saves/extvali-mExtvaliccAge.rds")
+
+write.csv(mExtvaliccHours, "../saves/extvali-mExtvaliccHours.csv", quote = F, row.names = F)
+saveRDS(mExtvaliccHours, "../saves/extvali-mExtvaliccHours.rds")
+
+write.csv(mExtvalihhTotal, "../saves/extvali-mExtvalihhTotal.csv", quote = F, row.names = F)
+saveRDS(mExtvalihhTotal, "../saves/extvali-mExtvalihhTotal.rds")
+
+write.csv(mExtvalihhSibs, "../saves/extvali-mExtvalihhSibs.csv", quote = F, row.names = F)
+saveRDS(mExtvalihhSibs, "../saves/extvali-mExtvalihhSibs.rds")
+
+write.csv(mExtvalisibsChildAged, "../saves/extvali-mExtvalisibsChildAged.csv", quote = F, row.names = F)
+saveRDS(mExtvalisibsChildAged, "../saves/extvali-mExtvalisibsChildAged.rds")
+
+write.csv(mExtvalisiblingsVarietyScoreP, "../saves/extvali-mExtvalisiblingsVarietyScoreP.csv", quote = F, row.names = F)
+saveRDS(mExtvalisiblingsVarietyScoreP, "../saves/extvali-mExtvalisiblingsVarietyScoreP.rds")
+
+write.csv(mExtvalisiblingsVarietyScoreW, "../saves/extvali-mExtvalisiblingsVarietyScoreW.csv", quote = F, row.names = F)
+saveRDS(mExtvalisiblingsVarietyScoreW, "../saves/extvali-mExtvalisiblingsVarietyScoreW.rds")
+
+write.csv(mExtvaliPE, "../saves/extvali-mExtvaliPE.csv", quote = F, row.names = F)
+saveRDS(mExtvaliPE, "../saves/extvali-mExtvaliPE.rds")
+```
+
+
 ```{r extvali_plot}
 extvaliPostSamples <- bind_rows(
   posterior_samples(mExtvaliccAge, pars = "b_ccAge") %>% mutate(model = "mExtvaliccAge") %>% rename(estimate = b_ccAge), 
@@ -1587,11 +1617,11 @@ extvaliPostSamples <- bind_rows(
   posterior_samples(mExtvaliPE, pars = "b_pe") %>% mutate(model = "mExtvaliPE") %>% rename(estimate = b_pe)
 ) %>% 
   mutate(
-    model = factor(model, levels = extvaliModelorder) %>% str_remove(., "mExtvali"), 
+    model = factor(model, levels = extvaliModelorder, labels = c("sibling variety score (Cassidy et al., 2005)", "number of children in household aged 1-12", "number of children in household aged 0-18", "null model", "number of household members", "average hours spent in childcare per day", "age of childcare entry", "sibling variety score (Peterson, 2000)", "peer exposure index"))  
   )
 
-write.csv(extvali_results, "../saves/extvali-posteriorsamples.csv", quote = F, row.names = F)
-saveRDS(extvali_results, "../saves/extvali-posteriorsamples.rds")
+write.csv(extvaliPostSamples, "../saves/extvali-posteriorsamples.csv", quote = F, row.names = F)
+saveRDS(extvaliPostSamples, "../saves/extvali-posteriorsamples.rds")
 
 ggplot(extvaliPostSamples, aes(x = estimate, y = model, fill = factor(stat(quantile)))) +
   geom_vline(xintercept = 0, lty = 2, alpha = .75) +
@@ -1600,9 +1630,11 @@ ggplot(extvaliPostSamples, aes(x = estimate, y = model, fill = factor(stat(quant
     calc_ecdf = TRUE, 
     quantiles = c(0.025, 0.975)
   ) +	
-  scale_fill_manual(values = c("#006c66", "NA", "#006c66"), guide = "none")
+  scale_fill_manual(values = c("firebrick", "NA", "firebrick"), guide = "none") + 
+  scale_x_continuous(limits = c(-0.25, 0.75)) + 
+  ylab("")
 
-ggsave("../figures/extvali-posteriorsample.png")
+ggsave("../figures/extvali-posteriorsample.png", width = 6, height = 3)
 ```
 
 ```{r extvali_save}
