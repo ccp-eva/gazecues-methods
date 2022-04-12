@@ -157,43 +157,30 @@ vali <- testtrials %>%
 vali_kids <- vali %>%
   filter(ageInYears < 6) %>% 
   group_by(datacollection, ageInYears) %>%
+  mutate(female = ifelse(gender == "f", 1, 0)) %>% 
   summarise(
     nTotal = n_distinct(subjID), 
     meanAgeInMonths = mean(ageInMonths, na.rm = T) %>% round(2),
     sdAgeInMonths = sd(ageInMonths, na.rm = T) %>% round(2),
     minAgeInMonths = min(ageInMonths, na.rm = T),
     maxAgeInMonths = max(ageInMonths, na.rm = T),
+    nFemales = ceiling(sum(female/15)),
   )
-
-vali_kids_gender <- vali %>% 
-  filter(ageInYears < 6) %>% 
-  group_by(datacollection, ageInYears) %>%
-  filter(gender == "f") %>% 
-  summarise(
-    nFemales = length(unique(subjID))
-  )
-
-vali_kids <- vali_kids %>% 
-  left_join(vali_kids_gender, by = c("datacollection", "ageInYears"))
   
 vali_adults <- vali %>%
   filter(ageInYears == 18) %>% 
+  mutate(
+    gender = ifelse(is.na(gender), 0, paste(gender)), 
+    female = ifelse(gender == "f", 1, 0),
+  ) %>% 
   summarise(
     nTotal = n_distinct(subjID), 
     meanAge = mean(age, na.rm = T) %>% round(2),
     sdAge = sd(age, na.rm = T) %>% round(2),
     minAge = min(age, na.rm = T),
     maxAge = max(age, na.rm = T),
+    nFemales = ceiling(sum(female/15)),
   )
-
-vali_adults_gender <- vali %>% 
-  filter(ageInYears == 18 & gender == "f") %>% 
-  summarise(
-    nFemales = length(unique(subjID))
-  )
-
-vali_adults <- vali_adults %>% 
-  full_join(vali_adults_gender, by = character())
 ```
 ## Participants
 We collected data from an in-person child sample, a remote child sample, and a remote adult sample.
@@ -305,43 +292,34 @@ reli <- testtrials %>%
 reli_kids <- reli %>%
   filter(ageInYears < 6) %>% 
   group_by(datacollection, ageInYears) %>%
+  mutate(female = ifelse(gender == "f", 1, 0)) %>% 
   summarise(
     nTotal = n_distinct(subjID), 
     meanAgeInMonths = mean(ageInMonths, na.rm = T) %>% round(2),
     sdAgeInMonths = sd(ageInMonths, na.rm = T) %>% round(2),
     minAgeInMonths = min(ageInMonths, na.rm = T),
     maxAgeInMonths = max(ageInMonths, na.rm = T),
+    nFemales = ceiling(sum(female/30)), # 15 test trials * 2
   )
 
-reli_kids_gender <- reli %>% 
-  filter(ageInYears < 6) %>% 
-  group_by(datacollection, ageInYears) %>%
-  filter(gender == "f") %>% 
-  summarise(
-    nFemales = length(unique(subjID))
-  )
-
-reli_kids <- reli_kids %>% 
-  left_join(reli_kids_gender, by = c("datacollection", "ageInYears"))
-  
 reli_adults <- reli %>%
   filter(ageInYears == 18) %>% 
+  mutate(
+    gender = ifelse(is.na(gender), 0, paste(gender)), 
+    female = ifelse(gender == "f", 1, 0),
+  ) %>% 
   summarise(
     nTotal = n_distinct(subjID), 
     meanAge = mean(age, na.rm = T) %>% round(2),
     sdAge = sd(age, na.rm = T) %>% round(2),
     minAge = min(age, na.rm = T),
     maxAge = max(age, na.rm = T),
+    nFemales = sum(female),
+  ) %>% 
+  mutate(
+    nFemales = ifelse(studyversion == "hedge", nFemales/60, nFemales/64), # test trials * 2
+    nFemales = ceiling(nFemales)
   )
-
-reli_adults_gender <- reli %>% 
-  filter(ageInYears == 18 & gender == "f") %>% 
-  summarise(
-    nFemales = length(unique(subjID))
-  )
-
-reli_adults <- reli_adults %>% 
-  full_join(reli_adults_gender, by = character())
 ```
 ## Participants
 For our child sample, we went to kindergartens in Leipzig and surroundings.
@@ -436,23 +414,15 @@ extvali <- testtrials %>%
 
 extvali_sample <- extvali %>%
   group_by(ageInYears) %>%
+  mutate(female = ifelse(gender == "f", 1, 0)) %>% 
   summarise(
     nTotal = n_distinct(subjID), 
     meanAgeInMonths = mean(ageInMonths, na.rm = T) %>% round(2),
     sdAgeInMonths = sd(ageInMonths, na.rm = T) %>% round(2),
     minAgeInMonths = min(ageInMonths, na.rm = T),
     maxAgeInMonths = max(ageInMonths, na.rm = T),
+    nFemales = ceiling(sum(female/15)),
   )
-
-extvali_gender <- extvali %>% 
-  group_by(ageInYears) %>%
-  filter(gender == "f") %>% 
-  summarise(
-    nFemales = length(unique(subjID))
-  )
-
-extvali_sample <- extvali_sample %>% 
-  left_join(extvali_gender, by = c("ageInYears"))
 ```
 
 ## Participants
@@ -561,12 +531,19 @@ A trial was defined as the time between two eye blinking sounds. We transcribed 
 In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial. 
 We conducted a model comparison to estimate the effects of parental interference. Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in `R: correct ~ age + (1 | subjID) + (1 | targetPosition)`. We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample. 
 We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
-On the trial level, the model including the verification of choice as a main effect won: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greatest learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated testquestions won: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95% CI of the model estimates included zero and were rather wide. Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis. 
+On the trial level, the model including the verification of choice as a main effect won: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greatest learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated testquestions won: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}). Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis. 
 
-```{r webcam_coding}
-webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds")
+```{r webcam_table, results = "asis"}
+webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
+  mutate(across(c(waic, waic_weight, elpd_diff, se_diff), as.numeric)) %>% 
+  mutate_if(is.numeric, round, 2)
 
-knitr::kable(webcam_models)
+papaja::apa_table(
+  webcam_models, 
+  caption = "Model comparison for exploratory webcam coding of parental interference", 
+  note = "All models included random intercepts for participant and target position.", 
+  escape = T
+)
 ```
 
 ### Appendix to external validity section
@@ -579,11 +556,19 @@ Second, we implemented the sibling variety score by @cassidy2005theory. The auth
 The reasoning was that children between one and 13 years of age would engage in sibling play, while the youngest and most mature siblings would be less likely to participate in such. However, teenage siblings might provide opportunities for interesting discussions [@peterson2000kindred]. 
 
 #### WAIC scores and weights of the model comparison
-As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially. All effects except when a child entered childcare positively influence performance. 
+As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially (Table \ref{tab:extvali_table}). All effects except when a child entered childcare positively influence performance. 
 
-```{r extvali_results}
-extvali_models <- readRDS(file = "../saves/extvali-results.rds")
-knitr::kable(extvali_models)
+```{r extvali_table, results = "asis"}
+extvali_models <- readRDS(file = "../saves/extvali-results.rds") %>% 
+  mutate(across(c(waic, waic_weight, elpd_diff, se_diff), as.numeric)) %>% 
+  mutate_if(is.numeric, round, 2)
+
+papaja::apa_table(
+  webcam_models, 
+  caption = "Model comparison for influences of children's social surrounding", 
+  note = "All models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants", 
+  escape = T
+)
 ```
 
 ## Adult sample

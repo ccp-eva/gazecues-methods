@@ -364,7 +364,7 @@ range = 60
 - 71,
 27 girls). Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
 
-In addition, we recruited a remote adult sample by advertising the study on \emph{Prolific}. \emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of 50, 50, 50, and 50 English-speakers with an average age of 31.92, 31.92, 30.76, and 30.76 years (SD = 12.15, 12.15, 9.12, and 9.12, range = 18, 18, 19, and 19 - 63, 63, 59, and 59, 36, 28, 36, and 28 females).
+In addition, we recruited a remote adult sample by advertising the study on \emph{Prolific}. \emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of 50 and 50 English-speakers with an average age of 31.92 and 30.76 years (SD = 12.15 and 9.12, range = 18 and 19 - 63 and 59, 36 and 28 females).
 For completing the study, subjects were payed above the fixed minimum wage (in average £10.00 per hour). \emph{Prolific} distributed our study link to potential participants, while the hosting of the online study was done by local servers in the Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany.
 
 \hypertarget{procedure}{%
@@ -456,7 +456,7 @@ range = 38
 SD = 3.16,
 range = 48
 - 59,
-19 girls),
+20 girls),
 and 33 5-year-olds
 (mean = 66.12 months,
 SD = 3.36,
@@ -464,7 +464,7 @@ range = 61
 - 71,
 17 girls).
 
-The adult sample was recruited over \emph{Prolific} and consisted of 70, 70, 66, and 66 English-speakers with an average age of 25.43, 25.43, 26.05, and 26.05 years (SD = 6.43, 6.43, 9.44, and 9.44, range = 18, 18, 18, and 18 - 51, 51, 71, and 71, 45, 42, 45, and 42 females).
+The adult sample was recruited over \emph{Prolific} and consisted of 70 and 66 English-speakers with an average age of 25.43 and 26.05 years (SD = 6.43 and 9.44, range = 18 and 18 - 51 and 71, 45 and 42 females).
 
 \hypertarget{procedure-1}{%
 \subsection{Procedure}\label{procedure-1}}
@@ -532,19 +532,19 @@ For this exploratory analysis, we included all children of the aforementioned sa
 SD = 3.13,
 range = 37
 - 47,
-20 girls),
+23 girls),
 46 4-year-olds
 (mean = 54.43 months,
 SD = 2.76,
 range = 48
 - 59,
-26 girls),
+34 girls),
 and 49 5-year-olds
 (mean = 66.25 months,
 SD = 3.47,
 range = 60
 - 71,
-23 girls).
+27 girls).
 
 \hypertarget{procedure-2}{%
 \subsection{Procedure}\label{procedure-2}}
@@ -690,37 +690,43 @@ A trial was defined as the time between two eye blinking sounds. We transcribed 
 In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial.
 We conducted a model comparison to estimate the effects of parental interference. Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in \texttt{R:\ correct\ \textasciitilde{}\ age\ +\ (1\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}. We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample.
 We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
-On the trial level, the model including the verification of choice as a main effect won: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greatest learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated testquestions won: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95\% CI of the model estimates included zero and were rather wide. Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis.
+On the trial level, the model including the verification of choice as a main effect won: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greatest learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated testquestions won: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95\% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}). Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis.
 
-\begin{tabular}{l|r|r|r|r}
-\hline
-model & waic & waic\_weight & elpd\_diff & se\_diff\\
-\hline
-mPerTrialVerificationChoice & 263.24183 & 0.6469352 & 0.0000000 & 0.000000\\
-\hline
-mPerTrialNull & 263.74712 & 0.3530572 & -0.2526455 & 1.202097\\
-\hline
-mPerTrialPI & 264.34608 & 0.0000048 & -0.5521261 & 0.978696\\
-\hline
-mPerTrialRepeatedTestquestion & 265.43452 & 0.0000011 & -1.0963445 & 1.272427\\
-\hline
-mPerTrialHintsEyes & 265.67182 & 0.0000014 & -1.2149955 & 1.255888\\
-\hline
-mPerTrialParentSpeech & 266.45389 & 0.0000003 & -1.6060301 & 1.211500\\
-\hline
-mPerSubjectRepeatedTestquestion & 83.52517 & 0.7033000 & 0.0000000 & 0.000000\\
-\hline
-mPerSubjectPI & 88.25288 & 0.0000019 & -2.3638570 & 3.596520\\
-\hline
-mPerSubjectNull & 89.25650 & 0.0000003 & -2.8656662 & 3.608723\\
-\hline
-mPerSubjectVerificationChoice & 89.85833 & 0.2966959 & -3.1665822 & 4.484388\\
-\hline
-mPerSubjectParentSpeech & 90.44632 & 0.0000018 & -3.4605795 & 4.204938\\
-\hline
-mPerSubjectHintsEyes & 92.76122 & 0.0000001 & -4.6180264 & 3.773420\\
-\hline
+\begin{table}[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:webcam_table}Model comparison for exploratory webcam coding of parental interference}
+
+\begin{tabular}{lllll}
+\toprule
+model & \multicolumn{1}{c}{waic} & \multicolumn{1}{c}{waic\_weight} & \multicolumn{1}{c}{elpd\_diff} & \multicolumn{1}{c}{se\_diff}\\
+\midrule
+mPerTrialVerificationChoice & 263.24 & 0.65 & 0.00 & 0.00\\
+mPerTrialNull & 263.75 & 0.35 & -0.25 & 1.20\\
+mPerTrialPI & 264.35 & 0.00 & -0.55 & 0.98\\
+mPerTrialRepeatedTestquestion & 265.43 & 0.00 & -1.10 & 1.27\\
+mPerTrialHintsEyes & 265.67 & 0.00 & -1.21 & 1.26\\
+mPerTrialParentSpeech & 266.45 & 0.00 & -1.61 & 1.21\\
+mPerSubjectRepeatedTestquestion & 83.53 & 0.70 & 0.00 & 0.00\\
+mPerSubjectPI & 88.25 & 0.00 & -2.36 & 3.60\\
+mPerSubjectNull & 89.26 & 0.00 & -2.87 & 3.61\\
+mPerSubjectVerificationChoice & 89.86 & 0.30 & -3.17 & 4.48\\
+mPerSubjectParentSpeech & 90.45 & 0.00 & -3.46 & 4.20\\
+mPerSubjectHintsEyes & 92.76 & 0.00 & -4.62 & 3.77\\
+\bottomrule
+\addlinespace
 \end{tabular}
+
+\begin{tablenotes}[para]
+\normalsize{\textit{Note.} All models included random intercepts for participant and target position.}
+\end{tablenotes}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
 
 \hypertarget{appendix-to-external-validity-section}{%
 \subsubsection{Appendix to external validity section}\label{appendix-to-external-validity-section}}
@@ -738,31 +744,43 @@ The reasoning was that children between one and 13 years of age would engage in 
 \hypertarget{waic-scores-and-weights-of-the-model-comparison}{%
 \paragraph{WAIC scores and weights of the model comparison}\label{waic-scores-and-weights-of-the-model-comparison}}
 
-As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially. All effects except when a child entered childcare positively influence performance.
+As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially (Table \ref{tab:extvali_table}). All effects except when a child entered childcare positively influence performance.
 
-\begin{tabular}{l|r|r|r|r}
-\hline
-model & waic & waic\_weight & elpd\_diff & se\_diff\\
-\hline
-PE & 2390.222 & 0.5405439 & 0.0000000 & 0.0000000\\
-\hline
-siblingsVarietyScoreP & 2390.429 & 0.3408146 & -0.1032133 & 1.0951621\\
-\hline
-ccHours & 2391.667 & 0.0001320 & -0.7222674 & 1.0449378\\
-\hline
-hhTotal & 2391.965 & 0.0001205 & -0.8716164 & 0.9255789\\
-\hline
-hhSibs & 2392.245 & 0.0000189 & -1.0114203 & 0.9762202\\
-\hline
-sibsChildAged & 2392.407 & 0.0000134 & -1.0924575 & 1.0418509\\
-\hline
-ccAge & 2392.445 & 0.1182920 & -1.1114913 & 1.6858011\\
-\hline
-null & 2392.618 & 0.0000583 & -1.1978484 & 1.2901087\\
-\hline
-siblingsVarietyScoreW & 2392.952 & 0.0000064 & -1.3648559 & 1.0877168\\
-\hline
+\begin{table}[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:extvali_table}Model comparison for influences of children's social surrounding}
+
+\begin{tabular}{lllll}
+\toprule
+model & \multicolumn{1}{c}{waic} & \multicolumn{1}{c}{waic\_weight} & \multicolumn{1}{c}{elpd\_diff} & \multicolumn{1}{c}{se\_diff}\\
+\midrule
+mPerTrialVerificationChoice & 263.24 & 0.65 & 0.00 & 0.00\\
+mPerTrialNull & 263.75 & 0.35 & -0.25 & 1.20\\
+mPerTrialPI & 264.35 & 0.00 & -0.55 & 0.98\\
+mPerTrialRepeatedTestquestion & 265.43 & 0.00 & -1.10 & 1.27\\
+mPerTrialHintsEyes & 265.67 & 0.00 & -1.21 & 1.26\\
+mPerTrialParentSpeech & 266.45 & 0.00 & -1.61 & 1.21\\
+mPerSubjectRepeatedTestquestion & 83.53 & 0.70 & 0.00 & 0.00\\
+mPerSubjectPI & 88.25 & 0.00 & -2.36 & 3.60\\
+mPerSubjectNull & 89.26 & 0.00 & -2.87 & 3.61\\
+mPerSubjectVerificationChoice & 89.86 & 0.30 & -3.17 & 4.48\\
+mPerSubjectParentSpeech & 90.45 & 0.00 & -3.46 & 4.20\\
+mPerSubjectHintsEyes & 92.76 & 0.00 & -4.62 & 3.77\\
+\bottomrule
+\addlinespace
 \end{tabular}
+
+\begin{tablenotes}[para]
+\normalsize{\textit{Note.} All models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants}
+\end{tablenotes}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
 
 \hypertarget{adult-sample}{%
 \subsection{Adult sample}\label{adult-sample}}
