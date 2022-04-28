@@ -18,6 +18,8 @@ library(ggthemes)
 library(tidyboot) # for bootstrap CIs
 library(brms) # modeling
 library(splithalfr) # reliability 
+library(tidybayes) # for stat_halfeye
+library(ggdist)
 
 options(scipen = 999)
 theme_set(theme_classic())
@@ -1604,39 +1606,6 @@ write.csv(mExtvaliPE, "../saves/extvali-mExtvaliPE.csv", quote = F, row.names = 
 saveRDS(mExtvaliPE, "../saves/extvali-mExtvaliPE.rds")
 ```
 
-
-```{r extvali_plot}
-extvaliPostSamples <- bind_rows(
-  posterior_samples(mExtvaliccAge, pars = "b_ccAge") %>% mutate(model = "mExtvaliccAge") %>% rename(estimate = b_ccAge), 
-  posterior_samples(mExtvaliccHours, pars = "b_ccHours") %>% mutate(model = "mExtvaliccHours") %>% rename(estimate = b_ccHours), 
-  posterior_samples(mExtvalihhTotal, pars = "b_hhTotal") %>% mutate(model = "mExtvalihhTotal") %>% rename(estimate = b_hhTotal), 
-  posterior_samples(mExtvalihhSibs, pars = "b_hhSibs") %>% mutate(model = "mExtvalihhSibs") %>% rename(estimate = b_hhSibs),
-  posterior_samples(mExtvalisibsChildAged, pars = "b_sibsChildAged") %>% mutate(model = "mExtvalisibsChildAged") %>% rename(estimate = b_sibsChildAged),
-  posterior_samples(mExtvalisiblingsVarietyScoreP, pars = "b_siblingsVarietyScoreP") %>% mutate(model = "mExtvalisiblingsVarietyScoreP") %>% rename(estimate = b_siblingsVarietyScoreP),
-  posterior_samples(mExtvalisiblingsVarietyScoreW, pars = "b_siblingsVarietyScoreW") %>% mutate(model = "mExtvalisiblingsVarietyScoreW") %>% rename(estimate = b_siblingsVarietyScoreW),
-  posterior_samples(mExtvaliPE, pars = "b_pe") %>% mutate(model = "mExtvaliPE") %>% rename(estimate = b_pe)
-) %>% 
-  mutate(
-    model = factor(model, levels = extvaliModelorder, labels = c("sibling variety score (Cassidy et al., 2005)", "number of children in household aged 1-12", "number of children in household aged 0-18", "null model", "number of household members", "average hours spent in childcare per day", "age of childcare entry", "sibling variety score (Peterson, 2000)", "peer exposure index"))  
-  )
-
-write.csv(extvaliPostSamples, "../saves/extvali-posteriorsamples.csv", quote = F, row.names = F)
-saveRDS(extvaliPostSamples, "../saves/extvali-posteriorsamples.rds")
-
-ggplot(extvaliPostSamples, aes(x = estimate, y = model, fill = factor(stat(quantile)))) +
-  geom_vline(xintercept = 0, lty = 2, alpha = .75) +
-  stat_density_ridges(
-    geom = "density_ridges_gradient",
-    calc_ecdf = TRUE, 
-    quantiles = c(0.025, 0.975)
-  ) +	
-  scale_fill_manual(values = c("firebrick", "NA", "firebrick"), guide = "none") + 
-  scale_x_continuous(limits = c(-0.25, 0.75)) + 
-  ylab("")
-
-ggsave("../figures/extvali-posteriorsample.png", width = 6, height = 3)
-```
-
 ```{r extvali_save}
 extvali_results <- mExtvaliComparison %>%
   left_join(mExtvaliComparisonWeights) %>%
@@ -1648,5 +1617,70 @@ extvali_results <- mExtvaliComparison %>%
 
 write.csv(extvali_results, "../saves/extvali-results.csv", quote = F, row.names = F)
 saveRDS(extvali_results, "../saves/extvali-results.rds")
+```
+
+```{r extvali_posteriordraws}
+extvali_draws <- bind_rows(
+  mExtvaliccAge %>% gather_draws(b_ccAge),
+  mExtvaliccHours %>% gather_draws(b_ccHours), 
+  mExtvalihhTotal %>% gather_draws(b_hhTotal), 
+  mExtvalihhSibs %>% gather_draws(b_hhSibs), 
+  mExtvalisibsChildAged %>% gather_draws(b_sibsChildAged), 
+  mExtvalisiblingsVarietyScoreP %>% gather_draws(b_siblingsVarietyScoreP), 
+  mExtvalisiblingsVarietyScoreW %>% gather_draws(b_siblingsVarietyScoreW),
+  mExtvaliPE %>% gather_draws(b_pe)
+  ) %>% 
+  mutate(
+    Predictor = factor(.variable, 
+                       levels = c("b_hhSibs", 
+                                  "b_siblingsVarietyScoreP", 
+                                  "b_sibsChildAged", 
+                                  "b_hhTotal", 
+                                  "b_ccHours", 
+                                  "b_ccAge", 
+                                  "b_siblingsVarietyScoreW", 
+                                  "b_pe"), 
+                       labels = c("Number of children in household aged 0-18", 
+                                  "Sibling variety score (Peterson, 2000)", 
+                                  "Number of children in household aged 1-12", 
+                                  "Number of household members", 
+                                  "Average hours spent in childcare per day", 
+                                  "Age of childcare entry", 
+                                  "Sibling variety score (Cassidy et al., 2005)", 
+                                  "Peer exposure index")
+                       )  
+  )
+
+write.csv(extvali_draws, "../saves/extvali-draws.csv", quote = F, row.names = F)
+saveRDS(extvali_draws, "../saves/extvali-draws.rds")
+```
+
+```{r extvali_plot}
+ggplot(extvali_draws, aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
+ tidybayes::stat_halfeye(alpha = .7, .width = c(.95, .80), scale = 3) +
+    labs(x = "Posterior estimate", y = "")+
+  guides(fill = "none")+
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  scale_fill_manual(values = c("grey","#85AD00")) +
+  xlim(-0.2, 0.6) +
+  theme_minimal()
+
+extvali_draws %>% 
+  filter(
+          Predictor == "Peer exposure index" ||
+          Predictor == "Sibling variety score (Cassidy et al., 2005)" ||
+          Predictor == "Number of children in household aged 0-18" ||
+          Predictor == "Average hours spent in childcare per day", 
+         ) %>% 
+  ggplot(., aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
+ tidybayes::stat_halfeye(alpha = .8, .width = c(.95, .80)) +
+    labs(x = "Posterior estimate", y = "") +
+  guides(fill = "none")+
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  scale_fill_manual(values = c("grey","#85AD00")) +
+  scale_x_continuous(limits = c(-0.6, 1), breaks = seq(-0.5, 1, 0.25)) + 
+  theme_minimal()
+
+ggsave("../figures/extvali_results.png", width = 10, height = 6, scale = 0.7, bg = "white")
 ```
 
