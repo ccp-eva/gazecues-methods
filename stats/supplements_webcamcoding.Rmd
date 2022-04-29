@@ -13,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(brms)
 library(ggridges)
+library(ggpubr)
+library(tidybayes)
 
 options(scipen = 999)
 theme_set(theme_classic())
@@ -105,7 +107,7 @@ mData <- webcam_data %>%
 
 ```{r webcam_perTrial_models}
 # originally: 
-# brm(correct ~ age + (trial + targetPosition | subjID) + (age | targetPosition)
+# brm(correct ~ age + (symmetricPosition | subjID) + (1 | targetPosition)
 # age + person effect + trial effect
 # simplified the model, since not a lot of data / info to estimate all the parameters. 
 # therefore, remove trial & targetposition
@@ -187,40 +189,53 @@ mPerTrialParentSpeech <- add_criterion(mPerTrialParentSpeech, "waic")
 mPerTrialComparison <- loo_compare(mPerTrialNull, mPerTrialPI, mPerTrialRepeatedTestquestion, mPerTrialVerificationChoice, mPerTrialHintsEyes, mPerTrialParentSpeech, criterion = "waic")
 
 mPerTrialComparison <- as_tibble(mPerTrialComparison, rownames = "model")
-write.csv(mPerTrialComparison, "../saves/supplements-webcamcoding-mPerTrialComparison-WAIC.csv", quote = F, row.names = F)
-saveRDS(mPerTrialComparison, "../saves/supplements-webcamcoding-mPerTrialComparison-WAIC.rds")
 
 mPerTrialComparisonWeights <- as_tibble(model_weights(mPerTrialNull, mPerTrialPI, mPerTrialRepeatedTestquestion, mPerTrialVerificationChoice, mPerTrialHintsEyes, mPerTrialParentSpeech, criterion = "waic"), rownames = "model")
-write.csv(mPerTrialComparisonWeights, "../saves/supplements-webcamcoding-mPerTrialComparison-weights.csv", quote = F, row.names = F)
-saveRDS(mPerTrialComparisonWeights, "../saves/supplements-webcamcoding-mPerTrialComparison-weights.rds")
+```
+
+```{r webcam_perTrial_posteriordraws}
+perTrial_draws <- bind_rows(
+  mPerTrialPI %>% gather_draws(b_pi),
+  mPerTrialRepeatedTestquestion %>% gather_draws(b_repeatedTestquestion), 
+  mPerTrialVerificationChoice %>% gather_draws(b_verificationChoice), 
+  mPerTrialHintsEyes %>% gather_draws(b_hintsEyes), 
+  mPerTrialParentSpeech %>% gather_draws(b_parentSpeech), 
+  ) %>% 
+  mutate(
+    Predictor = factor(.variable, 
+                       levels = c("b_verificationChoice", 
+                                  "b_pi", 
+                                  "b_repeatedTestquestion", 
+                                  "b_parentSpeech", 
+                                  "b_hintsEyes"
+                       ), 
+                       labels = c("# Verification choice", 
+                                  "Parental interference index",
+                                  "# Repeated testquestion", 
+                                  "# Words uttered by caregiver", 
+                                  "# Hints towards eyes"
+                       )
+                )  
+  )
+
+write.csv(perTrial_draws, "../saves/supplements-webcamcoding-perTrialdraws.csv", quote = F, row.names = F)
+saveRDS(perTrial_draws, "../saves/supplements-webcamcoding-perTrialdraws.rds")
 ```
 
 ```{r webcam_perTrial_plot}
-postSamplesPerTrial <- bind_rows(
-  # posterior_samples(mPerTrialNull, pars = "age") %>% mutate(model = "mPerTrialNull - age") %>% rename(estimate = b_age),
-  posterior_samples(mPerTrialPI, pars = "pi") %>% mutate(model = "mPerTrialPI") %>% rename(estimate = b_pi), 
-  posterior_samples(mPerTrialRepeatedTestquestion, pars = "repeatedTestquestion") %>% mutate(model = "mPerTrialRepeatedTestquestion") %>% rename(estimate = b_repeatedTestquestion), 
-  posterior_samples(mPerTrialVerificationChoice, pars = "verificationChoice") %>% mutate(model = "mPerTrialVerificationChoice") %>% rename(estimate = b_verificationChoice), 
-  posterior_samples(mPerTrialHintsEyes, pars = "hintsEyes") %>% mutate(model = "mPerTrialHintsEyes") %>% rename(estimate = b_hintsEyes), 
-  posterior_samples(mPerTrialParentSpeech, pars = "parentSpeech") %>% mutate(model = "mPerTrialParentSpeech") %>% rename(estimate = b_parentSpeech), 
-)
+perTrial_plot <- perTrial_draws %>% 
+  ggplot(., aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
+ tidybayes::stat_halfeye(alpha = .8, .width = c(.95, .80)) +
+    labs(x = "Posterior estimate", y = "") +
+  guides(fill = "none")+
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  scale_fill_manual(values = c("grey","#85AD00")) +
+  scale_x_continuous(limits = c(-2, 2), breaks = seq(-2, 2, 0.5)) +
+  theme_minimal()
 
-postSamplesPerTrial <- postSamplesPerTrial %>% 
-  mutate(
-        model = factor(model, levels = c("mPerTrialParentSpeech", "mPerTrialHintsEyes", "mPerTrialVerificationChoice", "mPerTrialRepeatedTestquestion", "mPerTrialPI")),
-  )
+perTrial_plot
 
-ggplot(postSamplesPerTrial, aes(x = estimate, y = model, fill = factor(stat(quantile)))) +
-  geom_vline(xintercept = 0, lty = 2, alpha = .75) +
-  stat_density_ridges(
-    geom = "density_ridges_gradient",
-    calc_ecdf = TRUE, 
-    quantiles = c(0.025, 0.975)
-  ) +	
-  scale_fill_manual(values = c("firebrick", "NA", "firebrick"), guide = "none") +
-  scale_x_continuous(limits = c(-2, 2), breaks = seq(-2, 2, by = 0.5))
-
-ggsave("../figures/supplements-webcamcoding-mPerTrialComparison-posteriorsample.png")
+ggsave("../figures/supplements_webcamcoding_perTrial.png", width = 10, height = 6, scale = 0.7, bg = "white")
 ```
 
 ### MODELS ON SUBJECT LEVEL
@@ -309,7 +324,7 @@ mPerSubjectParentSpeech <- update(mPerSubjectNull,
                       cores  = 4)
 ```
 
-```{r webcam_perTrial_comparisons}
+```{r webcam_perSubject_comparisons}
 mPerSubjectNull <- add_criterion(mPerSubjectNull, "waic")
 mPerSubjectPI <- add_criterion(mPerSubjectPI, "waic")
 mPerSubjectRepeatedTestquestion <- add_criterion(mPerSubjectRepeatedTestquestion, "waic")
@@ -320,46 +335,117 @@ mPerSubjectParentSpeech <- add_criterion(mPerSubjectParentSpeech, "waic")
 mPerSubjectComparison <- loo_compare(mPerSubjectNull, mPerSubjectPI, mPerSubjectRepeatedTestquestion, mPerSubjectVerificationChoice, mPerSubjectHintsEyes, mPerSubjectParentSpeech, criterion = "waic")
 
 mPerSubjectComparison <- as_tibble(mPerSubjectComparison, rownames = "model")
-write.csv(mPerSubjectComparison, "../saves/supplements-webcamcoding-mPerSubjectComparison-WAIC.csv", quote = F, row.names = F)
-saveRDS(mPerSubjectComparison, "../saves/supplements-webcamcoding-mPerSubjectComparison-WAIC.rds")
 
 mPerSubjectComparisonWeights <- as_tibble(model_weights(mPerSubjectNull, mPerSubjectPI, mPerSubjectRepeatedTestquestion, mPerSubjectVerificationChoice, mPerSubjectHintsEyes, mPerSubjectParentSpeech, criterion = "waic"), rownames = "model")
-write.csv(mPerSubjectComparisonWeights, "../saves/supplements-webcamcoding-mPerSubjectComparison-weights.csv", quote = F, row.names = F)
-saveRDS(mPerSubjectComparisonWeights, "../saves/supplements-webcamcoding-mPerSubjectComparison-weights.rds")
 ```
 
-```{r webcam_perTrial_plot}
-postSamplesPerSubject <- bind_rows(
-  # posterior_samples(mPerTrialNull, pars = "age") %>% mutate(model = "mPerTrialNull - age") %>% rename(estimate = b_age),
-  posterior_samples(mPerSubjectPI, pars = "pi") %>% mutate(model = "mPerSubjectPI") %>% rename(estimate = b_pi), 
-  posterior_samples(mPerSubjectRepeatedTestquestion, pars = "repeatedTestquestion") %>% mutate(model = "mPerSubjectRepeatedTestquestion") %>% rename(estimate = b_repeatedTestquestion), 
-  posterior_samples(mPerSubjectVerificationChoice, pars = "verificationChoice") %>% mutate(model = "mPerSubjectVerificationChoice") %>% rename(estimate = b_verificationChoice), 
-  posterior_samples(mPerSubjectHintsEyes, pars = "hintsEyes") %>% mutate(model = "mPerSubjectHintsEyes") %>% rename(estimate = b_hintsEyes), 
-  posterior_samples(mPerSubjectParentSpeech, pars = "parentSpeech") %>% mutate(model = "mPerSubjectParentSpeech") %>% rename(estimate = b_parentSpeech), 
-)
-
-postSamplesPerSubject <- postSamplesPerSubject %>% 
+```{r webcam_perSubject_posteriordraws}
+perSubject_draws <- bind_rows(
+  mPerSubjectPI %>% gather_draws(b_pi),
+  mPerSubjectRepeatedTestquestion %>% gather_draws(b_repeatedTestquestion), 
+  mPerSubjectVerificationChoice %>% gather_draws(b_verificationChoice), 
+  mPerSubjectHintsEyes %>% gather_draws(b_hintsEyes), 
+  mPerSubjectParentSpeech %>% gather_draws(b_parentSpeech), 
+  ) %>% 
   mutate(
-        model = factor(model, levels = c("mPerSubjectParentSpeech", "mPerSubjectHintsEyes", "mPerSubjectVerificationChoice", "mPerSubjectRepeatedTestquestion", "mPerSubjectPI")),
+    Predictor = factor(.variable, 
+                       levels = c("b_verificationChoice", 
+                                  "b_pi", 
+                                  "b_repeatedTestquestion", 
+                                  "b_parentSpeech", 
+                                  "b_hintsEyes"
+                       ), 
+                       labels = c("# Verification choice", 
+                                  "Parental interference index",
+                                  "# Repeated testquestion", 
+                                  "# Words uttered by caregiver", 
+                                  "# Hints towards eyes"
+                       )
+                )
   )
 
-ggplot(postSamplesPerSubject, aes(x = estimate, y = model, fill = factor(stat(quantile)))) +
-  geom_vline(xintercept = 0, lty = 2, alpha = .75) +
-  stat_density_ridges(
-    geom = "density_ridges_gradient",
-    calc_ecdf = TRUE, 
-    quantiles = c(0.025, 0.975)
-  ) +	
-  scale_fill_manual(values = c("firebrick", "NA", "firebrick"), guide = "none")
+write.csv(perSubject_draws, "../saves/supplements-webcamcoding-perSubjectdraws.csv", quote = F, row.names = F)
+saveRDS(perSubject_draws, "../saves/supplements-webcamcoding-perSubjectdraws.rds")
+```
 
-ggsave("../figures/supplements-webcamcoding-mPerSubjectComparison-posteriorsample.png")
+```{r webcam_perSubject_plot}
+perSubject_plot <- perSubject_draws %>% 
+  ggplot(., aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
+ tidybayes::stat_halfeye(alpha = .8, .width = c(.95, .80), scale = 1.75) +
+    labs(x = "Posterior estimate", y = "") +
+  guides(fill = "none")+
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  scale_fill_manual(values = c("grey","#85AD00")) +
+  scale_x_continuous(limits = c(-1, 0.75), breaks = seq(-1, 0.75, 0.25)) +
+  theme_minimal()
+
+perSubject_plot
+
+ggsave("../figures/supplements_webcamcoding_perSubject_draws.png", width = 10, height = 6, scale = 0.7, bg = "white")
+```
+
+```{r combined_plot}
+ggarrange(perTrial_draws %>% 
+            ggplot(., aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
+            tidybayes::stat_halfeye(alpha = .8, .width = c(.95, .80)) +
+            labs(x = "Posterior estimate", y = "") +
+            guides(fill = "none")+
+            geom_vline(xintercept = 0, linetype = "dashed") +
+            scale_fill_manual(values = c("grey","#85AD00")) +
+            scale_x_continuous(limits = c(-2, 2), breaks = seq(-2, 2, 1)) +
+            theme_minimal() + 
+            theme(panel.grid.minor.x = element_blank()), 
+          
+          ggarrange(
+            perSubject_draws %>% 
+              ggplot(., aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
+              tidybayes::stat_halfeye(alpha = .8, .width = c(.95, .80), scale = 2) +
+              labs(x = "", y = "") +
+              guides(y = "none", fill = "none") +
+              geom_vline(xintercept = 0, linetype = "dashed") +
+              scale_fill_manual(values = c("grey","#85AD00")) +
+              scale_x_continuous(limits = c(-1, 0.75), breaks = seq(-1, 0.75, 0.5)) +
+              theme_minimal(), 
+            NULL, 
+            nrow = 2, heights = c(1, 0.0001)
+          ), 
+          
+          nrow = 1, widths = c(1, 0.75),
+          labels = c("A", "B")
+          )
+
+ggsave("../figures/supplements_webcamcoding_draws.png", width = 10, height = 6, scale = 0.7, bg = "white")
 ```
 
 ```{r overall_save}
 overall_results <- bind_rows(mPerTrialComparison, mPerSubjectComparison) %>% 
   left_join(bind_rows(mPerTrialComparisonWeights, mPerSubjectComparisonWeights)) %>% 
   select(model, waic, value, elpd_diff, se_diff) %>% 
-  rename(waic_weight = value)
+  rename(
+    Predictor = model, 
+    WAIC = waic, 
+    Weight = value, 
+    ELPD = elpd_diff, 
+    SE = se_diff,
+  ) %>% 
+  mutate(
+    Predictor = recode(Predictor, 
+                   "mPerTrialVerificationChoice" = "By trial - # Verification choice", 
+                   "mPerTrialNull" = "By trial - Null model", 
+                   "mPerTrialPI" = "By trial - Parental interference index", 
+                   "mPerTrialRepeatedTestquestion" = "By trial - # Repeated testquestion", 
+                   "mPerTrialParentSpeech" = "By trial - # Words uttered by caregiver", 
+                   "mPerTrialHintsEyes" = "By trial - # Hints eyes", 
+                   "mPerSubjectRepeatedTestquestion" = "By subject - # Repeated testquestion", 
+                   "mPerSubjectPI" = "By subject - Parental interference index", 
+                   "mPerSubjectNull" = "By subject - Null model", 
+                   "mPerSubjectVerificationChoice" = "By subject - # Verification choice", 
+                   "mPerSubjectParentSpeech" = "By subject - # Words uttered by caregiver", 
+                   "mPerSubjectHintsEyes" = "By subject - # Hints eyes"
+                   )
+  )
+
+overall_results
 
 write.csv(overall_results, "../saves/supplements-webcamcoding-results.csv", quote = F, row.names = F)
 saveRDS(overall_results, "../saves/supplements-webcamcoding-results.rds")

@@ -1610,10 +1610,27 @@ saveRDS(mExtvaliPE, "../saves/extvali-mExtvaliPE.rds")
 extvali_results <- mExtvaliComparison %>%
   left_join(mExtvaliComparisonWeights) %>%
   select(model, waic, value, elpd_diff, se_diff) %>%
-  rename(waic_weight = value) %>% 
+  rename(
+    Predictor = model, 
+    WAIC = waic, 
+    Weight = value, 
+    ELPD = elpd_diff, 
+    SE = se_diff,
+  ) %>% 
   mutate(
-    model = str_remove(model, "mExtvali")
+    Predictor = recode(Predictor, 
+                   "mExtvaliPE" = "Peer exposure index", 
+                   "mExtvalisiblingsVarietyScoreW" = "Sibling variety score (Cassidy et al., 2005)", 
+                   "mExtvalihhSibs" = "# Children in household aged 0-18", 
+                   "mExtvaliccHours" = "Average hours spent in childcare per day",
+                   "mExtvalinull" = "Null model", 
+                   "mExtvalihhTotal" = "# Household members",
+                   "mExtvaliccAge" = "Age of childcare entry", 
+                   "mExtvalisiblingsVarietyScoreP" = "Sibling variety score (Peterson, 2000)", 
+                   "mExtvalisibsChildAged" = "# Children in household aged 1-12",
+                   )
   )
+
 
 write.csv(extvali_results, "../saves/extvali-results.csv", quote = F, row.names = F)
 saveRDS(extvali_results, "../saves/extvali-results.rds")
@@ -1640,10 +1657,10 @@ extvali_draws <- bind_rows(
                                   "b_ccAge", 
                                   "b_siblingsVarietyScoreW", 
                                   "b_pe"), 
-                       labels = c("Number of children in household aged 0-18", 
+                       labels = c("# Children in household aged 0-18", 
                                   "Sibling variety score (Peterson, 2000)", 
-                                  "Number of children in household aged 1-12", 
-                                  "Number of household members", 
+                                  "# Children in household aged 1-12", 
+                                  "# Household members", 
                                   "Average hours spent in childcare per day", 
                                   "Age of childcare entry", 
                                   "Sibling variety score (Cassidy et al., 2005)", 

@@ -445,7 +445,7 @@ The model including our peer exposure index, as defined as the number of other c
 with the estimates of age being $\beta$ =`r fixef(mExtvaliPE)["age", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["age", "Q2.5"]`; `r fixef(mExtvaliPE)["age", "Q97.5"]`]), data collection mode being $\beta$ =`r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Q97.5"]`]), and study version $\beta$ =`r fixef(mExtvaliPE)["studyversionbox", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["studyversionbox", "Q2.5"]`; `r fixef(mExtvaliPE)["studyversionbox", "Q97.5"]`]). Nevertheless, a general pattern emerges: exposure to a more variable social environment positively influenced children's gaze cue understanding. The number of people and, more specifically, children, as well as the more diverse their age, the more likely children were to understand the agent's gaze cue. The only predictor resulting in a negative estimate was the age at which a participant entered childcare, i.e., the later a child entered, the better performance in the task.
 
 (ref:figlab4) **External validity of the balloon finding task**. 
-Factors of children's social surroundings and their influence on the probability of responding correctly. Models are ordered according to their WAIC scores, with the uppermost winning the model comparison. The graph shows the estimated density curves of a model's predictor coefficient. Red tails display the 2.5% and 97.5% quantiles, respectively. 
+Factors of children's social surroundings and their influence on the probability of responding correctly. Models are ordered according to their WAIC scores, with the uppermost winning the model comparison. The graph shows the estimated density curves of a model's predictor coefficient. Only models performing better than our null model are included in the graph.
 
 ```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
 knitr::include_graphics("../figures/extvali_results.png")
@@ -502,17 +502,28 @@ optional: please review the submission guidelines from the journal whether state
 # Supplements
 ## Child sample
 ### Webcam coding
+(ref:figlab5) **Model comparison for exploratory webcam coding of parental interference**. 
+Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level.
+
+```{r fig5, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab5)"}
+knitr::include_graphics("../figures/supplements_webcamcoding_draws.png")
+```
+
 Comparing the performances of children across our two data collection modes, we found that children participating remotely were slightly more precise. This difference was especially prominent in younger participants in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
 In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing. Due to the time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = `r n_distinct(vali$subjID[vali$datacollection == "remote - unsupervised" & vali$ageInYears == 3 & vali$studyversion == "box" & vali$webcam == TRUE])`). We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
 A trial was defined as the time between two eye blinking sounds. We transcribed all utterances by parents and children and counted the words uttered by each. We then classified the utterances into several categories: question asked by child, repeated test questions by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive & negative feedback, motivational statements, and incomprehensible utterances.
 In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial. 
-We conducted a model comparison to estimate the effects of parental interference. Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in `R: correct ~ age + (1 | subjID) + (1 | targetPosition)`. We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample. 
+We conducted a model comparison to estimate the effects of parental interference. Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in `R: correct ~ age + (1 | subjID) + (1 | targetPosition)`.[^fn3]
+
+[^fn3]: Attentive readers might notice that we simplified the structure of random effects. Compared to our models in the *Individual differences* and *External Validity* sections, this model does not include the random slope for symmetric target position within participants. We decided to do so since we had limited amount of data from few participants. 
+
+We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample. 
 We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
-On the trial level, the model including the verification of choice as a main effect performed best: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}). Therefore, we conclude that no stable effect of parental interference could be confirmed in this exploratory analysis [m: naja, ich würde sagen, dass der effekt nicht sonderlich groß ist, aber wen dann kommt er so zustande wie oben erklärt. Wir wollen ja weg von effekt da vs. nciht da]. 
+On the trial level, the model including the verification of choice as a main effect performed best: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}). Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
 
 ```{r webcam_table, results = "asis"}
 webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
-  mutate(across(c(waic, waic_weight, elpd_diff, se_diff), as.numeric)) %>% 
+  mutate(across(c(WAIC, Weight, ELPD, SE), as.numeric)) %>% 
   mutate_if(is.numeric, round, 2)
 
 papaja::apa_table(
@@ -537,11 +548,11 @@ As can be seen, ELPD difference scores are smaller than their respective standar
 
 ```{r extvali_table, results = "asis"}
 extvali_models <- readRDS(file = "../saves/extvali-results.rds") %>% 
-  mutate(across(c(waic, waic_weight, elpd_diff, se_diff), as.numeric)) %>% 
+  mutate(across(c(WAIC, Weight, ELPD, SE), as.numeric)) %>% 
   mutate_if(is.numeric, round, 2)
 
 papaja::apa_table(
-  webcam_models, 
+  extvali_models, 
   caption = "Model comparison for influences of children's social surrounding", 
   note = "All models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants", 
   escape = T
