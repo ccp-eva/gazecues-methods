@@ -81,33 +81,32 @@ testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>%
 ```
 
 # Introduction 
-Developmental psychology is facing a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to reliably measure these individual differences.
+Developmental psychology is facing a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to reliably measure these individual differences. Since children spend a large amount of their daily lives interacting with and learning from others in social contexts, many studies investigate the emergence and driving factors of social-cognitive abilities. Under social cognition, we understand the ability to explain and predict the behavior of social agents by representing and reasoning about their perspectives, knowledge, intentions, beliefs, and preferences. 
 
-## Why is social cognition important?
+Traditional tasks of social cognition (e.g., false belief change-of-location tasks) frequently build upon dichotomous outcome variables (resulting in high chance levels), small sample sizes and low numbers of trials per subject. 
 
-For example, a booming research area of comparative and developmental psychologists and philosophers has been *Social Cognition* and *Theory of Mind*. Although definitions vary, these umbrella terms are commonly used to describe the ability to explain and predict the behavior of social agents by representing and reasoning about their perspectives, knowledge, intentions, beliefs, and preferences (TODO: cite). 
-Children spend a large amount of time interacting with and learning from others in social contexts. A main research interest has, therefore, been when social-cognitive abilities emerge in children. Here, studies often tracked change on a group level and assessed at which average age children succeed in a task that relies on a given social-cognitive ability. 
+With these procedures, researchers could systematically track change on a group level and capture the average age at which children succeed in a given task that relies on a certain social-cognitive ability. However, poor psychometric properties may conceal relations between different aspects of cognition and also obscure developmental change.
 
+If we want to answer questions about the co-development of social-cognitive abilities and the individual’s pace of mastering developmental milestones, we need to take variation between children seriously – both methodologically and theoretically. We argue that a systematic individual differences perspective on social-cognitive development is needed.
 
-## What methods are currently been used? What are common issues?
-In recent years, there has been a focus on replicability issues. These are especially prominent in developmental psychology since recruiting children and keeping them attentive and in a good mood requires a lot of effort and time. Often, this leads to small sample sizes or low numbers of trials per subject. Experimental paradigms often focus on dichotomous outcome variables and, therefore, high chance levels. 
-In short, tasks were simply not designed to measure children’s abilities on an individual level. 
-This has profound implications on what these studies can show: poor reliability of measures on an individual level may conceal relations between different aspects of cognition and also obscure developmental change. We argue that a systematic individual differences perspective on social-cognitive development is needed.
-
-
-## An individual difference perspective
-
-However, if we are interested in the co-development of social-cognitive abilities and a child’s pace of mastering developmental milestones, we need to focus on individual differences in social cognition. 
 To study individual differences, variability in task performance needs to be reliable (i.e., systematically order individuals in the same way) and meaningful (i.e., differences in test scores correspond to differences in ability). 
 
-Few studies using traditional measures (e.g., false belief change-of-location tasks) address these issues. A recent paper by @hedge2018reliability argued that cognitive tasks often become well-established by displaying robust effects across studies. The authors could show that this often does not emerge due to high measurement variance but rather low between-subject variability, concluding that popular cognitive tasks may reliably measure group differences but not individual differences. 
-In a similar vein, @pronk2021methods reasoned that accurate reliability estimates are needed to judge how well a certain cognitive test is suited to draw inferences about individuals.
+A recent paper by @hedge2018reliability argued that cognitive tasks often become well-established by displaying robust effects across studies. The authors could show that this often does not emerge due to high measurement variance but rather low between-subject variability, concluding that popular cognitive tasks may reliably measure group differences but not individual differences. In a similar vein, @pronk2021methods reasoned that accurate reliability estimates are needed to judge how well a certain cognitive test is suited to draw inferences about individuals.
 
-## Aim of the current project
-We want to make individual differences measurable, in a systematic and reliable way. One of our main goals is, therefore, to create a task that induces variation between children. 
-For getting precise person specific estimates, we need an accurate measure of a child's given underlying social-cognitive ability. To approach this issue, we focus on a continuous measure and short trials that facilitate more than a dozen replicates per subject. 
-To estimate the effect of inter-individual differences, we need a large sample size since since some of the effects that we are looking for might be small. A standardized, easily accessible test procedure helps us to enable data collection at scale. 
-Another goal in creating new tasks should be to focus on the face value: we want to measure the underlying social-cognitive ability as straight-forward and directly as possible. Importantly, we can assess whether the task shows external validity by assessing the relationship with related constructs and factors of children's surrounding. 
+From previous studies that tried to relate several theoretically connected constructs to each other, we see mostly failed attempts. For example, @sodian2016understanding studied the relation between several social cognition measures. Against expectation, they could not find correlations between some theoretically connected constructs (e.g. implicit false belief  and moral false belief understanding). Interestingly, nearly all measured variables were associated with their verbal IQ test. This shows that we are more likely to find associations between constructs when measures are actually designed to capture variation between individuals - similarly to how IQ tests are constructed. Therefore, it is conceivable that we are simply not able to capture existing underlying relationships with our existing tools - since they were mostly not created to quantify individual differences. 
+
+Our aim is, therefore, to make individual differences measurable in a systematic and reliable way. For getting precise person-specific estimates, we need an accurate measure of a child's given underlying social-cognitive ability. One of our main goals is to create a task that induces variation between children. To approach this issue, we focus on a continuous measure and short trials that facilitate more than a dozen replicates per subject. 
+
+To estimate the effect of inter-individual differences, we need a large sample size since since some of the effects that we are looking for might be small. Since data collection with families requires a lot of organizational effort, we want to enable data collection in-person with supervision as well as remotely without supervision. A standardized, easily accessible test procedure helps us to enable data collection at scale.
+
+Another goal in creating new tasks should be to focus on the face value: we want to measure the underlying social-cognitive ability as straight-forward and directly as possible. Importantly, we can assess whether the task shows external validity by assessing the relationship with related constructs and factors of children's social surrounding. 
+
+In our first novel task, we concentrated on the essential ability that is involved in many social-cognitive reasoning processes: gaze cue understanding - the ability to locate and use the attentional focus of an agent. The first component is often termed gaze following - turning ones eyes in the same direction as the gaze of another agent. By acting as a 'front end ability' [@brooks2005development, p. 535], following an agent's gaze provides insights into their intentions, thoughts, and feelings. In our definition, gaze cue understanding goes one step further by including the *acting* on the gaze-cued location. 
+
+In many previous gaze following studies, the eye movement of an agent was accompanied by a congruent head movement - thus, making it hard to disentangle which information the children rely on. In our task, we control the eye movement alone to pinpoint and break down children's abilities as detailed as possible. 
+
+By implementing studies with open versus closed eyes conditions and head versus eye movement alone, researchers found that infants start gaze following in the narrow sense at the end of their first year of life (e.g., @brooks2005development). 
+It is, however, unclear when and how children start to use these cues to guide their own active behavior. 
 
 ---
 
@@ -119,8 +118,10 @@ Another goal in creating new tasks should be to focus on the face value: we want
 - goal of the current project: standardized, easy to use continuous methods
 - soc cog, gaze cue understanding small def (longer one dev paper)
 
+--- 
+
 Rakoczy, H. (2022). Foundations of theory of mind and its development in early childhood. Nature Reviews Psychology, 1–13. https://doi.org/10.1038/s44159-022-00037-z:
-"The way humans view agents, be it others or themselves, differs radically from the way humans view the rest of the world. This difference is because agents feel, perceive and think. Agents see the world from their own subjective perspective and they rationally plan, form intentions and act accordingly. This way of seeing others as rational subjects with individual perspectives on the world is termed theory of mind (ToM)." (p. 1)
+
 "ToM also has specific real-life consequences. First, the development of ToM competence goes along with general measures of children’s peer social skills in early and middle childhood. (...) Second, ToM specifically predicts communicative competence. (...) Third, ToM competence is related to the quality of peer relationships: children with more advanced ToM are rated as more likeable and popular among their peers. Fourth, children who are more proficient at ToM tasks tend to act more prosocially, including comforting, sharing or helping other individuals. Finally, preschool ToM competence predicts achievement in primary school, a relationship that is possibly mediated by social competence, in that preschool ToM abilities enable subsequent social competence development, which in turn contributes to school achievement." (p. 2)
 "Evidence for an emerging understanding of perception at 9 months of age comes from various sources. For example, children begin to follow the gaze of other agents in systematic and differential ways: they follow an agent’s head turn only when the agent can actually see (has their eyes open rather than closed, or wears a transparent rather than an opaque blindfold)." (p. 2)
 Developmental determinants: executive function, language ("that" complementations), social (SES, siblings, mind-minded parents)
@@ -262,7 +263,7 @@ For the hedge version, performance was defined as the absolute click distance be
 (B) Internal consistency (odd-even split) in hedge child sample. (C) Internal consistency in hedge adult sample. (D) Test-retest reliability in hedge child sample. (E) Test-retest reliability in hedge adult sample.
 (F) Developmental trajectory in discrete box version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. Dotted black line shows level of performance expected by chance (for child sample 20%, i.e., 1 out of 5 boxes; for adult sample 12.5%, i.e., 1 out of 8 boxes).
 (G) Internal consistency (odd-even split) in box child sample. (H) Internal consistency in box adult sample. (I) Test-retest reliability in box child sample. (J) Test-retest reliability in box adult sample.
-Regression lines with 95% CI as smoothed mean based on a linear model, with *Pearson*'s correlation coefficient *r*.
+Regression lines with 95% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with *Pearson*'s correlation coefficient *r*.
 Large points with 95% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year). 
 Small points show the mean performance for each subject. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds  for remote unsupervised data collection. Color of data points denotes age group.
 
@@ -286,7 +287,7 @@ Our GLMM analysis corroborated the visual inspection of the data: in the hedge v
 In the box version, the estimate of age ($\beta$ =`r fixef(mAgeBox)["age", "Estimate"]` (95% CI [`r fixef(mAgeBox)["age", "Q2.5"]`; `r fixef(mAgeBox)["age", "Q97.5"]`]) and the estimate of data collection mode  ($\beta$ = `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mAgeBox)["datacollectionremoteMunsupervised", "Q97.5"]`]) were positive and reliably different from zero. Note that even though confidence intervals from the data collection estimates were wide, the effect was positive and reliably different from zero in a way that our remote sample performed more accurately than our in-person sample. 
 
 ## Discussion
-Our task induced inter-individual variation in both adults and children. With increasing age, participants got more and more precise in locating the target. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This illustrates the flexibility of the task. 
+Our task induced inter-individual variation in both adults and children. We see substantial developmental gains: with increasing age, participants got more and more precise in locating the target. The five-year-olds reached a proficiency level close to the adults' level. For neither study version nor age group did we find any floor or ceiling effects. The presentation as a tablet game kept children interest and motivated throughout the 15 test trials. Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample. This illustrates the flexibility of the task. 
 
 # Internal consistency and retest reliability
 
@@ -361,7 +362,7 @@ Adults in the hedge version received 30 test trials, each of the ten bin occurri
 We assessed reliability in two ways. First, we focused on the internal consistency by calculating splithalf reliability coefficients. For each subject, trials were split into odd and even trials, performance was aggregated and then correlated using *Pearson* coefficients. For this, we used the data of the first test day. Performance was defined according to study version: in the hedge version, performance referred to the mean absolute difference between the target center and the click coordinate, scaled according to target widths; in the box version, we computed the mean proportion of correct choices. 
 @pronk2021methods recently compared various methods for computing split-half reliability that differ in how the trials are split into parts and whether they are combined with stratification by task design. To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position. First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling. Analyses were run using the function `by_split` from the `splithalfr` package [@pronk2021methods].
 
-Second, we assessed the test-retest reliability. We calculated performance scores (depending on study version as described above) for each participant in each test session and correlated them using *Pearson* correlation coefficients. Furthermore, for our child sample we report an age-corrected correlation between the two test days using a GLMM based approach [@rouder2019psychometrics]. We fit trial by trial data with a fixed effect of age, a random intercept for each subject and a random slope for test day (model notation in `R: performance ~ age (0 + reliday | subjID)`). For the hedge version, performance was modeled by a lognormal distribution, while the model for the box version used a Bernoulli distribution with a logit link function. The model computes a correlation between the participant specific estimates for each test day. This can be interpreted as the test-retest reliability. By using this approach, we do not need to compromise on data aggregation and, therefore, loss of information. Since the model uses hierarchical shrinkage, we obtain regularized, more accurate person specific estimates. Most importantly, the model includes age as a fixed effect. The correlation between the two person specific estimates is consequently the age-independent estimate for test-retest reliability. This rules out the possibility that a high correlation between test days arises from domain general cognitive development instead of study-specific inter-individual differences. A high correlation between our participant specific model estimates would speak for a high association between test days.
+Second, we assessed the test-retest reliability. We calculated performance scores (depending on study version as described above) for each participant in each test session and correlated them using *Pearson* correlation coefficients. Furthermore, for our child sample we report an age-corrected correlation between the two test days using a GLMM based approach [@rouder2019psychometrics]. We fit trial by trial data with a fixed effect of age, a random intercept for each subject and a random slope for test day (model notation in `R: performance ~ age (0 + reliday | subjID)`). For the hedge version, performance was modeled by a lognormal distribution, while the model for the box version used a Bernoulli distribution with a logit link function. The model computes a correlation between the participant specific estimates for each test day. This can be interpreted as the test-retest reliability. By using this approach, we do not need to compromise on data aggregation and, therefore, loss of information. Since the model uses hierarchical shrinkage, we obtain regularized, more accurate person-specific estimates. Most importantly, the model includes age as a fixed effect. The correlation between the two person-specific estimates is consequently the age-independent estimate for test-retest reliability. This rules out the possibility that a high correlation between test days arises from domain general cognitive development instead of study-specific inter-individual differences. A high correlation between our participant specific model estimates would speak for a high association between test days.
 
 ## Results
 ```{r splithalf}
@@ -544,16 +545,16 @@ We compared models using WAIC (widely applicable information criterion) scores a
 On the trial level, the model including the verification of choice as a main effect performed best: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}). Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
 
 ```{r webcam_table, results = "asis"}
-webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
-  mutate(across(c(WAIC, Weight, ELPD, SE), as.numeric)) %>% 
-  mutate_if(is.numeric, round, 2)
-
-papaja::apa_table(
-  webcam_models, 
-  caption = "Model comparison for exploratory webcam coding of parental interference", 
-  note = "All models included random intercepts for participant and target position.", 
-  escape = T
-)
+# webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
+#   mutate(across(c(WAIC, SE_WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>% 
+#   mutate_if(is.numeric, round, 2)
+#     
+# papaja::apa_table(
+#   webcam_models, 
+#   caption = "Model comparison for exploratory webcam coding of parental interference", 
+#   note = "All models included random intercepts for participant and target position.", 
+#   escape = T
+# )
 ```
 
 ### Appendix to external validity section
@@ -570,7 +571,7 @@ As can be seen, ELPD difference scores are smaller than their respective standar
 
 ```{r extvali_table, results = "asis"}
 extvali_models <- readRDS(file = "../saves/extvali-results.rds") %>% 
-  mutate(across(c(WAIC, Weight, ELPD, SE), as.numeric)) %>% 
+  mutate(across(c(WAIC, SE_WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>% 
   mutate_if(is.numeric, round, 2)
 
 papaja::apa_table(
