@@ -420,13 +420,14 @@ ggsave("../figures/supplements_webcamcoding_draws.png", width = 10, height = 6, 
 ```{r overall_save}
 overall_results <- bind_rows(mPerTrialComparison, mPerSubjectComparison) %>% 
   left_join(bind_rows(mPerTrialComparisonWeights, mPerSubjectComparisonWeights)) %>% 
-  select(model, waic, value, elpd_diff, se_diff) %>% 
+  select(model, waic, se_waic, value, elpd_diff, se_diff) %>% 
   rename(
     Predictor = model, 
     WAIC = waic, 
+    SE_WAIC = se_waic,
     Weight = value, 
-    ELPD = elpd_diff, 
-    SE = se_diff,
+    ELPD_DIFF = elpd_diff, 
+    SE_ELPD_DIFF = se_diff,
   ) %>% 
   mutate(
     Predictor = recode(Predictor, 

@@ -1609,13 +1609,14 @@ saveRDS(mExtvaliPE, "../saves/extvali-mExtvaliPE.rds")
 ```{r extvali_save}
 extvali_results <- mExtvaliComparison %>%
   left_join(mExtvaliComparisonWeights) %>%
-  select(model, waic, value, elpd_diff, se_diff) %>%
+  select(model, waic, se_waic, value, elpd_diff, se_diff) %>%
   rename(
     Predictor = model, 
     WAIC = waic, 
+    SE_WAIC = se_waic,
     Weight = value, 
-    ELPD = elpd_diff, 
-    SE = se_diff,
+    ELPD_DIFF = elpd_diff, 
+    SE_ELPD_DIFF = se_diff,
   ) %>% 
   mutate(
     Predictor = recode(Predictor, 
@@ -1674,13 +1675,15 @@ saveRDS(extvali_draws, "../saves/extvali-draws.rds")
 
 ```{r extvali_plot}
 ggplot(extvali_draws, aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
- tidybayes::stat_halfeye(alpha = .7, .width = c(.95, .80), scale = 3) +
+ tidybayes::stat_halfeye(alpha = .8, .width = c(.95, .80), scale = 3) +
     labs(x = "Posterior estimate", y = "")+
   guides(fill = "none")+
   geom_vline(xintercept = 0, linetype = "dashed") +
   scale_fill_manual(values = c("grey","#85AD00")) +
   xlim(-0.2, 0.6) +
   theme_minimal()
+
+ggsave("../figures/extvali_results_all.png", width = 10, height = 6, scale = 0.7, bg = "white")
 
 extvali_draws %>% 
   filter(
