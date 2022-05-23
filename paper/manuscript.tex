@@ -202,9 +202,9 @@ Correspondence concerning this article should be addressed to Julia Prein, Max P
 \affiliation{\vspace{0.5cm}\textsuperscript{1} Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany}
 
 \abstract{%
-In order to explain and predict the behavior of agents, we use social cognition: we represent and reason about other's perspectives, knowledge, intentions, beliefs and preferences. Traditional measures of social cognition (e.g., false belief change-of-location tasks), however, often lack satisfactory psychometric properties: they are not designed to capture variation \emph{between} children and rely on low trial numbers, dichotomous measures, and group averages. This has profound implications on what these studies can show. Poor measurement of social cognition on an individual level may conceal relations between different aspects of cognition and may obscure developmental change. To fully understand how social-cognitive abilities emerge and relate to each other, we need new tools that can reliably measure individual differences.
-To approach this issue, we designed a balloon finding task to study social cognition in young children and adults. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze cue understanding -- the ability to locate and use the attentional focus of an agent. Our interactive web interface works across devices and enables supervised and unsupervised, as well as in-person and remote testing. The implemented spatial layout allows for discrete as well as continuous measures of participants' click imprecision and is easily adoptable to different study needs.
-Here we show that our task induces inter-individual differences in a child (N = XXX) and adult (N = XXX) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-test reliability estimates underline that the capured variation is systematic. Furthermore, we find first evidence for the external validity of our task: the measured performance in gaze cue understanding relates to children's real life social surrounding. Taken together, this work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
+To explain and predict the behavior of agents, we use social cognition: we represent and reason about others' perspectives, knowledge, intentions, beliefs, and preferences. However, traditional measures of social cognition (e.g., false belief change-of-location tasks) often lack satisfactory psychometric properties: they are not designed to capture variation \emph{between} children and rely on low trial numbers, dichotomous measures, and group averages. This has profound implications for what these studies can show. Poor measurement of social cognition on an individual level may conceal relations between different aspects of cognition and may obscure developmental change. To fully understand how social-cognitive abilities emerge and relate to each other, we need new tools that can reliably measure individual differences.
+We designed a balloon-finding task to study social cognition in young children and adults to approach this issue. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze cue understanding -- the ability to locate and use the attentional focus of an agent. Our interactive task works across devices and enables supervised and unsupervised, as well as in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants' click imprecision and is easily adaptable to different study requirements.
+Here we show that our task induces inter-individual differences in a child (N = XXX) and an adult (N = XXX) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. Furthermore, we find first evidence for the external validity of our task: the measured performance in gaze cue understanding relates to children's real-life social surroundings. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
 }
 
 
@@ -215,10 +215,10 @@ Here we show that our task induces inter-individual differences in a child (N = 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Social cognition -- representing and reasoning about an agent's perspectives, knowledge states, intentions, beliefs, and preferences to explain and predict their behavior -- is among the best-studied phenomena in developmental research.
+Social cognition - representing and reasoning about an agent's perspectives, knowledge states, intentions, beliefs, and preferences to explain and predict their behavior - is among the most-studied phenomena in developmental research.
 In recent decades, much progress has been made in determining the average age at which a specific social-cognitive ability emerges in development (Gopnik \& Slaughter, 1991; Candida C. Peterson, Wellman, \& Slaughter, 2012; Rakoczy, 2022; Wellman, Cross, \& Watson, 2001; Wellman \& Liu, 2004).
 
-One of the most commonly applied, prototypical measures for social cognition is the Sally-Anne task (Baron-Cohen, Leslie, \& Frith, 1985).
+One of the most commonly applied prototypical measures for social cognition is the Sally-Anne task (Baron-Cohen, Leslie, \& Frith, 1985).
 Here, children watch a short sequence of events (often acted out or narrated by the experimenters).
 A doll called Sally puts her marble into a basket.
 After Sally leaves the scene, a second doll named Anne takes the marble and moves it into a box.
@@ -229,25 +229,24 @@ Many years of research utilizing these verbal change-of-location tasks suggest t
 Several cross-cultural studies supported this evidence (Barrett et al., 2013; Callaghan et al., 2005; cf. Mayer \& Träuble, 2015).
 However, from this age onwards, the change-of-location task shows ceiling effects and has very limited diagnostic value.
 As Wellman (2012) put it, ``it's really only passing/failing one sort of understanding averaged across age'' (p.~317).
-Therefore, the focus has been to track change at an (age-) group level --
-within a narrow developmental time frame and with a strong emphasis on a single social-cognitive ability.
+Therefore, the focus has been to track change at an (age-) group level within a narrow developmental time frame and with a strong emphasis on a single social-cognitive ability.
 
 Although humans substantially differ in their behavior, thoughts, and motivations, researchers often regard variability as cumbersome or reinterpret it as error variance, therefore neglecting and trivializing individual differences (Kidd, Donnelly, \& Christiansen, 2018).
 Consequently, little consensus has been reached on the interrelation or independence of social-cognitive abilities (termed `structure of social cognition' by Happé, Cook, \& Bird, 2017).
 
 However, identifying variability in social-cognitive abilities and factors influencing those could be vital in theory building (e.g., to test causal predictions) and design interventions (Happé et al., 2017).
-For example, it could be used to provide evidence for accounts on \emph{developmental lags} (i.e., whether children differ in their speed of acquiring new conceptual insights into the understanding of the mind) or \emph{genuine variation} (i.e., whether children differ in their ease or fluency in (applying) these social-cognitive abilities) (Hughes \& Devine, 2015).
+For example, those identifiers could be used to provide evidence for two accounts: (1) \emph{developmental lags} (i.e., whether children differ in their speed of acquiring new conceptual insights into the understanding of the mind), and (2) \emph{genuine variation} (i.e., whether children differ in their ease or fluency in (applying) these social-cognitive abilities) (Hughes \& Devine, 2015).
 Therefore, we argue that we should study the co-development of social-cognitive abilities, variation in the individual's pace of mastering developmental milestones, and which factors influence a child's proficiency.
 For this endeavor, we need to take individual differences seriously -- both theoretically and methodologically.
 
 Some studies have already examined individual differences in social cognition (Hughes \& Devine, 2015; Slaughter, 2015).
 Previous studies focused, for example,
 on the association of mental state talk and false belief understanding (Hughes, Ensor, \& Marks, 2011),
-emotion, language, family interaction and belief understanding (Bulgarelli \& Molina, 2016; Cutting \& Dunn, 1999; Dunn, Brown, Slomkowski, Tesla, \& Youngblade, 1991),
+emotion, language, family interaction, and belief understanding (Bulgarelli \& Molina, 2016; Cutting \& Dunn, 1999; Dunn, Brown, Slomkowski, Tesla, \& Youngblade, 1991),
 stereotypes and theory of mind (Rizzo \& Killen, 2018),
-prosociality and theory of mind (for a review see Imuta, Henry, Slaughter, Selcuk, \& Ruffman, 2016; Walker, 2005),
+prosociality and theory of mind (for a review, see Imuta, Henry, Slaughter, Selcuk, \& Ruffman, 2016; Walker, 2005),
 executive functions and theory of mind (Buttelmann, Kühn, \& Zmyj, 2021; Carlson, Moses, \& Claxton, 2004),
-parenting practices and theory of mind (for a review see Pavarini, de Hollanda Souza, \& Hawk, 2013),
+parenting practices and theory of mind (for a review, see Pavarini, de Hollanda Souza, \& Hawk, 2013),
 agency and moral cognition (Sodian et al., 2016),
 attachment quality and gaze following (Astor et al., 2020),
 language and gaze following (Okumura, Kanakogi, Kobayashi, \& Itakura, 2017),
@@ -260,7 +259,7 @@ they often rely on low trial numbers, small sample sizes, and dichotomous measur
 Hedge, Powell, and Sumner (2018) argued that cognitive tasks often become well-established by displaying robust effects across studies.
 The authors could show that this usually does not emerge due to high measurement variance but relatively low between-subject variability, concluding that popular cognitive tasks may reliably measure group differences but not individual differences (termed ``reliability paradox'').
 Similarly, Pronk, Molenaar, Wiers, and Murre (2021) reasoned that accurate reliability estimates are needed to judge how well a particular cognitive test is suited to draw inferences about individuals.
-A recent review underlined reoccurring issues in standardization, validity, reliability, and sensitivity to developmental change: alarmingly few theory of mind measures reported empirically validated psychometric properties (Beaudoin, Leblanc, Gagner, \& Beauchamp, 2020) or show poor test-retest reliability (Mayes, Klin, Tercyak, Cicchetti, \& Cohen, 1996).
+A recent review underlined reoccurring issues in standardization, validity, reliability, and sensitivity to developmental change: alarmingly few theory of mind measures reported empirically validated psychometric properties (Beaudoin, Leblanc, Gagner, \& Beauchamp, 2020) or showed poor test-retest reliability (Mayes, Klin, Tercyak, Cicchetti, \& Cohen, 1996).
 
 Even studies focusing on individual differences often use behavioral forced-choice paradigms {[}e.g., carlson2004individual; Walker (2005){]}.
 Few studies that do realize continuous measures often administer (theory of mind) scales and conventionally compute aggregate scores (across tasks or trials), therefore neglecting the issue of measurement error (Hughes et al., 2011).
@@ -268,34 +267,34 @@ This way, a particular social-cognitive ability in question is still assessed ca
 This has profound implications for what these studies can show.
 Poor measurement of social cognition on an individual level may conceal relations between different aspects of cognition and may obscure developmental change.
 
-Therefore, developmental psychology is facing a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to reliably measure these individual differences.
+Therefore, developmental psychology faces a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to measure these individual differences reliably.
 To capture the emergence of social-cognitive abilities and related social factors in greater precision and detail, we must consequently address the methodological limitations of existing study designs (Hughes et al., 2011; Hughes \& Leekam, 2004).
 
-Schaafsma, Pfaff, Spunt, and Adolphs (2015) compiled a ``wish-list'' for new social-cognitive paradigms and advocated for parametric measures covering proficiency as a range, avoiding floor and ceiling effects, and showing satisfactory test-retest reliability estimates.
+Schaafsma, Pfaff, Spunt, and Adolphs (2015) compiled a ``wish-list'' for new social-cognitive paradigms. They advocated for parametric measures covering proficiency as a range, avoiding floor and ceiling effects, and showing satisfactory test-retest reliability estimates.
 In valid and reliable tasks, differences in test scores should correspond to differences in the social-cognitive ability and systematically order individuals in the same way.
-As a nice add-on, tasks should allow for use within an fMRI scanner.
+Additionally, tasks should allow for use within an fMRI scanner.
 With an easily administrable test procedure, larger sample sizes can be collected to estimate the potentially small effect of inter-individual differences.
 
 Additionally, it has been argued that social-cognitive abilities should not be treated as an all-or-nothing matter (e.g., dichotomously in pass/fail situations) but as abilities on a continuum (Beaudoin et al., 2020; Hughes \& Devine, 2015).
 Task batteries might be better suited to cover a range of social-cognitive abilities (Hughes et al., 2011).
-A proposal was that first basic social-cognitive processes should be relatively well understood before advancing to more complex social-cognitive abilities (Schaafsma et al., 2015).
+Schaafsma et al. (2015) proposed that first basic social-cognitive processes should be relatively well understood before advancing to more complex social-cognitive abilities.
 
 Another goal in creating new tasks should be to focus on the face value:
 we want to measure the underlying social-cognitive ability as straight-forward and directly as possible.
 The task should serve as a proxy for behavior as it appears in the real world.
 Importantly, we can assess whether the task shows external validity by evaluating the relationship with related constructs and factors of children's social surroundings.
 
-Our aim is, therefore, to make individual differences measurable in a systematic and reliable way.
+Therefore, we aim to make individual differences measurable in a systematic and reliable way.
 We want to create a task that induces variation between children to get precise person-specific estimates.
 To approach this issue, we focus on a continuous measure and short trials that facilitate more than a dozen replicates per subject.
 A standardized, easily accessible test procedure helps us to enable data collection at scale.
-Since data collection with families requires a lot of organizational effort, we want to enable data collection in-person with supervision as well as remotely without supervision.
+Since data collection with families requires much organizational effort, we want to enable data collection in-person with supervision as well as remotely without supervision.
 
 In our first novel task, we concentrate on the fundamental ability that is involved in many social-cognitive reasoning processes:
 gaze cue understanding - the ability to locate and use the attentional focus of an agent.
 The first component of this ability is often termed gaze following - turning one's eyes in the same direction as the gaze of another agent - and has been studied intensively (Astor, Thiele, \& Gredebäck, 2021; Byers-Heinlein et al., 2021; Coelho, George, Conty, Hugueville, \& Tijus, 2006; Del Bianco, Falck-Ytter, Thorup, \& Gredebäck, 2019; Frischen, Bayliss, \& Tipper, 2007; Hernik \& Broesch, 2019; Itakura \& Tanaka, 1998; Lee, Eskritt, Symons, \& Muir, 1998; Moore, 2008; Shepherd, 2010; Tomasello, Hare, Lehmann, \& Call, 2007).
 Following an agent's gaze provides insights into their intentions, thoughts, and feelings by acting as a `front end ability' (Brooks \& Meltzoff, 2005, p. 535).
-In our definition, gaze cue understanding goes one step further by including the \emph{acting on the gaze-cued location} - therefore, using the available social information to guide your behavior as needed in real-life conditions.
+In our definition, gaze cue understanding goes one step further by including the \emph{acting on the gaze-cued location} - therefore, using the available social information to guide one's behavior as needed in real-life conditions.
 
 \hypertarget{task-design}{%
 \section{Task design}\label{task-design}}
