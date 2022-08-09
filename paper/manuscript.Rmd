@@ -28,7 +28,7 @@ authornote: |
 abstract: |
   To explain and predict the behavior of agents, we use social cognition: we represent and reason about others' perspectives, knowledge, intentions, beliefs, and preferences. However, traditional measures of social cognition (e.g., false belief change-of-location tasks) often lack satisfactory psychometric properties: they are not designed to capture variation *between* children and rely on low trial numbers, dichotomous measures, and group averages. This has profound implications for what these studies can show. Poor measurement of social cognition on an individual level may conceal relations between different aspects of cognition and may obscure developmental change. To fully understand how social-cognitive abilities emerge and relate to each other, we need new tools that can reliably measure individual differences.
    We designed a gaze understanding task to study social cognition in young children and adults to approach this issue. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze understanding – the ability to locate and use the attentional focus of an agent. Our interactive task works across devices and enables supervised and unsupervised, as well as in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants’ click imprecision and is easily adaptable to different study requirements. 
-  Here we show that our task induces inter-individual differences in a child (N = XXX) and an adult (N = XXX) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. Furthermore, we find first evidence for the external validity of our task: the measured performance in gaze understanding relates to children's real-life social surroundings. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
+  Here we show that our task induces inter-individual differences in a child (N = XXX) and an adult (N = XXX) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
   
 keywords          : "social cognition, individual differences, gaze cues, psychometrics"
 wordcount         : "X"
@@ -135,7 +135,6 @@ First, we used a continuous measure which allowed us to capture fine grained ind
 Second, we designed short trials that facilitate more than a dozen replicates per subject. 
 The result are more precise individual-level estimates. 
 Third, we systematically investigated the psychometric properties of the new task. 
-Finally, to validate the task, we studied how it relates to aspects of children's everyday experience.
 
 Designing this task required a new testing infrastructure. 
 We designed the task as an interactive browser-based web app. 
@@ -410,90 +409,6 @@ In the box version it was `r posterior_summary(mRetestBox)["cor_subjID__relidayr
 ## Discussion
 Our results indicated that the measured variation was systematic. As could be expected, the continuous measure of the hedge version yielded higher reliability estimates than the discrete box version. For children, the model based reliability estimates showed that the task did capture individual differences even when correcting for age. This corroborates what we already see in Figure \@ref(fig:fig2): there was a clear overlap between age groups, indicating that age is predictive of performance for the mean, but is not the main source of individual differences.
 
-# Validity
-Our third aim was to assess whether the captured individual variation in gaze understanding relates to factors in children's real live social environment. Previous studies found associations between social cognition measures and various environmental factors [@devine2018family; @hughes2004links], including family background and education [@cutting1999theory; bulgarelli2016social], number and age of siblings and family constellation [@zhang2021worse, @cassidy2005theory; @perner1994theory; @peterson2000kindred], interaction with siblings [@dunn1991young], and centre-based childcare [@bulgarelli2016social]. It is assumed that opportunities to play, communicate and argue with siblings and similarly-aged peers help children to understand the human mind. Therefore, if we find a link between gaze understanding and family factors, we regard this as an indicator for the validity of our measure. 
-
-```{r extvali_sample}
-extvali <- testtrials %>% 
-  filter(ageInYears < 6) %>%
-  mutate(
-        symmetricPosition = case_when(
-                                  targetPosition == "5" | targetPosition == "6" | targetPosition == "box3" ~ 1, 
-                                  targetPosition == "4" | targetPosition == "7" | targetPosition == "box2" | targetPosition == "box4" ~ 2,
-                                  targetPosition == "3" | targetPosition == "8" | targetPosition == "box1" | targetPosition == "box5" ~ 3, 
-                                  targetPosition == "2" | targetPosition == "9" ~ 4,
-                                  targetPosition == "1" | targetPosition == "10" ~ 5, 
-                       ), 
-  ) %>% 
-  select(datacollection, studyversion, subjID, gender, trialNr, ageInMonths, ageInYears, correctBox, childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, targetPosition, symmetricPosition) %>% 
-  group_by(subjID) %>% 
-  # so that all models run with same nr of subjects
-  drop_na()
-
-extvali_sample <- extvali %>%
-  group_by(ageInYears) %>%
-  mutate(female = ifelse(gender == "f", 1, 0)) %>% 
-  summarise(
-    nTotal = n_distinct(subjID), 
-    meanAgeInMonths = mean(ageInMonths, na.rm = T) %>% round(2),
-    sdAgeInMonths = sd(ageInMonths, na.rm = T) %>% round(2),
-    minAgeInMonths = min(ageInMonths, na.rm = T),
-    maxAgeInMonths = max(ageInMonths, na.rm = T),
-    nFemales = ceiling(sum(female/15)),
-  )
-```
-
-## Participants
-For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This subsample consisted of 
-`r sum(extvali_sample$nTotal)` children, including 
-`r sum(extvali_sample$nTotal[extvali_sample$ageInYears == "3"])` 3-year-olds 
-(mean = `r sum(extvali_sample$meanAgeInMonths[extvali_sample$ageInYears == "3"])` months, 
-SD = `r sum(extvali_sample$sdAgeInMonths[extvali_sample$ageInYears == "3"])`, 
-range = `r sum(extvali_sample$minAgeInMonths[extvali_sample$ageInYears == "3"])`
-- `r sum(extvali_sample$maxAgeInMonths[extvali_sample$ageInYears == "3"])`, 
-`r sum(extvali_sample$nFemales[extvali_sample$ageInYears == "3"])` girls),
-`r sum(extvali_sample$nTotal[extvali_sample$ageInYears == "4"])` 4-year-olds 
-(mean = `r sum(extvali_sample$meanAgeInMonths[extvali_sample$ageInYears == "4"])` months, 
-SD = `r sum(extvali_sample$sdAgeInMonths[extvali_sample$ageInYears == "4"])`, 
-range = `r sum(extvali_sample$minAgeInMonths[extvali_sample$ageInYears == "4"])`
-- `r sum(extvali_sample$maxAgeInMonths[extvali_sample$ageInYears == "4"])`, 
-`r sum(extvali_sample$nFemales[extvali_sample$ageInYears == "4"])` girls),
-and `r sum(extvali_sample$nTotal[extvali_sample$ageInYears == "5"])` 5-year-olds 
-(mean = `r sum(extvali_sample$meanAgeInMonths[extvali_sample$ageInYears == "5"])` months, 
-SD = `r sum(extvali_sample$sdAgeInMonths[extvali_sample$ageInYears == "5"])`, 
-range = `r sum(extvali_sample$minAgeInMonths[extvali_sample$ageInYears == "5"])`
-- `r sum(extvali_sample$maxAgeInMonths[extvali_sample$ageInYears == "5"])`, 
-`r sum(extvali_sample$nFemales[extvali_sample$ageInYears == "5"])` girls). 
-
-## Procedure
-Families of our kindergarten and online child sample were asked to fill out a brief demographic questionnaire. We asked for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day. 
-
-## Analysis
-To estimate the effects of social surrounding on gaze understanding, we fit GLMMs predicting the task performance by each of our questionnaire variables, controlling for age (in months, z-transformed), data collection mode (reference category: in-person supervised) and study version (reference category: hedge version). The models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants. Therefore, our null model closely resembled the structure from our first analysis (see Analysis section of *Does the gaze understanding task induce variation?*; here: `performance ~ age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition)`). 
-In order to combine data of our two study versions, we transformed continuous click responses from the hedge version into a discrete outcome. For the target position, we categorized two adjacent bins as one imaginary box. To measure participants' performance, we created imaginary box boundaries around the target's landing position and examined whether the participant's click response fell into this imaginary box. Across the two study versions, we could consequently model the participant's correct response (0/1) using a `Bernoulli` distribution with a logit link function.
-For model comparisons, we ran separate models, each with one of the following predictors as a fixed effects added to the null model: number of household members, number of children aged 0-18 in household, number of children aged 1-12 in household, hours spent in childcare each day, and age when subject entered childcare. 
-In addition, we calculated three index scores. First, we calculated a sibling variety score according to @peterson2000kindred. Second, we implemented the modified version of @cassidy2005theory (for more details, see Supplements). Third, based on our own data exploration, we calculated the amount of peer exposure determined as the number of siblings and the average hours spent in childcare (both z-transformed). 
-We compared the models using WAIC (widely applicable information criterion) scores and weights [@mcelreath2020statistical]. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
-
-## Results
-```{r extvali_winningmodel}
-mExtvaliPE <- readRDS(file = "../saves/extvali-mExtvaliPE.rds") 
-```
-
-The model including our peer exposure index, as defined as the number of other children in the household and average hours spent in childcare, showed the best out-of-sample predictive accuracy. Note that we did not find a great difference in WAIC scores between the compared models (see Supplements for WAIC scores and weights). The model estimates were all considerably smaller than estimates of age, study version and data collection, and all 95% CIs included zero. For example, for our winning model, we found a peer exposure estimate of $\beta$ =
-`r fixef(mExtvaliPE)["pe", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["pe", "Q2.5"]`; `r fixef(mExtvaliPE)["pe", "Q97.5"]`]),
-with the estimates of age being $\beta$ =`r fixef(mExtvaliPE)["age", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["age", "Q2.5"]`; `r fixef(mExtvaliPE)["age", "Q97.5"]`]), data collection mode being $\beta$ =`r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Q2.5"]`; `r fixef(mExtvaliPE)["datacollectionremoteMunsupervised", "Q97.5"]`]), and study version $\beta$ =`r fixef(mExtvaliPE)["studyversionbox", "Estimate"]` (95% CI [`r fixef(mExtvaliPE)["studyversionbox", "Q2.5"]`; `r fixef(mExtvaliPE)["studyversionbox", "Q97.5"]`]). Nevertheless, a general pattern emerges: exposure to a more variable social environment positively influenced children's gaze understanding. The number of people and, more specifically, children, as well as the more diverse their age, the more likely children were to understand the agent's gaze cue. The only predictor resulting in a negative estimate was the age at which a participant entered childcare, i.e., the later a child entered, the better performance in the task.
-
-(ref:figlab4) **External validity of the gaze understanding task**. 
-Factors of children's social surroundings and their influence on the probability of responding correctly. Models are ordered according to their WAIC scores, with the uppermost winning the model comparison. The graph shows the estimated density curves of a model's predictor coefficient. Only models performing better than our null model are included in the graph.
-
-```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)", fig.show='asis'}
-knitr::include_graphics("../figures/extvali_results.png")
-```
-
-## Discussion
-We found that factors of children's social surrounding influenced their gaze understanding. Even though the effects are small and confidence intervals wide, it is remarkable that we were able to detect relationships between this fundamental social-cognitive ability and very distant, real life variables. Previous studies often focused on more complex, later developing social-cognitive abilities (e.g., false belief understanding). Apparently, systematic links between family factors and social-cognitive abilities can be found even when looking at more fundamental social-cognitive abilities like gaze understanding.
-
 # General Discussion
 In this paper, we presented a new experimental paradigm to study individual differences in gaze understanding across the lifespan. 
 This paper contributes to methodological advances in developmental psychology in the following ways. 
@@ -537,7 +452,7 @@ This effect is most pronounced in the three-year-olds in the box version (for an
 Therefore, we recommend using a tablet for remote data collection. 
 Children can then click for themselves and caregivers have less chance to interfere.  
 
-After finding consistent and reliable individual estimates, we aimed at verifying the appropriateness of our new task.
+# TODO adjust discussion part validity
 Validity is often assessed by looking at concurrent relations between measures. Here we looked at a relation that is often postulated for social cognition tasks, namely that social-cognitive ability is predicted by family level variables.
 We found that children's gaze understanding relates to factors of their social environment: 
 children were more accurate, the more social exposure and the more diverse their surrounding was.
@@ -651,7 +566,7 @@ A trial was defined as the time between two eye blinking sounds. We transcribed 
 In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial. 
 We conducted a model comparison to estimate the effects of parental interference. Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in `R: correct ~ age + (1 | subjID) + (1 | targetPosition)`.[^fn3]
 
-[^fn3]: Attentive readers might notice that we simplified the structure of random effects. Compared to our models in the *Individual differences* and *External Validity* sections, this model does not include the random slope for symmetric target position within participants. We decided to do so since we had limited amount of data from few participants. 
+[^fn3]: Attentive readers might notice that we simplified the structure of random effects. Compared to our models in the *Individual differences* section, this model does not include the random slope for symmetric target position within participants. We decided to do so since we had limited amount of data from few participants. 
 
 We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample. 
 We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models. 
@@ -668,31 +583,6 @@ On the trial level, the model including the verification of choice as a main eff
 #   note = "All models included random intercepts for participant and target position.", 
 #   escape = T
 # )
-```
-
-### Appendix to external validity section
-#### Scoring of sibling variety scores
-For assessing the external validity of our gaze understanding task, we calculated two sibling variety scores based on the existing Theory of Mind literature. 
-First, we followed the approach by @peterson2000kindred. Here, only-children as well as firstborns with siblings under one year scored 0 points; lastborns with siblings above 12 years scored 0.5 points; children with twins, firstborns with siblings over one year, and lastborns with at least one sibling under 13 years scored 1 point, middleborns with at least one older and younger sibling aged one to 12 years scored 2 points. 
-
-Second, we implemented the sibling variety score by @cassidy2005theory. The authors adjusted the original score of @peterson2000kindred in the following way: only-children scored 0 points; children with a sibling under one year or above 12 years, and twins with no other sibling scored 0.5 points; children with a sibling above one year or under 13 years scored 1 point; middleborns with at least one older and younger sibling aged one to 12 years scored 2 points. Twins with additional siblings scored depending on the age and number of their siblings. 
-
-The reasoning was that children between one and 13 years of age would engage in sibling play, while the youngest and most mature siblings would be less likely to participate in such. However, teenage siblings might provide opportunities for interesting discussions [@peterson2000kindred]. 
-
-#### WAIC scores and weights of the model comparison
-As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially (Table \ref{tab:extvali_table}). All effects except when a child entered childcare positively influence performance. 
-
-```{r extvali_table, results = "asis"}
-extvali_models <- readRDS(file = "../saves/extvali-results.rds") %>% 
-  mutate(across(c(WAIC, SE_WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>% 
-  mutate_if(is.numeric, round, 2)
-
-papaja::apa_table(
-  extvali_models, 
-  caption = "Model comparison for influences of children's social surrounding", 
-  note = "All models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants", 
-  escape = T
-)
 ```
 
 ## Adult sample
