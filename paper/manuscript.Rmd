@@ -411,7 +411,7 @@ In the box version it was `r posterior_summary(mRetestBox)["cor_subjID__relidayr
 Our results indicated that the measured variation was systematic. As could be expected, the continuous measure of the hedge version yielded higher reliability estimates than the discrete box version. For children, the model based reliability estimates showed that the task did capture individual differences even when correcting for age. This corroborates what we already see in Figure \@ref(fig:fig2): there was a clear overlap between age groups, indicating that age is predictive of performance for the mean, but is not the main source of individual differences.
 
 # Validity
-Our third aim was to assess whether the captured individual variation in gaze understanding relates to factors in children's real live social environment. Previous studies found associations between social cognition measures and various environmental factors [@devine2018family; @hughes2004links], including family background and education [@cutting1999theory; bulgarelli2016social], number and age of siblings and family constellation [@zhang2021worse, @cassidy2005theory; @perner1994theory; @peterson2000kindred], interaction with siblings [@dunn1991young], and centre-based childcare [@bulgarelli2016social]. It is assumed that opportunities to play, communicate and argue with siblings and similarly-aged peers help children to understand the human mind. Therefore, if we find a link between gaze understanding and family factors, we regard this as an indicator for the predictive validity of our measure. 
+Our third aim was to assess whether the captured individual variation in gaze understanding relates to factors in children's real live social environment. Previous studies found associations between social cognition measures and various environmental factors [@devine2018family; @hughes2004links], including family background and education [@cutting1999theory; bulgarelli2016social], number and age of siblings and family constellation [@zhang2021worse, @cassidy2005theory; @perner1994theory; @peterson2000kindred], interaction with siblings [@dunn1991young], and centre-based childcare [@bulgarelli2016social]. It is assumed that opportunities to play, communicate and argue with siblings and similarly-aged peers help children to understand the human mind. Therefore, if we find a link between gaze understanding and family factors, we regard this as an indicator for the validity of our measure. 
 
 ```{r extvali_sample}
 extvali <- testtrials %>% 
@@ -487,52 +487,46 @@ with the estimates of age being $\beta$ =`r fixef(mExtvaliPE)["age", "Estimate"]
 (ref:figlab4) **External validity of the gaze understanding task**. 
 Factors of children's social surroundings and their influence on the probability of responding correctly. Models are ordered according to their WAIC scores, with the uppermost winning the model comparison. The graph shows the estimated density curves of a model's predictor coefficient. Only models performing better than our null model are included in the graph.
 
-```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
+```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)", fig.show='asis'}
 knitr::include_graphics("../figures/extvali_results.png")
 ```
 
 ## Discussion
 We found that factors of children's social surrounding influenced their gaze understanding. Even though the effects are small and confidence intervals wide, it is remarkable that we were able to detect relationships between this fundamental social-cognitive ability and very distant, real life variables. Previous studies often focused on more complex, later developing social-cognitive abilities (e.g., false belief understanding). Apparently, systematic links between family factors and social-cognitive abilities can be found even when looking at more fundamental social-cognitive abilities like gaze understanding.
 
-# Discussion
-We presented a new experimental paradigm to study individual differences in a fundamental social-cognitive ability -- gaze understanding. 
-Participants are asked to locate a balloon by using the gaze cues of another agent. 
-The outcome measure depends on the presented study version: 
-in the hedge version, we implemented a continuous measure, while the box version employs a categorical measure. 
-The cartoon-like presentation makes the task engaging for children and adults alike.
-
+# General Discussion
+In this paper, we presented a new experimental paradigm to study individual differences in gaze understanding across the lifespan. 
+This paper contributes to methodological advances in developmental psychology in the following ways. 
 First, our new web-based testing infrastructure proved useful for standardized, portable data collection at scale, both remotely as well as in-person. 
-Second, we could show that we captured fine grained individual differences in gaze understanding at different ages -- especially in the continuous hedge version.
+Second, we could captured fine-grained individual differences in gaze understanding at different ages -- from early childhood until adulthood.
 Third, our task showed satisfactory psychometric properties with respect to internal consistency and retest reliability estimates. 
 Finally, we found that gaze understanding relates to aspects of children's everyday experience.
 The web app (https://ccp-odc.eva.mpg.de/gafo-demo/) and its source code (https://github.com/ccp-eva/gafo-demo) are openly accessible.
 We want to highlight that researchers are welcome to use and modify our task according to their needs. 
   
-  
-- summary (so als ob die leute nix gelesen hätten)
-  - continuous
-  - across age, adults nochmal aufgreifen
-  - good reliability
-  
-## Comparing our study versions
+One of the main contributions of this paper is that our newly presented gaze understanding task induces variation between participants. 
+This is primarily achieved through the implementation of short trials, resulting in over a dozen replicates per subject (15 test trials within 5-10 minutes testing time).
+Our experimental design enables a continuous outcome measure, which again quantifies individual differences.
+
+In our task, participants are asked to locate a balloon by using the gaze cues of another agent. 
+The outcome measure depends on the presented study version: 
+in the hedge version, we implemented a continuous measure, while the box version employs a categorical measure. 
 Our continuous hedge version yields higher internal consistency estimates compared to the categorical box version. 
 Both study versions exhibit high retest reliability. 
-Therefore, when a sufficient amount of trials is presented, the box version of the task can yield reliable individual estimates [cf. @hughes2000good improved reliability through aggregation]. 
-With respect to psychometric properties, we would recommend the use of the continuous version. 
+Therefore, when a sufficient amount of trials is presented, the box version of the task can yield reliable individual estimates [cf. @hughes2000good; improved reliability through aggregation]. 
+When testing time is limited, we would recommend the use of the continuous study version for higher internal consistency. 
 However, the categorical box version demonstrates design features that might be preferable in some research contexts: the discrete outcome might facilitate clicking for children. In addition, researchers could induce different levels of salience for each box. Our task could consequently be used to study bias, preferences and diverse desires (e.g. matching the box appearance to some feature of the agent). 
-  
-## Online implementation
-For our task, we designed a new testing infrastructure. 
-The gaze understanding task is presented as an interactive web app. 
+In sum, our task provides a step towards more robust and reliable research methods, especially with regards to individual differences research. 
+
+In addition to the new task design itself, we designed a new testing infrastructure. 
+Our gaze understanding task is presented as an interactive web app. 
 This enables presentation across devices without any prior installation. 
-Short trials facilitate a substantial number of trials -- here, we employed 15 test trials within 5-10 minutes testing time.
-Consequently, individual-level estimates are more precise. 
 Stimuli presentation is achieved through the use of SVGs. This has several advantages: 
 the aspect ratio and stimulus quality are kept constant no matter which size the web browser displays. 
 Most importantly, we can dynamically modify the stimulus details (e.g., positions) on a trial-by-trial basis.
 Presented agents and objects can be easily adapted for future task modifications or specific cultural settings. 
+The cartoon-like presentation makes the task engaging for children and adults alike.
 
-## Comparing data collection modes
 Participants can be tested in-person with supervision or remotely at home. 
 Test instructions are standardized and, with prior informed consent, the webcam records study participation.
 This allows us to scale up data collection: testing is flexible, fast and requires no further experimenter training. 
@@ -543,12 +537,12 @@ This effect is most pronounced in the three-year-olds in the box version (for an
 Therefore, we recommend using a tablet for remote data collection. 
 Children can then click for themselves and caregivers have less chance to interfere.  
 
-## Validity
+After finding consistent and reliable individual estimates, we aimed at verifying the appropriateness of our new task.
 Validity is often assessed by looking at concurrent relations between measures. Here we looked at a relation that is often postulated for social cognition tasks, namely that social-cognitive ability is predicted by family level variables.
 We found that children's gaze understanding relates to factors of their social environment: 
 children were more accurate, the more social exposure and the more diverse their surrounding was.
 However, compared to our fine-grained, parametric measure of gaze understanding, family variables were only captured on the surface level by employing single questionnaire items. 
-We hope that future technological advances will enable continuous measures of children's real life social surroundings [@barr2020screen; @long2020detecting, @rogoff2018importance]. 
+We hope that future technological advances will enable continuous measures of children's real life social surroundings [@barr2020screen; @long2020detecting; @rogoff2018importance]. 
 
 ## Future research
 Even though aggregate scores seem to improve reliability estimates [cf. @hughes2000good], they may smooth out noise that could be attributed to individual differences. 
@@ -564,8 +558,10 @@ Researchers could consider to adjust the task difficulty, for example, by adjust
 Our future goal is to utilize the presented testing infrastructure for further studies on social-cognitive abilities. 
 We aim at creating a task battery to study individual differences in various aspects of social cognition. 
 As @schaafsma2015deconstructing pointed out, social cognition is encompasses a whole range of abilities which could be best assessed by task batteries. We want to move from the most fundamental social-cognitive abilities to more complex processes like knowledge-ignorance or false belief understanding.
-  
-- conclusion:
+
+# Limitations
+
+# Conclusion
   - big picture
   - ind diff important for ..., good measures needed
   - dedicated measures of ind diff instead of simply using well-established. reliability    paradox paper zitieren
