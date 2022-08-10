@@ -74,60 +74,6 @@ variationHedge <- variationHedgeInd %>%
   tidyboot_mean(column = mean)
 ```
 
-```{r variation_hedge_plot}
-hedge_variation_plot <- ggplot() +
-  # child data
-  geom_smooth(
-    data = variationHedgeInd %>% filter(sample == "kids"),  
-    aes(x = ageInYearsExact, y = mean, group = datacollection, lty = datacollection), 
-    method = "lm", size = 0.5, alpha = 0.15, col = "darkgrey",
-  ) + 
-  
-  geom_point(
-    data = variationHedgeInd %>% filter(sample == "kids"), 
-    aes(x = ageInYearsExact, y = mean, col = ageInYears, shape = datacollection, alpha = datacollection)
-  ) +
-  
-  geom_pointrange(
-    data = variationHedge %>% filter(sample == "kids"), 
-    aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = ageInYears, shape = datacollection, alpha = datacollection), size = 0.8, position=position_dodge(width = 0.1)
-  ) +
-  
-  scale_shape_manual(values = c(16, 18)) + 
-  scale_alpha_discrete(range = c(1, 0.4)) + 
-  scale_linetype_manual(values = c("solid", "dashed")) + 
-  
-  # adult data
-  geom_jitter(
-    data = variationHedgeInd %>% filter(sample == "adults"), 
-    aes(x = 6.5, y = mean, col = ageInYears, shape = datacollection), alpha = 0.5, width = .05, height = .01,  
-  ) +
-
-  geom_pointrange(
-    data = variationHedge %>% filter(sample == "adults"), 
-    aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper, shape = datacollection), 
-    size = 0.8,
-  ) +
-  
-  labs(x = "Age in years", y = "Average imprecision in target width", col = "Age group", shape = "Data collection mode", alpha = "Data collection mode", lty = "Data collection mode") + 
-  scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d", "darkgrey"), breaks = c("3", "4", "5", "18"), labels = c("3-year-olds", "4-year-olds", "5-year-olds", "Adults")) +
-  scale_y_continuous(limits = c(0, 5), breaks = seq(0, 5, 1)) + 
-  scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
-
-  theme(legend.text = element_text(size = 8),
-        legend.key.size = unit(0.4, "cm"), 
-        legend.direction = "vertical", 
-        legend.box = "horizontal",
-        legend.position = c(0.72, 0.85), 
-        legend.background = element_blank(),
-        legend.box.background = element_rect(colour = "black")
-        )
-
-hedge_variation_plot
-
-ggsave("../figures/gafo_hedge_variation.png", width = 7, height = 4)
-```
-
 ```{r age_hedge_model}
 mDataAgeHedge <- vali %>% 
   filter(studyversion == "hedge" & sample == "kids") %>% 
@@ -149,7 +95,7 @@ mAgeHedge <- brm(clickDistInBalloons ~ age + datacollection + (symmetricPosition
 write.csv(mAgeHedge, "../saves/mAgeHedge.csv", quote = F, row.names = F)
 saveRDS(mAgeHedge, "../saves/mAgeHedge.rds")
 
-pp_check(mAgeHedge) + xlim(0, 10)
+# pp_check(mAgeHedge) + xlim(0, 10)
 ```
 
 ```{r GLMM_plot_hedge}
@@ -209,8 +155,8 @@ hedge_variation_plot_GLMM <- ggplot() +
         )
 
 hedge_variation_plot_GLMM
-
-ggsave("../figures/gafo_hedge_variation_GLMM.png", width = 7, height = 4)
+saveRDS(hedge_variation_plot_GLMM, file = "../saves/gafo-hedge-variation-plot-GLMM.rds")
+# ggsave("../figures/gafo_hedge_variation_GLMM.png", width = 7, height = 4)
 ```
 
 ```{r variation_box_prepareData}
@@ -226,57 +172,6 @@ variationBoxInd <- vali %>%
 variationBox <- variationBoxInd %>%
   group_by(sample, datacollection, ageInYears) %>%
   tidyboot_mean(column = mean)
-```
-
-```{r variation_box_plot}
-# with remote sample
-box_variation_plot <- ggplot() +
-  # chance level
-  geom_segment(aes(x = 3.0, y = 0.2, xend = 6.2, yend = 0.2), lty = "dotted") + 
-  geom_segment(aes(x = 6.25, y = 0.125, xend = 6.75, yend = 0.125), lty = "dotted") + 
-  
-  # child data
-  geom_smooth(
-    data = variationBoxInd %>% filter(sample == "kids"),  
-    aes(x = ageInYearsExact, y = mean, group = datacollection, lty = datacollection), 
-    method = "glm", size = 0.5, alpha = 0.15, col = "darkgrey",
-  ) + 
-  
-  geom_point(
-    data = variationBoxInd %>% filter(sample == "kids"), 
-    aes(x = ageInYearsExact, y = mean, col = ageInYears, shape = datacollection, alpha = datacollection)
-  ) +
-  
-  geom_pointrange(
-    data = variationBox %>% filter(sample == "kids"), 
-    aes(x = as.numeric(as.character(ageInYears))+.5, y = mean, ymin = ci_lower, ymax = ci_upper, col = ageInYears, shape = datacollection, alpha = datacollection), size = 0.8, position=position_dodge(width = 0.1)
-  ) +
-  
-  scale_shape_manual(values = c(16, 18)) + 
-  scale_alpha_discrete(range = c(1, 0.4)) + 
-  scale_linetype_manual(values = c("solid", "dashed")) + 
-  
-  # adult data
-  geom_jitter(
-    data = variationBoxInd %>% filter(sample == "adults"), 
-    aes(x = 6.5, y = mean, col = ageInYears, shape = datacollection), alpha = 0.5, width = .05, height = .01,  
-  ) +
-
-  geom_pointrange(
-    data = variationBox %>% filter(sample == "adults"), 
-    aes(x = 6.5, y = mean, ymin = ci_lower, ymax = ci_upper, shape = datacollection), 
-    size = 0.8,
-  ) +
-  
-  labs(x = "Age in years", y = "Proportion correct", col = "Age in years", shape = "Data collection mode", alpha = "Data collection mode", lty = "Data collection mode") + 
-  scale_color_manual(values = c("#00b1ea", "#006c66", "#29485d", "darkgrey"), breaks = c("3", "4", "5", "18"), labels = c("3-year-olds", "4-year-olds", "5-year-olds", "Adults")) +
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) + 
-  scale_x_continuous(breaks = seq(3, 6.5, 0.5), labels = c("3.0", "3.5", "4.0", "4.5", "5.0", "5.5", "6.0", "Adults")) + 
-  theme(legend.position="none")
-
-box_variation_plot
-
-ggsave("../figures/gafo_box_variation.png", width = 5, height = 4)
 ```
 
 ```{r age_box_model}
@@ -352,7 +247,8 @@ box_variation_plot_GLMM <- ggplot() +
 
 box_variation_plot_GLMM
 
-ggsave("../figures/gafo_box_variation_GLMM.png", width = 7, height = 4)
+saveRDS(box_variation_plot_GLMM, file = "../saves/gafo-box-variation-plot-GLMM.rds")
+# ggsave("../figures/gafo_box_variation_GLMM.png", width = 7, height = 4)
 ```
 
 # RELI
@@ -370,7 +266,7 @@ reli %>%
   ftable()
 ```
 
-## Internal consistency
+## Splithalf Reliability Data
 ```{r intCon_hedge_data}
 # take data of first reli day for internal consistency
 hedge_intCon <- reli %>% 
@@ -409,7 +305,8 @@ hedge_intCon_kids <- hedge_intCon %>%
 
 hedge_intCon_kids
 
-ggsave("../figures/gafo_hedge_intCon_kids.png", width = 6, height = 4)
+saveRDS(hedge_intCon_kids, file = "../saves/gafo-hedge-intCon-kids.rds")
+# ggsave("../figures/gafo_hedge_intCon_kids.png", width = 6, height = 4)
 ```
 
 ```{r intCon_hedge_adults}
@@ -426,7 +323,8 @@ hedge_intCon_adults <- hedge_intCon %>%
 
 hedge_intCon_adults
 
-ggsave("../figures/gafo_hedge_intCon_adults.png", width = 6, height = 4)
+saveRDS(hedge_intCon_adults, file = "../saves/gafo-hedge-intCon-adults.rds")
+# ggsave("../figures/gafo_hedge_intCon_adults.png", width = 6, height = 4)
 ```
 
 ```{r intCon_box_data}
@@ -467,7 +365,8 @@ box_intCon_kids <- box_intCon %>%
 
 box_intCon_kids
 
-ggsave("../figures/gafo_box_intCon_kids.png", width = 6, height = 4)
+saveRDS(box_intCon_kids, file = "../saves/gafo-box-intCon-kids.rds")
+# ggsave("../figures/gafo_box_intCon_kids.png", width = 6, height = 4)
 ```
 
 ```{r intCon_box_adults}
@@ -484,10 +383,13 @@ box_intCon_adults <- box_intCon %>%
 
 box_intCon_adults
 
-ggsave("../figures/gafo_box_intCon_adults.png", width = 6, height = 4)
+saveRDS(box_intCon_adults, file = "../saves/gafo-box-intCon-adults.rds")
+# ggsave("../figures/gafo_box_intCon_adults.png", width = 6, height = 4)
 ```
 
-```{r splithalfr_luke}
+## Splithalf Reliability - Hedge Kids
+
+```{r splithalfr_hedge_kids_firstsecond}
 fn_score_hedge <- function(ds) {
   return(mean(ds$clickDistInBalloons, na.rm = TRUE))
 }
@@ -495,876 +397,1222 @@ fn_score_hedge <- function(ds) {
 hedge_intCon_data <- reli %>%
   filter(studyversion == "hedge" & reliday == "reliday1")
 
-# random split
-splitscores_hedge_random_kids <- by_split(
+# first-second half split
+splitscores_hedge_firstsecond_kids <- by_split(
   hedge_intCon_data %>% filter(sample == "kids"),
   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
   fn_score_hedge,
-  replications = 25,
+  method = c("first_second"),
+  ncores = 1,
+  verbose = F
+)
+
+hedge_firstsecond_kids <- split_coefs(splitscores_hedge_firstsecond_kids, cor)
+hedge_firstsecond_kids_ci <- split_ci(splitscores_hedge_firstsecond_kids, cor)
+
+splithalf_data <- tibble(
+                          sample = "kids",
+                          studyversion = "hedge",
+                          method = "first-second",
+                          stratification = "none",
+                          coefficient = hedge_firstsecond_kids,
+                          CI_lower = hedge_firstsecond_kids_ci$lims["0.025","bca"],
+                          CI_upper = hedge_firstsecond_kids_ci$lims["0.975","bca"]
+                        )
+
+# first-second half stratified by target position
+splitscores_hedge_firstsecondStrat_kids <- by_split(
+  hedge_intCon_data %>% filter(sample == "kids"),
+  hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_hedge,
+  method = c("first_second"),
+  ncores = 1,
+  verbose = F,
+  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+)
+
+hedge_firstsecondStrat_kids <- split_coefs(splitscores_hedge_firstsecondStrat_kids, cor)
+hedge_firstsecondStrat_kids_ci <- split_ci(splitscores_hedge_firstsecondStrat_kids, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "hedge",
+                                        method = "first-second",
+                                        stratification = "target position",
+                                        coefficient = hedge_firstsecondStrat_kids,
+                                        CI_lower = hedge_firstsecondStrat_kids_ci$lims["0.025","bca"],
+                                        CI_upper = hedge_firstsecondStrat_kids_ci$lims["0.975","bca"]
+                                      )
+```
+
+```{r splithalfr_hedge_kids_oddeven}
+# odd-even split
+splitscores_hedge_oddeven_kids <- by_split(
+  hedge_intCon_data %>% filter(sample == "kids"),
+  hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_hedge,
+  method = c("odd_even"),
+  ncores = 1,
+  verbose = F
+)
+
+hedge_oddeven_kids <- split_coefs(splitscores_hedge_oddeven_kids, cor)
+hedge_oddeven_kids_ci <- split_ci(splitscores_hedge_oddeven_kids, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "hedge",
+                                        method = "odd-even",
+                                        stratification = "none",
+                                        coefficient = hedge_oddeven_kids,
+                                        CI_lower = hedge_oddeven_kids_ci$lims["0.025","bca"],
+                                        CI_upper = hedge_oddeven_kids_ci$lims["0.975","bca"]
+                                      )
+
+# odd-even split stratified by target position
+splitscores_hedge_oddevenStrat_kids <- by_split(
+  hedge_intCon_data %>% filter(sample == "kids"),
+  hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_hedge,
+  method = c("odd_even"),
+  ncores = 1,
+  verbose = F,
+  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+)
+
+hedge_oddevenStrat_kids <- split_coefs(splitscores_hedge_oddevenStrat_kids, cor)
+hedge_oddevenStrat_kids_ci <- split_ci(splitscores_hedge_oddevenStrat_kids, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "hedge",
+                                        method = "odd-even",
+                                        stratification = "target position",
+                                        coefficient = hedge_oddevenStrat_kids,
+                                        CI_lower = hedge_oddevenStrat_kids_ci$lims["0.025","bca"],
+                                        CI_upper = hedge_oddevenStrat_kids_ci$lims["0.975","bca"]
+                                      )
+```
+
+```{r splithalfr_hedge_kids_permutated}
+# permutated splitting (random sampling without replacement)
+splitscores_hedge_permutated_kids <- by_split(
+  hedge_intCon_data %>% filter(sample == "kids"),
+  hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_hedge,
+  replications = 5000,
+  method = c("random"),
+  ncores = 7, # setting ncores equally to something less than detectCores()
+)
+
+hedge_permutated_kids <- split_coefs(splitscores_hedge_permutated_kids, cor)
+
+splitscores_hedge_permutated_kids_uniq_reps <- unique(splitscores_hedge_permutated_kids$replication)
+
+splitscores_hedge_permutated_kids_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_hedge_permutated_kids, replication==r), cor))
+}
+
+hedge_permutated_kids_ci <- mclapply(splitscores_hedge_permutated_kids_uniq_reps, splitscores_hedge_permutated_kids_parallel_split_ci, mc.cores=48)
+
+hedge_permutated_kids_tbl <- tibble(
+  studyversion = "hedge",
+  sample = "kids",
+  split = "permutated",
+  stratification = "none",
+  mean = hedge_permutated_kids)
+
+hedge_permutated_kids_tbl$CI_lower = numeric(nrow(hedge_permutated_kids_tbl))
+hedge_permutated_kids_tbl$CI_upper = numeric(nrow(hedge_permutated_kids_tbl))
+
+for(i in 1:nrow(hedge_permutated_kids_tbl)) {
+  hedge_permutated_kids_tbl$CI_lower[i] <- hedge_permutated_kids_ci[[i]]$lims["0.025","bca"]
+  hedge_permutated_kids_tbl$CI_upper[i] <- hedge_permutated_kids_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "hedge",
+                                        method = "permutated",
+                                        stratification = "none",
+                                        coefficient = mean(hedge_permutated_kids_tbl$mean),
+                                        CI_lower = mean(hedge_permutated_kids_tbl$CI_lower),
+                                        CI_upper = mean(hedge_permutated_kids_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_hedge_kids_permutated_stratified}
+# permutated splitting stratified by target position
+splitscores_hedge_permutatedStrat_kids <- by_split(
+  hedge_intCon_data %>% filter(sample == "kids"),
+  hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_hedge,
+  replications = 5000,
+  method = c("random"),
+  ncores = 7, # setting ncores equally to something less than detectCores()
+  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+)
+
+hedge_permutatedStrat_kids <- split_coefs(splitscores_hedge_permutatedStrat_kids, cor)
+
+splitscores_hedge_permutatedStrat_kids_uniq_reps <- unique(splitscores_hedge_permutatedStrat_kids$replication)
+
+splitscores_hedge_permutatedStrat_kids_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_hedge_permutatedStrat_kids, replication==r), cor))
+}
+
+hedge_permutatedStrat_kids_ci <- mclapply(splitscores_hedge_permutatedStrat_kids_uniq_reps, splitscores_hedge_permutatedStrat_kids_parallel_split_ci, mc.cores=48)
+
+hedge_permutatedStrat_kids_tbl <- tibble(
+  studyversion = "hedge",
+  sample = "kids",
+  split = "random",
+  stratification = "target position",
+  mean = hedge_permutatedStrat_kids)
+
+hedge_permutatedStrat_kids_tbl$CI_lower = numeric(nrow(hedge_permutatedStrat_kids_tbl))
+hedge_permutatedStrat_kids_tbl$CI_upper = numeric(nrow(hedge_permutatedStrat_kids_tbl))
+
+for(i in 1:nrow(hedge_permutatedStrat_kids_tbl)) {
+  hedge_permutatedStrat_kids_tbl$CI_lower[i] <- hedge_permutatedStrat_kids_ci[[i]]$lims["0.025","bca"]
+  hedge_permutatedStrat_kids_tbl$CI_upper[i] <- hedge_permutatedStrat_kids_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "hedge",
+                                        method = "permutated",
+                                        stratification = "target position",
+                                        coefficient = mean(hedge_permutatedStrat_kids_tbl$mean),
+                                        CI_lower = mean(hedge_permutatedStrat_kids_tbl$CI_lower),
+                                        CI_upper = mean(hedge_permutatedStrat_kids_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_hedge_kids_montecarlo}
+# monte carlo (sampling with replacement)
+splitscores_hedge_montecarlo_kids <- by_split(
+  hedge_intCon_data %>% filter(sample == "kids"),
+  hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_hedge,
+  replications = 5000,
   method = c("random"),
   replace = TRUE,
   split_p = 1,
   ncores = 7, # setting ncores equally to something less than detectCores()
 )
 
-hedge_random_kids <- split_coefs(splitscores_hedge_random_kids, cor)
-uniq_reps <- unique(splitscores_hedge_random_kids$replication)
+hedge_montecarlo_kids <- split_coefs(splitscores_hedge_montecarlo_kids, cor)
 
-parallel_split_ci <- function(r) {
-        return(split_ci(filter(splitscores_hedge_random_kids, replication==r), cor))
+splitscores_hedge_montecarlo_kids_uniq_reps <- unique(splitscores_hedge_montecarlo_kids$replication)
+
+splitscores_hedge_montecarlo_kids_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_hedge_montecarlo_kids, replication==r), cor))
 }
 
-hedge_random_kids_ci <- mclapply(uniq_reps, parallel_split_ci, mc.cores=48)
-# Darn R
+hedge_montecarlo_kids_ci <- mclapply(splitscores_hedge_montecarlo_kids_uniq_reps, splitscores_hedge_montecarlo_kids_parallel_split_ci, mc.cores=48)
 
-# create dataframe to save data
-splithalf_data <- tibble(
+hedge_montecarlo_kids_tbl <- tibble(
   studyversion = "hedge",
   sample = "kids",
-  split = "random",
+  split = "Monte Carlo",
   stratification = "none",
-  mean = hedge_random_kids)
+  mean = hedge_montecarlo_kids)
 
-splithalf_data$CI_lower = numeric(nrow(splithalf_data))
-splithalf_data$CI_upper = numeric(nrow(splithalf_data))
-for(i in 1:nrow(splithalf_data)) {
-  splithalf_data$CI_lower[i] <- hedge_random_kids_ci[[i]]$lims["0.025","bca"]
-  splithalf_data$CI_upper[i] <- hedge_random_kids_ci[[i]]$lims["0.975","bca"]
+hedge_montecarlo_kids_tbl$CI_lower = numeric(nrow(hedge_montecarlo_kids_tbl))
+hedge_montecarlo_kids_tbl$CI_upper = numeric(nrow(hedge_montecarlo_kids_tbl))
+
+for(i in 1:nrow(hedge_montecarlo_kids_tbl)) {
+  hedge_montecarlo_kids_tbl$CI_lower[i] <- hedge_montecarlo_kids_ci[[i]]$lims["0.025","bca"]
+  hedge_montecarlo_kids_tbl$CI_upper[i] <- hedge_montecarlo_kids_ci[[i]]$lims["0.975","bca"]
 }
 
-print(splithalf_data)
-# write_csv(splithalf_data, "splithalf_data.csv")
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "hedge",
+                                        method = "Monte Carlo",
+                                        stratification = "none",
+                                        coefficient = mean(hedge_montecarlo_kids_tbl$mean),
+                                        CI_lower = mean(hedge_montecarlo_kids_tbl$CI_lower),
+                                        CI_upper = mean(hedge_montecarlo_kids_tbl$CI_upper),
+                                      )
 ```
 
-```{r splithalfr_hedge_kids}
-# fn_score_hedge <- function(ds) {
-#   return(mean(ds$clickDistInBalloons, na.rm = TRUE))
-# }
-# 
-# hedge_intCon_data <- reli %>% 
-#   filter(studyversion == "hedge" & reliday == "reliday1")
-# 
-# # first-second half split
-# splitscores_hedge_firstsecond_kids <- by_split(
-#   hedge_intCon_data %>% filter(sample == "kids"),
-#   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("first_second"),
-#   ncores = 1,
-#   verbose = F
-# )
-# 
-# hedge_firstsecond_kids <- split_coefs(splitscores_hedge_firstsecond_kids, cor)
-# hedge_firstsecond_kids_ci <- split_ci(splitscores_hedge_firstsecond_kids, cor)
-# 
-# splithalf_data <- tibble(
-#                           sample = "kids", 
-#                           studyversion = "hedge", 
-#                           method = "first-second", 
-#                           stratification = "none",                                        
-#                           coefficient = hedge_firstsecond_kids, 
-#                           CI_lower = hedge_firstsecond_kids_ci$lims["0.025","bca"], 
-#                           CI_upper = hedge_firstsecond_kids_ci$lims["0.975","bca"]
-#                         )
-# 
-# # first-second half stratified by target position
-# splitscores_hedge_firstsecondStrat_kids <- by_split(
-#   hedge_intCon_data %>% filter(sample == "kids"),
-#   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("first_second"),
-#   ncores = 1,
-#   verbose = F, 
-#   stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-# )
-# 
-# hedge_firstsecondStrat_kids <- split_coefs(splitscores_hedge_firstsecondStrat_kids, cor)
-# hedge_firstsecondStrat_kids_ci <- split_ci(splitscores_hedge_firstsecondStrat_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "hedge", 
-#                                         method = "first-second",
-#                                         stratification = "target position",
-#                                         coefficient = hedge_firstsecondStrat_kids,
-#                                         CI_lower = hedge_firstsecondStrat_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_firstsecondStrat_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # odd-even split
-# splitscores_hedge_oddeven_kids <- by_split(
-#   hedge_intCon_data %>% filter(sample == "kids"),
-#   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("odd_even"),
-#   ncores = 1,
-#   verbose = F
-# )
-# 
-# hedge_oddeven_kids <- split_coefs(splitscores_hedge_oddeven_kids, cor)
-# hedge_oddeven_kids_ci <- split_ci(splitscores_hedge_oddeven_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "hedge", 
-#                                         method = "odd-even",
-#                                         stratification = "none",
-#                                         coefficient = hedge_oddeven_kids,
-#                                         CI_lower = hedge_oddeven_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_oddeven_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # odd-even split stratified by target position
-# splitscores_hedge_oddevenStrat_kids <- by_split(
-#   hedge_intCon_data %>% filter(sample == "kids"),
-#   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("odd_even"),
-#   ncores = 1,
-#   verbose = F, 
-#   stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-# )
-# 
-# hedge_oddevenStrat_kids <- split_coefs(splitscores_hedge_oddevenStrat_kids, cor)
-# hedge_oddevenStrat_kids_ci <- split_ci(splitscores_hedge_oddevenStrat_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "hedge", 
-#                                         method = "odd-even",
-#                                         stratification = "target position",
-#                                         coefficient = hedge_oddevenStrat_kids,
-#                                         CI_lower = hedge_oddevenStrat_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_oddevenStrat_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # permutated splitting (random sampling without replacement)
-# splitscores_hedge_permutated_kids <- by_split(
-#   hedge_intCon_data %>% filter(sample == "kids"),
-#   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-# )
-# 
-# hedge_permutated_kids <- split_coefs(splitscores_hedge_permutated_kids, cor)
-# hedge_permutated_kids_ci <- split_ci(splitscores_hedge_permutated_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "hedge", 
-#                                         method = "permutated",
-#                                         stratification = "none",
-#                                         coefficient = hedge_permutated_kids,
-#                                         CI_lower = hedge_permutated_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_permutated_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # permutated splitting stratified by target position
-# splitscores_hedge_permutatedStrat_kids <- by_split(
-#   hedge_intCon_data %>% filter(sample == "kids"),
-#   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-# )
-# 
-# hedge_permutatedStrat_kids <- split_coefs(splitscores_hedge_permutatedStrat_kids, cor)
-# hedge_permutatedStrat_kids_ci <- split_ci(splitscores_hedge_permutatedStrat_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "hedge", 
-#                                         method = "permutated",
-#                                         stratification = "target position",
-#                                         coefficient = hedge_permutatedStrat_kids,
-#                                         CI_lower = hedge_permutatedStrat_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_permutatedStrat_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # monte carlo (sampling with replacement)
-# splitscores_hedge_montecarlo_kids <- by_split(
-#   hedge_intCon_data %>% filter(sample == "kids"),
-#   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   replace = TRUE,
-# )
-# 
-# hedge_montecarlo_kids <- split_coefs(splitscores_hedge_montecarlo_kids, cor)
-# hedge_montecarlo_kids_ci <- split_ci(splitscores_hedge_montecarlo_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "hedge", 
-#                                         method = "Monte Carlo",
-#                                         stratification = "none",
-#                                         coefficient = hedge_montecarlo_kids,
-#                                         CI_lower = hedge_montecarlo_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_montecarlo_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # monte carlo stratified by target position
-# splitscores_hedge_montecarloStrat_kids <- by_split(
-#   hedge_intCon_data %>% filter(sample == "kids"),
-#   hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   replace = TRUE,
-#   stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-# )
-# 
-# hedge_montecarloStrat_kids <- split_coefs(splitscores_hedge_montecarloStrat_kids, cor)
-# hedge_montecarloStrat_kids_ci <- split_ci(splitscores_hedge_montecarloStrat_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "hedge", 
-#                                         method = "Monte Carlo",
-#                                         stratification = "target position",
-#                                         coefficient = hedge_montecarloStrat_kids,
-#                                         CI_lower = hedge_montecarloStrat_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_montecarloStrat_kids_ci$lims["0.975","bca"]
-#                                       )
+```{r splithalfr_hedge_kids_montecarlo_stratified}
+# monte carlo stratified by target position
+splitscores_hedge_montecarloStrat_kids <- by_split(
+  hedge_intCon_data %>% filter(sample == "kids"),
+  hedge_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_hedge,
+  replications = 5000,
+  method = c("random"),
+  replace = TRUE,
+  split_p = 1,
+  ncores = 7, # setting ncores equally to something less than detectCores()
+  stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+)
+
+hedge_montecarloStrat_kids <- split_coefs(splitscores_hedge_montecarloStrat_kids, cor)
+
+splitscores_hedge_montecarloStrat_kids_uniq_reps <- unique(splitscores_hedge_montecarloStrat_kids$replication)
+
+splitscores_hedge_montecarloStrat_kids_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_hedge_montecarloStrat_kids, replication==r), cor))
+}
+
+hedge_montecarloStrat_kids_ci <- mclapply(splitscores_hedge_montecarloStrat_kids_uniq_reps, splitscores_hedge_montecarloStrat_kids_parallel_split_ci, mc.cores=48)
+
+hedge_montecarloStrat_kids_tbl <- tibble(
+  studyversion = "hedge",
+  sample = "kids",
+  split = "Monte Carlo",
+  stratification = "target position",
+  mean = hedge_montecarloStrat_kids)
+
+hedge_montecarloStrat_kids_tbl$CI_lower = numeric(nrow(hedge_montecarloStrat_kids_tbl))
+hedge_montecarloStrat_kids_tbl$CI_upper = numeric(nrow(hedge_montecarloStrat_kids_tbl))
+
+for(i in 1:nrow(hedge_montecarloStrat_kids_tbl)) {
+  hedge_montecarloStrat_kids_tbl$CI_lower[i] <- hedge_montecarloStrat_kids_ci[[i]]$lims["0.025","bca"]
+  hedge_montecarloStrat_kids_tbl$CI_upper[i] <- hedge_montecarloStrat_kids_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "hedge",
+                                        method = "Monte Carlo",
+                                        stratification = "target position",
+                                        coefficient = mean(hedge_montecarloStrat_kids_tbl$mean),
+                                        CI_lower = mean(hedge_montecarloStrat_kids_tbl$CI_lower),
+                                        CI_upper = mean(hedge_montecarloStrat_kids_tbl$CI_upper),
+                                      )
 ```
 
-```{r splithalfr_hedge_adults}
-# # first-second half split
-# splitscores_hedge_firstsecond_adults <- by_split(
-#   hedge_intCon_data %>% filter(sample == "adults"),
-#   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("first_second"),
-#   ncores = 1,
-#   verbose = F
-# )
-# 
-# hedge_firstsecond_adults <- split_coefs(splitscores_hedge_firstsecond_adults, cor)
-# hedge_firstsecond_adults_ci <- split_ci(splitscores_hedge_firstsecond_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                               sample = "adults", 
-#                                               studyversion = "hedge", 
-#                                               method = "first-second", 
-#                                               stratification = "none",                                        
-#                                               coefficient = hedge_firstsecond_adults, 
-#                                               CI_lower = hedge_firstsecond_adults_ci$lims["0.025","bca"], 
-#                                               CI_upper = hedge_firstsecond_adults_ci$lims["0.975","bca"]
-#                                             )
-# 
-# # first-second half stratified by target position
-# splitscores_hedge_firstsecondStrat_adults <- by_split(
-#   hedge_intCon_data %>% filter(sample == "adults"),
-#   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("first_second"),
-#   ncores = 1,
-#   verbose = F, 
-#   stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-# )
-# 
-# hedge_firstsecondStrat_adults <- split_coefs(splitscores_hedge_firstsecondStrat_adults, cor)
-# hedge_firstsecondStrat_adults_ci <- split_ci(splitscores_hedge_firstsecondStrat_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "hedge", 
-#                                         method = "first-second",
-#                                         stratification = "target position",
-#                                         coefficient = hedge_firstsecondStrat_adults,
-#                                         CI_lower = hedge_firstsecondStrat_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_firstsecondStrat_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # odd-even split
-# splitscores_hedge_oddeven_adults <- by_split(
-#   hedge_intCon_data %>% filter(sample == "adults"),
-#   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("odd_even"),
-#   ncores = 1,
-#   verbose = F
-# )
-# 
-# hedge_oddeven_adults <- split_coefs(splitscores_hedge_oddeven_adults, cor)
-# hedge_oddeven_adults_ci <- split_ci(splitscores_hedge_oddeven_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "hedge", 
-#                                         method = "odd-even",
-#                                         stratification = "none",
-#                                         coefficient = hedge_oddeven_adults,
-#                                         CI_lower = hedge_oddeven_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_oddeven_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # odd-even split stratified by target position
-# splitscores_hedge_oddevenStrat_adults <- by_split(
-#   hedge_intCon_data %>% filter(sample == "adults"),
-#   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("odd_even"),
-#   ncores = 1,
-#   verbose = F, 
-#   stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-# )
-# 
-# hedge_oddevenStrat_adults <- split_coefs(splitscores_hedge_oddevenStrat_adults, cor)
-# hedge_oddevenStrat_adults_ci <- split_ci(splitscores_hedge_oddevenStrat_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "hedge", 
-#                                         method = "odd-even",
-#                                         stratification = "target position",
-#                                         coefficient = hedge_oddevenStrat_adults,
-#                                         CI_lower = hedge_oddevenStrat_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_oddevenStrat_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # permutated splitting (random sampling without replacement)
-# splitscores_hedge_permutated_adults <- by_split(
-#   hedge_intCon_data %>% filter(sample == "adults"),
-#   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-# )
-# 
-# hedge_permutated_adults <- split_coefs(splitscores_hedge_permutated_adults, cor)
-# hedge_permutated_adults_ci <- split_ci(splitscores_hedge_permutated_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "hedge", 
-#                                         method = "permutated",
-#                                         stratification = "none",
-#                                         coefficient = hedge_permutated_adults,
-#                                         CI_lower = hedge_permutated_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_permutated_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # permutated splitting stratified by target position
-# splitscores_hedge_permutatedStrat_adults <- by_split(
-#   hedge_intCon_data %>% filter(sample == "adults"),
-#   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-# )
-# 
-# hedge_permutatedStrat_adults <- split_coefs(splitscores_hedge_permutatedStrat_adults, cor)
-# hedge_permutatedStrat_adults_ci <- split_ci(splitscores_hedge_permutatedStrat_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "hedge", 
-#                                         method = "permutated",
-#                                         stratification = "target position",
-#                                         coefficient = hedge_permutatedStrat_adults,
-#                                         CI_lower = hedge_permutatedStrat_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_permutatedStrat_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # monte carlo (sampling with replacement)
-# splitscores_hedge_montecarlo_adults <- by_split(
-#   hedge_intCon_data %>% filter(sample == "adults"),
-#   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   replace = TRUE,
-# )
-# 
-# hedge_montecarlo_adults <- split_coefs(splitscores_hedge_montecarlo_adults, cor)
-# hedge_montecarlo_adults_ci <- split_ci(splitscores_hedge_montecarlo_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "hedge", 
-#                                         method = "Monte Carlo",
-#                                         stratification = "none",
-#                                         coefficient = hedge_montecarlo_adults,
-#                                         CI_lower = hedge_montecarlo_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_montecarlo_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # monte carlo stratified by target position
-# splitscores_hedge_montecarloStrat_adults <- by_split(
-#   hedge_intCon_data %>% filter(sample == "adults"),
-#   hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_hedge,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   replace = TRUE,
-#   stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-# )
-# 
-# hedge_montecarloStrat_adults <- split_coefs(splitscores_hedge_montecarloStrat_adults, cor)
-# hedge_montecarloStrat_adults_ci <- split_ci(splitscores_hedge_montecarloStrat_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "hedge", 
-#                                         method = "Monte Carlo",
-#                                         stratification = "target position",
-#                                         coefficient = hedge_montecarloStrat_adults,
-#                                         CI_lower = hedge_montecarloStrat_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = hedge_montecarloStrat_adults_ci$lims["0.975","bca"]
-#                                       )
+####
+## Splithalf Reliability - Hedge Adults
+
+```{r splithalfr_hedge_adults_firstsecond}
+# first-second half split
+splitscores_hedge_firstsecond_adults <- by_split(
+  hedge_intCon_data %>% filter(sample == "adults"),
+  hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_hedge,
+  method = c("first_second"),
+  ncores = 1,
+  verbose = F
+)
+
+hedge_firstsecond_adults <- split_coefs(splitscores_hedge_firstsecond_adults, cor)
+hedge_firstsecond_adults_ci <- split_ci(splitscores_hedge_firstsecond_adults, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "hedge",
+                                        method = "first-second",
+                                        stratification = "none",
+                                        coefficient = hedge_firstsecond_adults,
+                                        CI_lower = hedge_firstsecond_adults_ci$lims["0.025","bca"],
+                                        CI_upper = hedge_firstsecond_adults_ci$lims["0.975","bca"]
+                                      )
+
+# first-second half stratified by target position
+splitscores_hedge_firstsecondStrat_adults <- by_split(
+  hedge_intCon_data %>% filter(sample == "adults"),
+  hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_hedge,
+  method = c("first_second"),
+  ncores = 1,
+  verbose = F,
+  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+)
+
+hedge_firstsecondStrat_adults <- split_coefs(splitscores_hedge_firstsecondStrat_adults, cor)
+hedge_firstsecondStrat_adults_ci <- split_ci(splitscores_hedge_firstsecondStrat_adults, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "hedge",
+                                        method = "first-second",
+                                        stratification = "target position",
+                                        coefficient = hedge_firstsecondStrat_adults,
+                                        CI_lower = hedge_firstsecondStrat_adults_ci$lims["0.025","bca"],
+                                        CI_upper = hedge_firstsecondStrat_adults_ci$lims["0.975","bca"]
+                                      )
 ```
 
-```{r splithalfr_box_kids}
-# fn_score_box <- function(ds) {
-#   return(mean(ds$correctBox, na.rm = TRUE))
-# }
-# 
-# box_intCon_data <- reli %>% 
-#   filter(studyversion == "box" & reliday == "reliday1") 
-# 
-# # first-second half split
-# splitscores_box_firstsecond_kids <- by_split(
-#   box_intCon_data %>% filter(sample == "kids"),
-#   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("first_second"),
-#   ncores = 1,
-#   verbose = F
-# )
-# 
-# box_firstsecond_kids <- split_coefs(splitscores_box_firstsecond_kids, cor)
-# box_firstsecond_kids_ci <- split_ci(splitscores_box_firstsecond_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                               sample = "kids", 
-#                                               studyversion = "box", 
-#                                               method = "first-second", 
-#                                               stratification = "none",                                        
-#                                               coefficient = box_firstsecond_kids, 
-#                                               CI_lower = box_firstsecond_kids_ci$lims["0.025","bca"], 
-#                                               CI_upper = box_firstsecond_kids_ci$lims["0.975","bca"]
-#                                             )
-# 
-# # first-second half stratified by target position
-# splitscores_box_firstsecondStrat_kids <- by_split(
-#   box_intCon_data %>% filter(sample == "kids"),
-#   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("first_second"),
-#   ncores = 1,
-#   verbose = F, 
-#   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-# )
-# 
-# box_firstsecondStrat_kids <- split_coefs(splitscores_box_firstsecondStrat_kids, cor)
-# box_firstsecondStrat_kids_ci <- split_ci(splitscores_box_firstsecondStrat_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "box", 
-#                                         method = "first-second",
-#                                         stratification = "target position",
-#                                         coefficient = box_firstsecondStrat_kids,
-#                                         CI_lower = box_firstsecondStrat_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_firstsecondStrat_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # odd-even split
-# splitscores_box_oddeven_kids <- by_split(
-#   box_intCon_data %>% filter(sample == "kids"),
-#   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("odd_even"),
-#   ncores = 1,
-#   verbose = F
-# )
-# 
-# box_oddeven_kids <- split_coefs(splitscores_box_oddeven_kids, cor)
-# box_oddeven_kids_ci <- split_ci(splitscores_box_oddeven_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "box", 
-#                                         method = "odd-even",
-#                                         stratification = "none",
-#                                         coefficient = box_oddeven_kids,
-#                                         CI_lower = box_oddeven_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_oddeven_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # odd-even split stratified by target position
-# splitscores_box_oddevenStrat_kids <- by_split(
-#   box_intCon_data %>% filter(sample == "kids"),
-#   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("odd_even"),
-#   ncores = 1,
-#   verbose = F, 
-#   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-# )
-# 
-# box_oddevenStrat_kids <- split_coefs(splitscores_box_oddevenStrat_kids, cor)
-# box_oddevenStrat_kids_ci <- split_ci(splitscores_box_oddevenStrat_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "box", 
-#                                         method = "odd-even",
-#                                         stratification = "target position",
-#                                         coefficient = box_oddevenStrat_kids,
-#                                         CI_lower = box_oddevenStrat_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_oddevenStrat_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # permutated splitting (random sampling without replacement)
-# splitscores_box_permutated_kids <- by_split(
-#   box_intCon_data %>% filter(sample == "kids"),
-#   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-# )
-# 
-# box_permutated_kids <- split_coefs(splitscores_box_permutated_kids, cor)
-# box_permutated_kids_ci <- split_ci(splitscores_box_permutated_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "box", 
-#                                         method = "permutated",
-#                                         stratification = "none",
-#                                         coefficient = box_permutated_kids,
-#                                         CI_lower = box_permutated_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_permutated_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # permutated splitting stratified by target position
-# splitscores_box_permutatedStrat_kids <- by_split(
-#   box_intCon_data %>% filter(sample == "kids"),
-#   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-# )
-# 
-# box_permutatedStrat_kids <- split_coefs(splitscores_box_permutatedStrat_kids, cor)
-# box_permutatedStrat_kids_ci <- split_ci(splitscores_box_permutatedStrat_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "box", 
-#                                         method = "permutated",
-#                                         stratification = "target position",
-#                                         coefficient = box_permutatedStrat_kids,
-#                                         CI_lower = box_permutatedStrat_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_permutatedStrat_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # monte carlo (sampling with replacement)
-# splitscores_box_montecarlo_kids <- by_split(
-#   box_intCon_data %>% filter(sample == "kids"),
-#   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   replace = TRUE,
-# )
-# 
-# box_montecarlo_kids <- split_coefs(splitscores_box_montecarlo_kids, cor)
-# box_montecarlo_kids_ci <- split_ci(splitscores_box_montecarlo_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "box", 
-#                                         method = "Monte Carlo",
-#                                         stratification = "none",
-#                                         coefficient = box_montecarlo_kids,
-#                                         CI_lower = box_montecarlo_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_montecarlo_kids_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # monte carlo stratified by target position
-# splitscores_box_montecarloStrat_kids <- by_split(
-#   box_intCon_data %>% filter(sample == "kids"),
-#   box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   replace = TRUE,
-#   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
-# )
-# 
-# box_montecarloStrat_kids <- split_coefs(splitscores_box_montecarloStrat_kids, cor)
-# box_montecarloStrat_kids_ci <- split_ci(splitscores_box_montecarloStrat_kids, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "kids", 
-#                                         studyversion = "box", 
-#                                         method = "Monte Carlo",
-#                                         stratification = "target position",
-#                                         coefficient = box_montecarloStrat_kids,
-#                                         CI_lower = box_montecarloStrat_kids_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_montecarloStrat_kids_ci$lims["0.975","bca"]
-#                                       )
+```{r splithalfr_hedge_adults_oddeven}
+# odd-even split
+splitscores_hedge_oddeven_adults <- by_split(
+  hedge_intCon_data %>% filter(sample == "adults"),
+  hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_hedge,
+  method = c("odd_even"),
+  ncores = 1,
+  verbose = F
+)
+
+hedge_oddeven_adults <- split_coefs(splitscores_hedge_oddeven_adults, cor)
+hedge_oddeven_adults_ci <- split_ci(splitscores_hedge_oddeven_adults, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "hedge",
+                                        method = "odd-even",
+                                        stratification = "none",
+                                        coefficient = hedge_oddeven_adults,
+                                        CI_lower = hedge_oddeven_adults_ci$lims["0.025","bca"],
+                                        CI_upper = hedge_oddeven_adults_ci$lims["0.975","bca"]
+                                      )
+
+# odd-even split stratified by target position
+splitscores_hedge_oddevenStrat_adults <- by_split(
+  hedge_intCon_data %>% filter(sample == "adults"),
+  hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_hedge,
+  method = c("odd_even"),
+  ncores = 1,
+  verbose = F,
+  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+)
+
+hedge_oddevenStrat_adults <- split_coefs(splitscores_hedge_oddevenStrat_adults, cor)
+hedge_oddevenStrat_adults_ci <- split_ci(splitscores_hedge_oddevenStrat_adults, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "hedge",
+                                        method = "odd-even",
+                                        stratification = "target position",
+                                        coefficient = hedge_oddevenStrat_adults,
+                                        CI_lower = hedge_oddevenStrat_adults_ci$lims["0.025","bca"],
+                                        CI_upper = hedge_oddevenStrat_adults_ci$lims["0.975","bca"]
+                                      )
 ```
 
-```{r splithalfr_box_adults}
-# # first-second half split
-# splitscores_box_firstsecond_adults <- by_split(
-#   box_intCon_data %>% filter(sample == "adults"),
-#   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("first_second"),
-#   ncores = 1,
-#   verbose = F
-# )
-# 
-# box_firstsecond_adults <- split_coefs(splitscores_box_firstsecond_adults, cor)
-# box_firstsecond_adults_ci <- split_ci(splitscores_box_firstsecond_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                               sample = "adults", 
-#                                               studyversion = "box", 
-#                                               method = "first-second", 
-#                                               stratification = "none",                                        
-#                                               coefficient = box_firstsecond_adults, 
-#                                               CI_lower = box_firstsecond_adults_ci$lims["0.025","bca"], 
-#                                               CI_upper = box_firstsecond_adults_ci$lims["0.975","bca"]
-#                                             )
-# 
-# # first-second half stratified by target position
-# splitscores_box_firstsecondStrat_adults <- by_split(
-#   box_intCon_data %>% filter(sample == "adults"),
-#   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("first_second"),
-#   ncores = 1,
-#   verbose = F, 
-#   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-# )
-# 
-# box_firstsecondStrat_adults <- split_coefs(splitscores_box_firstsecondStrat_adults, cor)
-# box_firstsecondStrat_adults_ci <- split_ci(splitscores_box_firstsecondStrat_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "box", 
-#                                         method = "first-second",
-#                                         stratification = "target position",
-#                                         coefficient = box_firstsecondStrat_adults,
-#                                         CI_lower = box_firstsecondStrat_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_firstsecondStrat_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # odd-even split
-# splitscores_box_oddeven_adults <- by_split(
-#   box_intCon_data %>% filter(sample == "adults"),
-#   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("odd_even"),
-#   ncores = 1,
-#   verbose = F
-# )
-# 
-# box_oddeven_adults <- split_coefs(splitscores_box_oddeven_adults, cor)
-# box_oddeven_adults_ci <- split_ci(splitscores_box_oddeven_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "box", 
-#                                         method = "odd-even",
-#                                         stratification = "none",
-#                                         coefficient = box_oddeven_adults,
-#                                         CI_lower = box_oddeven_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_oddeven_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # odd-even split stratified by target position
-# splitscores_box_oddevenStrat_adults <- by_split(
-#   box_intCon_data %>% filter(sample == "adults"),
-#   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("odd_even"),
-#   ncores = 1,
-#   verbose = F, 
-#   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-# )
-# 
-# box_oddevenStrat_adults <- split_coefs(splitscores_box_oddevenStrat_adults, cor)
-# box_oddevenStrat_adults_ci <- split_ci(splitscores_box_oddevenStrat_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "box", 
-#                                         method = "odd-even",
-#                                         stratification = "target position",
-#                                         coefficient = box_oddevenStrat_adults,
-#                                         CI_lower = box_oddevenStrat_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_oddevenStrat_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # permutated splitting (random sampling without replacement)
-# splitscores_box_permutated_adults <- by_split(
-#   box_intCon_data %>% filter(sample == "adults"),
-#   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-# )
-# 
-# box_permutated_adults <- split_coefs(splitscores_box_permutated_adults, cor)
-# box_permutated_adults_ci <- split_ci(splitscores_box_permutated_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "box", 
-#                                         method = "permutated",
-#                                         stratification = "none",
-#                                         coefficient = box_permutated_adults,
-#                                         CI_lower = box_permutated_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_permutated_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # permutated splitting stratified by target position
-# splitscores_box_permutatedStrat_adults <- by_split(
-#   box_intCon_data %>% filter(sample == "adults"),
-#   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-# )
-# 
-# box_permutatedStrat_adults <- split_coefs(splitscores_box_permutatedStrat_adults, cor)
-# box_permutatedStrat_adults_ci <- split_ci(splitscores_box_permutatedStrat_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "box", 
-#                                         method = "permutated",
-#                                         stratification = "target position",
-#                                         coefficient = box_permutatedStrat_adults,
-#                                         CI_lower = box_permutatedStrat_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_permutatedStrat_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # monte carlo (sampling with replacement)
-# splitscores_box_montecarlo_adults <- by_split(
-#   box_intCon_data %>% filter(sample == "adults"),
-#   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   replace = TRUE,
-# )
-# 
-# box_montecarlo_adults <- split_coefs(splitscores_box_montecarlo_adults, cor)
-# box_montecarlo_adults_ci <- split_ci(splitscores_box_montecarlo_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "box", 
-#                                         method = "Monte Carlo",
-#                                         stratification = "none",
-#                                         coefficient = box_montecarlo_adults,
-#                                         CI_lower = box_montecarlo_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_montecarlo_adults_ci$lims["0.975","bca"]
-#                                       )
-# 
-# # monte carlo stratified by target position
-# splitscores_box_montecarloStrat_adults <- by_split(
-#   box_intCon_data %>% filter(sample == "adults"),
-#   box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
-#   fn_score_box,
-#   method = c("random"),
-#   ncores = 1,
-#   verbose = F, 
-#   replications = 1,
-#   replace = TRUE,
-#   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
-# )
-# 
-# box_montecarloStrat_adults <- split_coefs(splitscores_box_montecarloStrat_adults, cor)
-# box_montecarloStrat_adults_ci <- split_ci(splitscores_box_montecarloStrat_adults, cor)
-# 
-# splithalf_data <- splithalf_data %>% add_row(
-#                                         sample = "adults", 
-#                                         studyversion = "box", 
-#                                         method = "Monte Carlo",
-#                                         stratification = "target position",
-#                                         coefficient = box_montecarloStrat_adults,
-#                                         CI_lower = box_montecarloStrat_adults_ci$lims["0.025","bca"], 
-#                                         CI_upper = box_montecarloStrat_adults_ci$lims["0.975","bca"]
-#                                       )
+```{r splithalfr_hedge_adults_permutated}
+# permutated splitting (random sampling without replacement)
+splitscores_hedge_permutated_adults <- by_split(
+  hedge_intCon_data %>% filter(sample == "adults"),
+  hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_hedge,
+  replications = 5000,
+  method = c("random"),
+  ncores = 7, # setting ncores equally to something less than detectCores()
+)
+
+hedge_permutated_adults <- split_coefs(splitscores_hedge_permutated_adults, cor)
+
+splitscores_hedge_permutated_adults_uniq_reps <- unique(splitscores_hedge_permutated_adults$replication)
+
+splitscores_hedge_permutated_adults_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_hedge_permutated_adults, replication==r), cor))
+}
+
+hedge_permutated_adults_ci <- mclapply(splitscores_hedge_permutated_adults_uniq_reps, splitscores_hedge_permutated_adults_parallel_split_ci, mc.cores=48)
+
+hedge_permutated_adults_tbl <- tibble(
+  studyversion = "hedge",
+  sample = "adults",
+  split = "permutated",
+  stratification = "none",
+  mean = hedge_permutated_adults)
+
+hedge_permutated_adults_tbl$CI_lower = numeric(nrow(hedge_permutated_adults_tbl))
+hedge_permutated_adults_tbl$CI_upper = numeric(nrow(hedge_permutated_adults_tbl))
+
+for(i in 1:nrow(hedge_permutated_adults_tbl)) {
+  hedge_permutated_adults_tbl$CI_lower[i] <- hedge_permutated_adults_ci[[i]]$lims["0.025","bca"]
+  hedge_permutated_adults_tbl$CI_upper[i] <- hedge_permutated_adults_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "hedge",
+                                        method = "permutated",
+                                        stratification = "none",
+                                        coefficient = mean(hedge_permutated_adults_tbl$mean),
+                                        CI_lower = mean(hedge_permutated_adults_tbl$CI_lower),
+                                        CI_upper = mean(hedge_permutated_adults_tbl$CI_upper),
+                                      )
 ```
 
+```{r splithalfr_hedge_adults_permutated_stratified}
+# permutated splitting stratified by target position
+splitscores_hedge_permutatedStrat_adults <- by_split(
+  hedge_intCon_data %>% filter(sample == "adults"),
+  hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_hedge,
+  replications = 5000,
+  method = c("random"),
+  ncores = 7, # setting ncores equally to something less than detectCores()
+  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+)
+
+hedge_permutatedStrat_adults <- split_coefs(splitscores_hedge_permutatedStrat_adults, cor)
+
+splitscores_hedge_permutatedStrat_adults_uniq_reps <- unique(splitscores_hedge_permutatedStrat_adults$replication)
+
+splitscores_hedge_permutatedStrat_adults_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_hedge_permutatedStrat_adults, replication==r), cor))
+}
+
+hedge_permutatedStrat_adults_ci <- mclapply(splitscores_hedge_permutatedStrat_adults_uniq_reps, splitscores_hedge_permutatedStrat_adults_parallel_split_ci, mc.cores=48)
+
+hedge_permutatedStrat_adults_tbl <- tibble(
+  studyversion = "hedge",
+  sample = "adults",
+  split = "random",
+  stratification = "target position",
+  mean = hedge_permutatedStrat_adults)
+
+hedge_permutatedStrat_adults_tbl$CI_lower = numeric(nrow(hedge_permutatedStrat_adults_tbl))
+hedge_permutatedStrat_adults_tbl$CI_upper = numeric(nrow(hedge_permutatedStrat_adults_tbl))
+
+for(i in 1:nrow(hedge_permutatedStrat_adults_tbl)) {
+  hedge_permutatedStrat_adults_tbl$CI_lower[i] <- hedge_permutatedStrat_adults_ci[[i]]$lims["0.025","bca"]
+  hedge_permutatedStrat_adults_tbl$CI_upper[i] <- hedge_permutatedStrat_adults_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "hedge",
+                                        method = "permutated",
+                                        stratification = "target position",
+                                        coefficient = mean(hedge_permutatedStrat_adults_tbl$mean),
+                                        CI_lower = mean(hedge_permutatedStrat_adults_tbl$CI_lower),
+                                        CI_upper = mean(hedge_permutatedStrat_adults_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_hedge_adults_montecarlo}
+# monte carlo (sampling with replacement)
+splitscores_hedge_montecarlo_adults <- by_split(
+  hedge_intCon_data %>% filter(sample == "adults"),
+  hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_hedge,
+  replications = 5000,
+  method = c("random"),
+  replace = TRUE,
+  split_p = 1,
+  ncores = 7, # setting ncores equally to something less than detectCores()
+)
+
+hedge_montecarlo_adults <- split_coefs(splitscores_hedge_montecarlo_adults, cor)
+
+splitscores_hedge_montecarlo_adults_uniq_reps <- unique(splitscores_hedge_montecarlo_adults$replication)
+
+splitscores_hedge_montecarlo_adults_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_hedge_montecarlo_adults, replication==r), cor))
+}
+
+hedge_montecarlo_adults_ci <- mclapply(splitscores_hedge_montecarlo_adults_uniq_reps, splitscores_hedge_montecarlo_adults_parallel_split_ci, mc.cores=48)
+
+hedge_montecarlo_adults_tbl <- tibble(
+  studyversion = "hedge",
+  sample = "adults",
+  split = "Monte Carlo",
+  stratification = "none",
+  mean = hedge_montecarlo_adults)
+
+hedge_montecarlo_adults_tbl$CI_lower = numeric(nrow(hedge_montecarlo_adults_tbl))
+hedge_montecarlo_adults_tbl$CI_upper = numeric(nrow(hedge_montecarlo_adults_tbl))
+
+for(i in 1:nrow(hedge_montecarlo_adults_tbl)) {
+  hedge_montecarlo_adults_tbl$CI_lower[i] <- hedge_montecarlo_adults_ci[[i]]$lims["0.025","bca"]
+  hedge_montecarlo_adults_tbl$CI_upper[i] <- hedge_montecarlo_adults_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "hedge",
+                                        method = "Monte Carlo",
+                                        stratification = "none",
+                                        coefficient = mean(hedge_montecarlo_adults_tbl$mean),
+                                        CI_lower = mean(hedge_montecarlo_adults_tbl$CI_lower),
+                                        CI_upper = mean(hedge_montecarlo_adults_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_hedge_adults_montecarlo_stratified}
+# monte carlo stratified by target position
+splitscores_hedge_montecarloStrat_adults <- by_split(
+  hedge_intCon_data %>% filter(sample == "adults"),
+  hedge_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_hedge,
+  replications = 5000,
+  method = c("random"),
+  replace = TRUE,
+  split_p = 1,
+  ncores = 7, # setting ncores equally to something less than detectCores()
+  stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+)
+
+hedge_montecarloStrat_adults <- split_coefs(splitscores_hedge_montecarloStrat_adults, cor)
+
+splitscores_hedge_montecarloStrat_adults_uniq_reps <- unique(splitscores_hedge_montecarloStrat_adults$replication)
+
+splitscores_hedge_montecarloStrat_adults_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_hedge_montecarloStrat_adults, replication==r), cor))
+}
+
+hedge_montecarloStrat_adults_ci <- mclapply(splitscores_hedge_montecarloStrat_adults_uniq_reps, splitscores_hedge_montecarloStrat_adults_parallel_split_ci, mc.cores=48)
+
+hedge_montecarloStrat_adults_tbl <- tibble(
+  studyversion = "hedge",
+  sample = "adults",
+  split = "Monte Carlo",
+  stratification = "target position",
+  mean = hedge_montecarloStrat_adults)
+
+hedge_montecarloStrat_adults_tbl$CI_lower = numeric(nrow(hedge_montecarloStrat_adults_tbl))
+hedge_montecarloStrat_adults_tbl$CI_upper = numeric(nrow(hedge_montecarloStrat_adults_tbl))
+
+for(i in 1:nrow(hedge_montecarloStrat_adults_tbl)) {
+  hedge_montecarloStrat_adults_tbl$CI_lower[i] <- hedge_montecarloStrat_adults_ci[[i]]$lims["0.025","bca"]
+  hedge_montecarloStrat_adults_tbl$CI_upper[i] <- hedge_montecarloStrat_adults_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "hedge",
+                                        method = "Monte Carlo",
+                                        stratification = "target position",
+                                        coefficient = mean(hedge_montecarloStrat_adults_tbl$mean),
+                                        CI_lower = mean(hedge_montecarloStrat_adults_tbl$CI_lower),
+                                        CI_upper = mean(hedge_montecarloStrat_adults_tbl$CI_upper),
+                                      )
+```
+
+
+## Splithalf Reliability - Box Kids
+
+```{r splithalfr_box_kids_firstsecond}
+fn_score_box <- function(ds) {
+  return(mean(ds$correctBox, na.rm = TRUE))
+}
+
+box_intCon_data <- reli %>%
+  filter(studyversion == "box" & reliday == "reliday1")
+
+# first-second half split
+splitscores_box_firstsecond_kids <- by_split(
+  box_intCon_data %>% filter(sample == "kids"),
+  box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_box,
+  method = c("first_second"),
+  ncores = 1,
+  verbose = F
+)
+
+box_firstsecond_kids <- split_coefs(splitscores_box_firstsecond_kids, cor)
+box_firstsecond_kids_ci <- split_ci(splitscores_box_firstsecond_kids, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "box",
+                                        method = "first-second",
+                                        stratification = "none",
+                                        coefficient = box_firstsecond_kids,
+                                        CI_lower = box_firstsecond_kids_ci$lims["0.025","bca"],
+                                        CI_upper = box_firstsecond_kids_ci$lims["0.975","bca"]
+                                      )
+
+# first-second half stratified by target position
+splitscores_box_firstsecondStrat_kids <- by_split(
+  box_intCon_data %>% filter(sample == "kids"),
+  box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_box,
+  method = c("first_second"),
+  ncores = 1,
+  verbose = F,
+  stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+)
+
+box_firstsecondStrat_kids <- split_coefs(splitscores_box_firstsecondStrat_kids, cor)
+box_firstsecondStrat_kids_ci <- split_ci(splitscores_box_firstsecondStrat_kids, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "box",
+                                        method = "first-second",
+                                        stratification = "target position",
+                                        coefficient = box_firstsecondStrat_kids,
+                                        CI_lower = box_firstsecondStrat_kids_ci$lims["0.025","bca"],
+                                        CI_upper = box_firstsecondStrat_kids_ci$lims["0.975","bca"]
+                                      )
+```
+
+```{r splithalfr_box_kids_oddeven}
+# odd-even split
+splitscores_box_oddeven_kids <- by_split(
+  box_intCon_data %>% filter(sample == "kids"),
+  box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_box,
+  method = c("odd_even"),
+  ncores = 1,
+  verbose = F
+)
+
+box_oddeven_kids <- split_coefs(splitscores_box_oddeven_kids, cor)
+box_oddeven_kids_ci <- split_ci(splitscores_box_oddeven_kids, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "box",
+                                        method = "odd-even",
+                                        stratification = "none",
+                                        coefficient = box_oddeven_kids,
+                                        CI_lower = box_oddeven_kids_ci$lims["0.025","bca"],
+                                        CI_upper = box_oddeven_kids_ci$lims["0.975","bca"]
+                                      )
+
+# odd-even split stratified by target position
+splitscores_box_oddevenStrat_kids <- by_split(
+  box_intCon_data %>% filter(sample == "kids"),
+  box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_box,
+  method = c("odd_even"),
+  ncores = 1,
+  verbose = F,
+  stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+)
+
+box_oddevenStrat_kids <- split_coefs(splitscores_box_oddevenStrat_kids, cor)
+box_oddevenStrat_kids_ci <- split_ci(splitscores_box_oddevenStrat_kids, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "box",
+                                        method = "odd-even",
+                                        stratification = "target position",
+                                        coefficient = box_oddevenStrat_kids,
+                                        CI_lower = box_oddevenStrat_kids_ci$lims["0.025","bca"],
+                                        CI_upper = box_oddevenStrat_kids_ci$lims["0.975","bca"]
+                                      )
+```
+
+```{r splithalfr_box_kids_permutated}
+# permutated splitting (random sampling without replacement)
+splitscores_box_permutated_kids <- by_split(
+  box_intCon_data %>% filter(sample == "kids"),
+  box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_box,
+  replications = 5000,
+  method = c("random"),
+  ncores = 7, # setting ncores equally to something less than detectCores()
+)
+
+box_permutated_kids <- split_coefs(splitscores_box_permutated_kids, cor)
+
+splitscores_box_permutated_kids_uniq_reps <- unique(splitscores_box_permutated_kids$replication)
+
+splitscores_box_permutated_kids_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_box_permutated_kids, replication==r), cor))
+}
+
+box_permutated_kids_ci <- mclapply(splitscores_box_permutated_kids_uniq_reps, splitscores_box_permutated_kids_parallel_split_ci, mc.cores=48)
+
+box_permutated_kids_tbl <- tibble(
+  studyversion = "box",
+  sample = "kids",
+  split = "permutated",
+  stratification = "none",
+  mean = box_permutated_kids)
+
+box_permutated_kids_tbl$CI_lower = numeric(nrow(box_permutated_kids_tbl))
+box_permutated_kids_tbl$CI_upper = numeric(nrow(box_permutated_kids_tbl))
+
+for(i in 1:nrow(box_permutated_kids_tbl)) {
+  box_permutated_kids_tbl$CI_lower[i] <- box_permutated_kids_ci[[i]]$lims["0.025","bca"]
+  box_permutated_kids_tbl$CI_upper[i] <- box_permutated_kids_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "box",
+                                        method = "permutated",
+                                        stratification = "none",
+                                        coefficient = mean(box_permutated_kids_tbl$mean),
+                                        CI_lower = mean(box_permutated_kids_tbl$CI_lower),
+                                        CI_upper = mean(box_permutated_kids_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_box_kids_permutated_stratified}
+# permutated splitting stratified by target position
+splitscores_box_permutatedStrat_kids <- by_split(
+  box_intCon_data %>% filter(sample == "kids"),
+  box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_box,
+  replications = 5000,
+  method = c("random"),
+  ncores = 7, # setting ncores equally to something less than detectCores()
+  stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+)
+
+box_permutatedStrat_kids <- split_coefs(splitscores_box_permutatedStrat_kids, cor)
+
+splitscores_box_permutatedStrat_kids_uniq_reps <- unique(splitscores_box_permutatedStrat_kids$replication)
+
+splitscores_box_permutatedStrat_kids_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_box_permutatedStrat_kids, replication==r), cor))
+}
+
+box_permutatedStrat_kids_ci <- mclapply(splitscores_box_permutatedStrat_kids_uniq_reps, splitscores_box_permutatedStrat_kids_parallel_split_ci, mc.cores=48)
+
+box_permutatedStrat_kids_tbl <- tibble(
+  studyversion = "box",
+  sample = "kids",
+  split = "random",
+  stratification = "target position",
+  mean = box_permutatedStrat_kids)
+
+box_permutatedStrat_kids_tbl$CI_lower = numeric(nrow(box_permutatedStrat_kids_tbl))
+box_permutatedStrat_kids_tbl$CI_upper = numeric(nrow(box_permutatedStrat_kids_tbl))
+
+for(i in 1:nrow(box_permutatedStrat_kids_tbl)) {
+  box_permutatedStrat_kids_tbl$CI_lower[i] <- box_permutatedStrat_kids_ci[[i]]$lims["0.025","bca"]
+  box_permutatedStrat_kids_tbl$CI_upper[i] <- box_permutatedStrat_kids_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "box",
+                                        method = "permutated",
+                                        stratification = "target position",
+                                        coefficient = mean(box_permutatedStrat_kids_tbl$mean),
+                                        CI_lower = mean(box_permutatedStrat_kids_tbl$CI_lower),
+                                        CI_upper = mean(box_permutatedStrat_kids_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_box_kids_montecarlo}
+# monte carlo (sampling with replacement)
+splitscores_box_montecarlo_kids <- by_split(
+  box_intCon_data %>% filter(sample == "kids"),
+  box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_box,
+  replications = 5000,
+  method = c("random"),
+  replace = TRUE,
+  split_p = 1,
+  ncores = 7, # setting ncores equally to something less than detectCores()
+)
+
+box_montecarlo_kids <- split_coefs(splitscores_box_montecarlo_kids, cor)
+
+splitscores_box_montecarlo_kids_uniq_reps <- unique(splitscores_box_montecarlo_kids$replication)
+
+splitscores_box_montecarlo_kids_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_box_montecarlo_kids, replication==r), cor))
+}
+
+box_montecarlo_kids_ci <- mclapply(splitscores_box_montecarlo_kids_uniq_reps, splitscores_box_montecarlo_kids_parallel_split_ci, mc.cores=48)
+
+box_montecarlo_kids_tbl <- tibble(
+  studyversion = "box",
+  sample = "kids",
+  split = "Monte Carlo",
+  stratification = "none",
+  mean = box_montecarlo_kids)
+
+box_montecarlo_kids_tbl$CI_lower = numeric(nrow(box_montecarlo_kids_tbl))
+box_montecarlo_kids_tbl$CI_upper = numeric(nrow(box_montecarlo_kids_tbl))
+
+for(i in 1:nrow(box_montecarlo_kids_tbl)) {
+  box_montecarlo_kids_tbl$CI_lower[i] <- box_montecarlo_kids_ci[[i]]$lims["0.025","bca"]
+  box_montecarlo_kids_tbl$CI_upper[i] <- box_montecarlo_kids_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "box",
+                                        method = "Monte Carlo",
+                                        stratification = "none",
+                                        coefficient = mean(box_montecarlo_kids_tbl$mean),
+                                        CI_lower = mean(box_montecarlo_kids_tbl$CI_lower),
+                                        CI_upper = mean(box_montecarlo_kids_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_box_kids_montecarlo_stratified}
+# monte carlo stratified by target position
+splitscores_box_montecarloStrat_kids <- by_split(
+  box_intCon_data %>% filter(sample == "kids"),
+  box_intCon_data %>% filter(sample == "kids") %>% pull(subjID),
+  fn_score_box,
+  replications = 5000,
+  method = c("random"),
+  replace = TRUE,
+  split_p = 1,
+  ncores = 7, # setting ncores equally to something less than detectCores()
+  stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
+)
+
+box_montecarloStrat_kids <- split_coefs(splitscores_box_montecarloStrat_kids, cor)
+
+splitscores_box_montecarloStrat_kids_uniq_reps <- unique(splitscores_box_montecarloStrat_kids$replication)
+
+splitscores_box_montecarloStrat_kids_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_box_montecarloStrat_kids, replication==r), cor))
+}
+
+box_montecarloStrat_kids_ci <- mclapply(splitscores_box_montecarloStrat_kids_uniq_reps, splitscores_box_montecarloStrat_kids_parallel_split_ci, mc.cores=48)
+
+box_montecarloStrat_kids_tbl <- tibble(
+  studyversion = "box",
+  sample = "kids",
+  split = "Monte Carlo",
+  stratification = "target position",
+  mean = box_montecarloStrat_kids)
+
+box_montecarloStrat_kids_tbl$CI_lower = numeric(nrow(box_montecarloStrat_kids_tbl))
+box_montecarloStrat_kids_tbl$CI_upper = numeric(nrow(box_montecarloStrat_kids_tbl))
+
+for(i in 1:nrow(box_montecarloStrat_kids_tbl)) {
+  box_montecarloStrat_kids_tbl$CI_lower[i] <- box_montecarloStrat_kids_ci[[i]]$lims["0.025","bca"]
+  box_montecarloStrat_kids_tbl$CI_upper[i] <- box_montecarloStrat_kids_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "kids",
+                                        studyversion = "box",
+                                        method = "Monte Carlo",
+                                        stratification = "target position",
+                                        coefficient = mean(box_montecarloStrat_kids_tbl$mean),
+                                        CI_lower = mean(box_montecarloStrat_kids_tbl$CI_lower),
+                                        CI_upper = mean(box_montecarloStrat_kids_tbl$CI_upper),
+                                      )
+```
+
+## Splithalf Reliability - Box Adults
+
+```{r splithalfr_box_adults_firstsecond}
+# first-second half split
+splitscores_box_firstsecond_adults <- by_split(
+  box_intCon_data %>% filter(sample == "adults"),
+  box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_box,
+  method = c("first_second"),
+  ncores = 1,
+  verbose = F
+)
+
+box_firstsecond_adults <- split_coefs(splitscores_box_firstsecond_adults, cor)
+box_firstsecond_adults_ci <- split_ci(splitscores_box_firstsecond_adults, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "box",
+                                        method = "first-second",
+                                        stratification = "none",
+                                        coefficient = box_firstsecond_adults,
+                                        CI_lower = box_firstsecond_adults_ci$lims["0.025","bca"],
+                                        CI_upper = box_firstsecond_adults_ci$lims["0.975","bca"]
+                                      )
+
+# first-second half stratified by target position
+splitscores_box_firstsecondStrat_adults <- by_split(
+  box_intCon_data %>% filter(sample == "adults"),
+  box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_box,
+  method = c("first_second"),
+  ncores = 1,
+  verbose = F,
+  stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+)
+
+box_firstsecondStrat_adults <- split_coefs(splitscores_box_firstsecondStrat_adults, cor)
+box_firstsecondStrat_adults_ci <- split_ci(splitscores_box_firstsecondStrat_adults, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "box",
+                                        method = "first-second",
+                                        stratification = "target position",
+                                        coefficient = box_firstsecondStrat_adults,
+                                        CI_lower = box_firstsecondStrat_adults_ci$lims["0.025","bca"],
+                                        CI_upper = box_firstsecondStrat_adults_ci$lims["0.975","bca"]
+                                      )
+```
+
+```{r splithalfr_box_adults_oddeven}
+# odd-even split
+splitscores_box_oddeven_adults <- by_split(
+  box_intCon_data %>% filter(sample == "adults"),
+  box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_box,
+  method = c("odd_even"),
+  ncores = 1,
+  verbose = F
+)
+
+box_oddeven_adults <- split_coefs(splitscores_box_oddeven_adults, cor)
+box_oddeven_adults_ci <- split_ci(splitscores_box_oddeven_adults, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "box",
+                                        method = "odd-even",
+                                        stratification = "none",
+                                        coefficient = box_oddeven_adults,
+                                        CI_lower = box_oddeven_adults_ci$lims["0.025","bca"],
+                                        CI_upper = box_oddeven_adults_ci$lims["0.975","bca"]
+                                      )
+
+# odd-even split stratified by target position
+splitscores_box_oddevenStrat_adults <- by_split(
+  box_intCon_data %>% filter(sample == "adults"),
+  box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_box,
+  method = c("odd_even"),
+  ncores = 1,
+  verbose = F,
+  stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+)
+
+box_oddevenStrat_adults <- split_coefs(splitscores_box_oddevenStrat_adults, cor)
+box_oddevenStrat_adults_ci <- split_ci(splitscores_box_oddevenStrat_adults, cor)
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "box",
+                                        method = "odd-even",
+                                        stratification = "target position",
+                                        coefficient = box_oddevenStrat_adults,
+                                        CI_lower = box_oddevenStrat_adults_ci$lims["0.025","bca"],
+                                        CI_upper = box_oddevenStrat_adults_ci$lims["0.975","bca"]
+                                      )
+```
+
+```{r splithalfr_box_adults_permutated}
+# permutated splitting (random sampling without replacement)
+splitscores_box_permutated_adults <- by_split(
+  box_intCon_data %>% filter(sample == "adults"),
+  box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_box,
+  replications = 5000,
+  method = c("random"),
+  ncores = 7, # setting ncores equally to something less than detectCores()
+)
+
+box_permutated_adults <- split_coefs(splitscores_box_permutated_adults, cor)
+
+splitscores_box_permutated_adults_uniq_reps <- unique(splitscores_box_permutated_adults$replication)
+
+splitscores_box_permutated_adults_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_box_permutated_adults, replication==r), cor))
+}
+
+box_permutated_adults_ci <- mclapply(splitscores_box_permutated_adults_uniq_reps, splitscores_box_permutated_adults_parallel_split_ci, mc.cores=48)
+
+box_permutated_adults_tbl <- tibble(
+  studyversion = "box",
+  sample = "adults",
+  split = "permutated",
+  stratification = "none",
+  mean = box_permutated_adults)
+
+box_permutated_adults_tbl$CI_lower = numeric(nrow(box_permutated_adults_tbl))
+box_permutated_adults_tbl$CI_upper = numeric(nrow(box_permutated_adults_tbl))
+
+for(i in 1:nrow(box_permutated_adults_tbl)) {
+  box_permutated_adults_tbl$CI_lower[i] <- box_permutated_adults_ci[[i]]$lims["0.025","bca"]
+  box_permutated_adults_tbl$CI_upper[i] <- box_permutated_adults_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "box",
+                                        method = "permutated",
+                                        stratification = "none",
+                                        coefficient = mean(box_permutated_adults_tbl$mean),
+                                        CI_lower = mean(box_permutated_adults_tbl$CI_lower),
+                                        CI_upper = mean(box_permutated_adults_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_box_adults_permutated_stratified}
+# permutated splitting stratified by target position
+splitscores_box_permutatedStrat_adults <- by_split(
+  box_intCon_data %>% filter(sample == "adults"),
+  box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_box,
+  replications = 5000,
+  method = c("random"),
+  ncores = 7, # setting ncores equally to something less than detectCores()
+  stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+)
+
+box_permutatedStrat_adults <- split_coefs(splitscores_box_permutatedStrat_adults, cor)
+
+splitscores_box_permutatedStrat_adults_uniq_reps <- unique(splitscores_box_permutatedStrat_adults$replication)
+
+splitscores_box_permutatedStrat_adults_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_box_permutatedStrat_adults, replication==r), cor))
+}
+
+box_permutatedStrat_adults_ci <- mclapply(splitscores_box_permutatedStrat_adults_uniq_reps, splitscores_box_permutatedStrat_adults_parallel_split_ci, mc.cores=48)
+
+box_permutatedStrat_adults_tbl <- tibble(
+  studyversion = "box",
+  sample = "adults",
+  split = "random",
+  stratification = "target position",
+  mean = box_permutatedStrat_adults)
+
+box_permutatedStrat_adults_tbl$CI_lower = numeric(nrow(box_permutatedStrat_adults_tbl))
+box_permutatedStrat_adults_tbl$CI_upper = numeric(nrow(box_permutatedStrat_adults_tbl))
+
+for(i in 1:nrow(box_permutatedStrat_adults_tbl)) {
+  box_permutatedStrat_adults_tbl$CI_lower[i] <- box_permutatedStrat_adults_ci[[i]]$lims["0.025","bca"]
+  box_permutatedStrat_adults_tbl$CI_upper[i] <- box_permutatedStrat_adults_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "box",
+                                        method = "permutated",
+                                        stratification = "target position",
+                                        coefficient = mean(box_permutatedStrat_adults_tbl$mean),
+                                        CI_lower = mean(box_permutatedStrat_adults_tbl$CI_lower),
+                                        CI_upper = mean(box_permutatedStrat_adults_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_box_adults_montecarlo}
+# monte carlo (sampling with replacement)
+splitscores_box_montecarlo_adults <- by_split(
+  box_intCon_data %>% filter(sample == "adults"),
+  box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_box,
+  replications = 5000,
+  method = c("random"),
+  replace = TRUE,
+  split_p = 1,
+  ncores = 7, # setting ncores equally to something less than detectCores()
+)
+
+box_montecarlo_adults <- split_coefs(splitscores_box_montecarlo_adults, cor)
+
+splitscores_box_montecarlo_adults_uniq_reps <- unique(splitscores_box_montecarlo_adults$replication)
+
+splitscores_box_montecarlo_adults_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_box_montecarlo_adults, replication==r), cor))
+}
+
+box_montecarlo_adults_ci <- mclapply(splitscores_box_montecarlo_adults_uniq_reps, splitscores_box_montecarlo_adults_parallel_split_ci, mc.cores=48)
+
+box_montecarlo_adults_tbl <- tibble(
+  studyversion = "box",
+  sample = "adults",
+  split = "Monte Carlo",
+  stratification = "none",
+  mean = box_montecarlo_adults)
+
+box_montecarlo_adults_tbl$CI_lower = numeric(nrow(box_montecarlo_adults_tbl))
+box_montecarlo_adults_tbl$CI_upper = numeric(nrow(box_montecarlo_adults_tbl))
+
+for(i in 1:nrow(box_montecarlo_adults_tbl)) {
+  box_montecarlo_adults_tbl$CI_lower[i] <- box_montecarlo_adults_ci[[i]]$lims["0.025","bca"]
+  box_montecarlo_adults_tbl$CI_upper[i] <- box_montecarlo_adults_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "box",
+                                        method = "Monte Carlo",
+                                        stratification = "none",
+                                        coefficient = mean(box_montecarlo_adults_tbl$mean),
+                                        CI_lower = mean(box_montecarlo_adults_tbl$CI_lower),
+                                        CI_upper = mean(box_montecarlo_adults_tbl$CI_upper),
+                                      )
+```
+
+```{r splithalfr_box_adults_montecarlo_stratified}
+# monte carlo stratified by target position
+splitscores_box_montecarloStrat_adults <- by_split(
+  box_intCon_data %>% filter(sample == "adults"),
+  box_intCon_data %>% filter(sample == "adults") %>% pull(subjID),
+  fn_score_box,
+  replications = 5000,
+  method = c("random"),
+  replace = TRUE,
+  split_p = 1,
+  ncores = 7, # setting ncores equally to something less than detectCores()
+  stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
+)
+
+box_montecarloStrat_adults <- split_coefs(splitscores_box_montecarloStrat_adults, cor)
+
+splitscores_box_montecarloStrat_adults_uniq_reps <- unique(splitscores_box_montecarloStrat_adults$replication)
+
+splitscores_box_montecarloStrat_adults_parallel_split_ci <- function(r) {
+        return(split_ci(filter(splitscores_box_montecarloStrat_adults, replication==r), cor))
+}
+
+box_montecarloStrat_adults_ci <- mclapply(splitscores_box_montecarloStrat_adults_uniq_reps, splitscores_box_montecarloStrat_adults_parallel_split_ci, mc.cores=48)
+
+box_montecarloStrat_adults_tbl <- tibble(
+  studyversion = "box",
+  sample = "adults",
+  split = "Monte Carlo",
+  stratification = "target position",
+  mean = box_montecarloStrat_adults)
+
+box_montecarloStrat_adults_tbl$CI_lower = numeric(nrow(box_montecarloStrat_adults_tbl))
+box_montecarloStrat_adults_tbl$CI_upper = numeric(nrow(box_montecarloStrat_adults_tbl))
+
+for(i in 1:nrow(box_montecarloStrat_adults_tbl)) {
+  box_montecarloStrat_adults_tbl$CI_lower[i] <- box_montecarloStrat_adults_ci[[i]]$lims["0.025","bca"]
+  box_montecarloStrat_adults_tbl$CI_upper[i] <- box_montecarloStrat_adults_ci[[i]]$lims["0.975","bca"]
+}
+
+splithalf_data <- splithalf_data %>% add_row(
+                                        sample = "adults",
+                                        studyversion = "box",
+                                        method = "Monte Carlo",
+                                        stratification = "target position",
+                                        coefficient = mean(box_montecarloStrat_adults_tbl$mean),
+                                        CI_lower = mean(box_montecarloStrat_adults_tbl$CI_lower),
+                                        CI_upper = mean(box_montecarloStrat_adults_tbl$CI_upper),
+                                      )
+```
+
+## Splithalf Reliability Table & Plot
 ```{r splithalf_plot}
-# splithalf_data %>% 
-#   mutate(
-#     sample = fct_rev(sample), 
-#   ) %>%
-#   unite("samplegroup", c(studyversion, sample), sep = " - ", remove = FALSE) %>% 
-#   mutate(samplegroup = fct_rev(samplegroup)) %>%
-#   unite("methodStrat", c(method, stratification), sep = " - ", remove = FALSE) %>% 
-#   mutate(
-#     methodStrat = factor(methodStrat, levels = c("first-second - none", "first-second - target position", "odd-even - none", "odd-even - target position", "permutated - none", "permutated - target position", "Monte Carlo - none", "Monte Carlo - target position")) %>% fct_rev(), 
-#   ) %>%  
-#   ggplot(aes(x = methodStrat, y = coefficient, color = sample, group = studyversion)) + 
-#     geom_errorbar(aes(ymin = CI_lower, ymax = CI_upper), colour = "black", width = .1, position = position_dodge(0.1)) +
-#     geom_point(position = position_dodge(0.1), size = 3) +
-#     scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
-#     scale_color_manual(values = c("#006c66", "darkgrey"), guide = "none") +
-#     labs(x = "Splitting & stratification method", y = "") +
-#     coord_flip() + 
-#     facet_wrap(~ samplegroup, nrow = 1) + 
-#     theme(legend.position = "none", panel.spacing = unit(1.5, "lines"))
-# 
+splithalf_plot <- splithalf_data %>%
+  mutate(
+    sample = fct_rev(sample),
+  ) %>%
+  unite("samplegroup", c(studyversion, sample), sep = " - ", remove = FALSE) %>%
+  mutate(samplegroup = fct_rev(samplegroup)) %>%
+  unite("methodStrat", c(method, stratification), sep = " - ", remove = FALSE) %>%
+  mutate(
+    methodStrat = factor(methodStrat, levels = c("first-second - none", "first-second - target position", "odd-even - none", "odd-even - target position", "permutated - none", "permutated - target position", "Monte Carlo - none", "Monte Carlo - target position")) %>% fct_rev(),
+  ) %>%
+  ggplot(aes(x = methodStrat, y = coefficient, color = sample, group = studyversion)) +
+    geom_errorbar(aes(ymin = CI_lower, ymax = CI_upper), colour = "black", width = .1, position = position_dodge(0.1)) +
+    geom_point(position = position_dodge(0.1), size = 3) +
+    scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+    scale_color_manual(values = c("#006c66", "darkgrey"), guide = "none") +
+    labs(x = "Splitting & stratification method", y = "") +
+    coord_flip() +
+    facet_wrap(~ samplegroup, nrow = 1) +
+    theme(legend.position = "none", panel.spacing = unit(1.5, "lines"))
+
+splithalf_plot
+saveRDS(splithalf_plot, file = "../saves/gafo-splithalf-plot.rds")
 # ggsave("../figures/gafo_splithalf.png", width = 8, height = 2.5, scale = 1.2)
 ```
 
 ```{r splithalf_table}
-# knitr::kable(splithalf_data)
+knitr::kable(splithalf_data)
 ```
 
 ```{r save_splithalf_data}
-# write.csv(splithalf_data, "../saves/gafo-splithalf.csv", quote = F, row.names = F)
-# saveRDS(splithalf_data, file = "../saves/gafo-splithalf.rds")
+write.csv(splithalf_data, "../saves/gafo-splithalf.csv", quote = F, row.names = F)
+saveRDS(splithalf_data, file = "../saves/gafo-splithalf-table.rds")
 ```
 
 ## Test-retest reliability 
