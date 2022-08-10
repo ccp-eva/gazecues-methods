@@ -54,9 +54,9 @@ header-includes:
 
 ```{r setup, include = FALSE}
 library("papaja")
-library(ggplot2)
+library("ggplot2")
+library("ggpubr")
 theme_set(theme_classic())
-# r_refs("r-references.bib")
 ```
 
 ```{r analysis-preferences}
@@ -259,7 +259,7 @@ range = `r sum(vali_kids$minAgeInMonths[vali_kids$datacollection == "remote - un
 - `r sum(vali_kids$maxAgeInMonths[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])`, 
 `r sum(vali_kids$nFemales[vali_kids$datacollection == "remote - unsupervised" & vali_kids$ageInYears == "5"])` girls). Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education. 
 
-Adults were recruited via *Prolific* [@palan2018prolific]. *Prolific* is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of `r vali_adults$nTotal` English-speakers with an average age of `r vali_adults$meanAge` years (SD = `r vali_adults$sdAge`, range = `r vali_adults$minAge` - `r vali_adults$maxAge`, `r vali_adults$nFemales` females). 
+Adults were recruited via *Prolific* [@palan2018prolific]. *Prolific* is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of `r sum(vali_adults$nTotal)` English-speakers with an average age of `r vali_adults$meanAge` years (SD = `r vali_adults$sdAge`, range = `r vali_adults$minAge` - `r vali_adults$maxAge`, `r vali_adults$nFemales` females). 
 For completing the study, subjects were payed above the fixed minimum wage (in average £10.00 per hour).
 
 ## Procedure
@@ -286,11 +286,7 @@ Large points with 95% CI (based on non-parametric bootstrap) represent performan
 Small points show the mean performance for each subject. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds  for remote unsupervised data collection. Color of data points denotes age group.
 
 ```{r fig2, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
-hedge_variation_plot_GLMM <- readRDS(file = "../saves/gafo-hedge-variation-plot-GLMM.rds")
-box_variation_plot_GLMM <- readRDS(file = "../saves/gafo-box-variation-plot-GLMM.rds")
-box_variation_plot_GLMM
-
-knitr::include_graphics(c("../figures/gafo_results.png"))
+knitr::include_graphics(c("../figures/gafo_arrangedplot.png"))
 ``` 
 
 ```{r agemodels}
@@ -388,7 +384,7 @@ Second, we assessed the test-retest reliability. We calculated performance score
 
 ## Results
 ```{r splithalf}
-splithalf <- readRDS(file = "../saves/gafo-splithalf.rds")
+splithalf <- readRDS(file = "../saves/gafo-splithalf-table.rds")
 ```
 
 We found that our gaze understanding task induced systematic variation: splithalf and test-retest reliability was high for most samples. For the internal consistency, we show traditional odd-even splits on our data and the corresponding *Pearson* correlation coefficients in Figure \@ref(fig:fig2)B, C, G and H. Figure \@ref(fig:fig3) compares splithalf reliability coefficients by splitting and stratification method [@pronk2021methods].
@@ -559,10 +555,10 @@ optional: please review the submission guidelines from the journal whether state
 # Supplements
 ## Child sample
 ### Webcam coding
-(ref:figlab5) **Model comparison for exploratory webcam coding of parental interference**. 
+(ref:figlab4) **Model comparison for exploratory webcam coding of parental interference**. 
 Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level.
 
-```{r fig5, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab5)"}
+```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
 knitr::include_graphics("../figures/supplements_webcamcoding_draws.png")
 ```
 

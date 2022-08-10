@@ -33,16 +33,6 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-  pdftitle={Measuring individual differences in the understanding of gaze cues across the lifespan},
-  pdfauthor={Julia Prein1, Manuel Bohn1, Steven Kalinke1, \& Daniel M. Haun1},
-  pdflang={en-EN},
-  pdfkeywords={social cognition, individual differences, gaze cues, psychometrics},
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
 \usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
@@ -185,6 +175,16 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Measuring individual differences in the understanding of gaze cues across the lifespan},
+  pdfauthor={Julia Prein1, Manuel Bohn1, Steven Kalinke1, \& Daniel M. Haun1},
+  pdflang={en-EN},
+  pdfkeywords={social cognition, individual differences, gaze cues, psychometrics},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
 
 \title{Measuring individual differences in the understanding of gaze cues across the lifespan}
 \author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1}, Steven Kalinke\textsuperscript{1}, \& Daniel M. Haun\textsuperscript{1}}
@@ -204,7 +204,7 @@ Correspondence concerning this article should be addressed to Julia Prein, Max P
 \abstract{%
 To explain and predict the behavior of agents, we use social cognition: we represent and reason about others' perspectives, knowledge, intentions, beliefs, and preferences. However, traditional measures of social cognition (e.g., false belief change-of-location tasks) often lack satisfactory psychometric properties: they are not designed to capture variation \emph{between} children and rely on low trial numbers, dichotomous measures, and group averages. This has profound implications for what these studies can show. Poor measurement of social cognition on an individual level may conceal relations between different aspects of cognition and may obscure developmental change. To fully understand how social-cognitive abilities emerge and relate to each other, we need new tools that can reliably measure individual differences.
 We designed a gaze understanding task to study social cognition in young children and adults to approach this issue. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze understanding -- the ability to locate and use the attentional focus of an agent. Our interactive task works across devices and enables supervised and unsupervised, as well as in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants' click imprecision and is easily adaptable to different study requirements.
-Here we show that our task induces inter-individual differences in a child (N = XXX) and an adult (N = XXX) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. Furthermore, we find first evidence for the external validity of our task: the measured performance in gaze understanding relates to children's real-life social surroundings. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
+Here we show that our task induces inter-individual differences in a child (N = XXX) and an adult (N = XXX) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
 }
 
 
@@ -273,7 +273,6 @@ First, we used a continuous measure which allowed us to capture fine grained ind
 Second, we designed short trials that facilitate more than a dozen replicates per subject.
 The result are more precise individual-level estimates.
 Third, we systematically investigated the psychometric properties of the new task.
-Finally, to validate the task, we studied how it relates to aspects of children's everyday experience.
 
 Designing this task required a new testing infrastructure.
 We designed the task as an interactive browser-based web app.
@@ -387,7 +386,7 @@ range = 60
 - 71,
 27 girls). Children in our sample grow up in an industrialized, urban Central-European context. Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
 
-Adults were recruited via \emph{Prolific} (Palan \& Schitter, 2018). \emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of 50 and 50 English-speakers with an average age of 31.92 and 30.76 years (SD = 12.15 and 9.12, range = 18 and 19 - 63 and 59, 36 and 28 females).
+Adults were recruited via \emph{Prolific} (Palan \& Schitter, 2018). \emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool. Participants consisted of 100 English-speakers with an average age of 31.92 and 30.76 years (SD = 12.15 and 9.12, range = 18 and 19 - 63 and 59, 36 and 28 females).
 For completing the study, subjects were payed above the fixed minimum wage (in average £10.00 per hour).
 
 \hypertarget{procedure}{%
@@ -421,7 +420,7 @@ For the hedge version, performance was defined as the absolute click distance be
 
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{../figures/gafo_results} 
+{\centering \includegraphics[width=1\linewidth]{../figures/gafo_arrangedplot} 
 
 }
 
@@ -441,7 +440,7 @@ As Figure \ref{fig:fig2}A and F show, our remotely collected child data resemble
 We found evidence that responses of children participating remotely were slightly more precise. This difference was mainly driven by the younger participants and especially prominent in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.\footnote{In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing. We focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = 16). We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample. Based on our model comparison, we conclude that there is no clear evidence of a stable effect of parental interference. See Supplements for further detail.}
 
 Our GLMM analysis corroborated the visual inspection of the data: in the hedge version, the estimates for age (\(\beta\) = -0.33; 95\% CI {[}-0.41; -0.24{]}) and data collection mode -0.32 (95\% CI {[}-0.50; -0.14{]}) were negative and reliably different from zero.
-In the box version, the estimate of age (\(\beta\) =0.63 (95\% CI {[}0.40; 0.88{]}) and the estimate of data collection mode (\(\beta\) = 1.11 (95\% CI {[}0.68; 1.56{]}) were positive and reliably different from zero. Note that even though confidence intervals from the data collection estimates were wide, the effect was positive and reliably different from zero in a way that our remote sample performed more accurately than our in-person sample.
+In the box version, the estimate of age (\(\beta\) =0.63 (95\% CI {[}0.40; 0.87{]}) and the estimate of data collection mode (\(\beta\) = 1.12 (95\% CI {[}0.68; 1.56{]}) were positive and reliably different from zero. Note that even though confidence intervals from the data collection estimates were wide, the effect was positive and reliably different from zero in a way that our remote sample performed more accurately than our in-person sample.
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
@@ -498,7 +497,7 @@ Second, we assessed the test-retest reliability. We calculated performance score
 \subsection{Results}\label{results-1}}
 
 We found that our gaze understanding task induced systematic variation: splithalf and test-retest reliability was high for most samples. For the internal consistency, we show traditional odd-even splits on our data and the corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}B, C, G and H. Figure \ref{fig:fig3} compares splithalf reliability coefficients by splitting and stratification method (Pronk et al., 2021).
-In the hedge version, the splithalf reliability coefficients ranged from 0.57 to 0.84. In the box version, splithalf reliability coefficients ranged from 0.49 to 0.76.
+In the hedge version, the splithalf reliability coefficients ranged from 0.65 to 0.93. In the box version, splithalf reliability coefficients ranged from 0.48 to 0.86.
 Similarly to the results of Pronk et al. (2021), we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients. In the majority of cases, stratifying by target position lead to similar or even higher estimates compared to no stratification. As might be expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
 
 
@@ -516,81 +515,13 @@ Reliability coefficients per splitting method, stratification level, study versi
 
 For the test-retest reliability, we show the association between raw performance scores of the two test days and corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}D, E, I and J.\footnote{In the hedge version, we excluded one 5-year-old child from the test-retest analysis. The performance of the mentioned child was 3 standard deviations above the mean on both test days. Including the child yielded a \emph{Pearson} correlation coefficient of \emph{r} = 0.87.}
 
-The age-corrected, GLMM based retest reliabilities for children yielded similar results. In hedge version it was 0.89 (95\% CI {[}0.65;1.00{]}).
-In the box version it was 0.91 (95\% CI {[}0.71;1.00{]}).
+The age-corrected, GLMM based retest reliabilities for children yielded similar results. In hedge version it was 0.90 (95\% CI {[}0.67;1.00{]}).
+In the box version it was 0.91 (95\% CI {[}0.69;1.00{]}).
 
 \hypertarget{discussion-1}{%
 \subsection{Discussion}\label{discussion-1}}
 
 Our results indicated that the measured variation was systematic. As could be expected, the continuous measure of the hedge version yielded higher reliability estimates than the discrete box version. For children, the model based reliability estimates showed that the task did capture individual differences even when correcting for age. This corroborates what we already see in Figure \ref{fig:fig2}: there was a clear overlap between age groups, indicating that age is predictive of performance for the mean, but is not the main source of individual differences.
-
-\hypertarget{validity}{%
-\section{Validity}\label{validity}}
-
-Our third aim was to assess whether the captured individual variation in gaze understanding relates to factors in children's real live social environment. Previous studies found associations between social cognition measures and various environmental factors (Devine \& Hughes, 2018; Hughes \& Leekam, 2004), including family background and education {[}Cutting and Dunn (1999); bulgarelli2016social{]}, number and age of siblings and family constellation Cassidy, Fineberg, Brown, \& Perkins (2005), interaction with siblings (Dunn et al., 1991), and centre-based childcare (Bulgarelli \& Molina, 2016). It is assumed that opportunities to play, communicate and argue with siblings and similarly-aged peers help children to understand the human mind. Therefore, if we find a link between gaze understanding and family factors, we regard this as an indicator for the validity of our measure.
-
-\hypertarget{participants-2}{%
-\subsection{Participants}\label{participants-2}}
-
-For this exploratory analysis, we included all children of the aforementioned samples where families filled out a short demographic questionnaire. This subsample consisted of
-109 children, including
-30 3-year-olds
-(mean = 41.82 months,
-SD = 3.31,
-range = 36
-- 47,
-19 girls),
-36 4-year-olds
-(mean = 54.32 months,
-SD = 2.95,
-range = 48
-- 59,
-27 girls),
-and 43 5-year-olds
-(mean = 66.43 months,
-SD = 3.48,
-range = 60
-- 71,
-22 girls).
-
-\hypertarget{procedure-2}{%
-\subsection{Procedure}\label{procedure-2}}
-
-Families of our kindergarten and online child sample were asked to fill out a brief demographic questionnaire. We asked for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in day care, and if yes, (5) since when and (6) for how long on an average day.
-
-\hypertarget{analysis-2}{%
-\subsection{Analysis}\label{analysis-2}}
-
-To estimate the effects of social surrounding on gaze understanding, we fit GLMMs predicting the task performance by each of our questionnaire variables, controlling for age (in months, z-transformed), data collection mode (reference category: in-person supervised) and study version (reference category: hedge version). The models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants. Therefore, our null model closely resembled the structure from our first analysis (see Analysis section of \emph{Does the gaze understanding task induce variation?}; here: \texttt{performance\ \textasciitilde{}\ age\ +\ datacollection\ +\ studyversion\ +\ (symmetricPosition\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}).
-In order to combine data of our two study versions, we transformed continuous click responses from the hedge version into a discrete outcome. For the target position, we categorized two adjacent bins as one imaginary box. To measure participants' performance, we created imaginary box boundaries around the target's landing position and examined whether the participant's click response fell into this imaginary box. Across the two study versions, we could consequently model the participant's correct response (0/1) using a \texttt{Bernoulli} distribution with a logit link function.
-For model comparisons, we ran separate models, each with one of the following predictors as a fixed effects added to the null model: number of household members, number of children aged 0-18 in household, number of children aged 1-12 in household, hours spent in childcare each day, and age when subject entered childcare.
-In addition, we calculated three index scores. First, we calculated a sibling variety score according to Peterson (2000). Second, we implemented the modified version of Cassidy et al. (2005) (for more details, see Supplements). Third, based on our own data exploration, we calculated the amount of peer exposure determined as the number of siblings and the average hours spent in childcare (both z-transformed).
-We compared the models using WAIC (widely applicable information criterion) scores and weights (McElreath, 2020). As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
-
-\hypertarget{results-2}{%
-\subsection{Results}\label{results-2}}
-
-The model including our peer exposure index, as defined as the number of other children in the household and average hours spent in childcare, showed the best out-of-sample predictive accuracy. Note that we did not find a great difference in WAIC scores between the compared models (see Supplements for WAIC scores and weights). The model estimates were all considerably smaller than estimates of age, study version and data collection, and all 95\% CIs included zero. For example, for our winning model, we found a peer exposure estimate of \(\beta\) =
-0.17 (95\% CI {[}-0.03; 0.36{]}),
-with the estimates of age being \(\beta\) =0.57 (95\% CI {[}0.38; 0.77{]}), data collection mode being \(\beta\) =0.95 (95\% CI {[}0.56; 1.35{]}), and study version \(\beta\) =1.87 (95\% CI {[}0.25; 3.59{]}). Nevertheless, a general pattern emerges: exposure to a more variable social environment positively influenced children's gaze understanding. The number of people and, more specifically, children, as well as the more diverse their age, the more likely children were to understand the agent's gaze cue. The only predictor resulting in a negative estimate was the age at which a participant entered childcare, i.e., the later a child entered, the better performance in the task.
-
-
-
-
-\begin{figure}
-
-{\centering \includegraphics[width=1\linewidth]{../figures/extvali_results} 
-
-}
-
-\caption{\textbf{External validity of the gaze understanding task}.
-Factors of children's social surroundings and their influence on the probability of responding correctly. Models are ordered according to their WAIC scores, with the uppermost winning the model comparison. The graph shows the estimated density curves of a model's predictor coefficient. Only models performing better than our null model are included in the graph.}\label{fig:fig4}
-\end{figure}
-
-\hypertarget{discussion-2}{%
-\subsection{Discussion}\label{discussion-2}}
-
-We found that factors of children's social surrounding influenced their gaze understanding. Even though the effects are small and confidence intervals wide, it is remarkable that we were able to detect relationships between this fundamental social-cognitive ability and very distant, real life variables. Previous studies often focused on more complex, later developing social-cognitive abilities (e.g., false belief understanding). Apparently, systematic links between family factors and social-cognitive abilities can be found even when looking at more fundamental social-cognitive abilities like gaze understanding.
 
 \hypertarget{general-discussion}{%
 \section{General Discussion}\label{general-discussion}}
@@ -637,7 +568,9 @@ This effect is most pronounced in the three-year-olds in the box version (for an
 Therefore, we recommend using a tablet for remote data collection.
 Children can then click for themselves and caregivers have less chance to interfere.
 
-After finding consistent and reliable individual estimates, we aimed at verifying the appropriateness of our new task.
+\hypertarget{todo-adjust-discussion-part-validity}{%
+\section{TODO adjust discussion part validity}\label{todo-adjust-discussion-part-validity}}
+
 Validity is often assessed by looking at concurrent relations between measures. Here we looked at a relation that is often postulated for social cognition tasks, namely that social-cognitive ability is predicted by family level variables.
 We found that children's gaze understanding relates to factors of their social environment:
 children were more accurate, the more social exposure and the more diverse their surrounding was.
@@ -822,9 +755,6 @@ Carlson, S., \& Moses, L. J. (2001). Individual {Differences} in {Inhibitory Con
 \leavevmode\vadjust pre{\hypertarget{ref-carlson2004individual}{}}%
 Carlson, S., Moses, L. J., \& Claxton, L. J. (2004). Individual differences in executive functioning and theory of mind: {An} investigation of inhibitory control and planning ability. \emph{Journal of Experimental Child Psychology}, \emph{87}(4), 299--319. \url{https://doi.org/10.1016/j.jecp.2004.01.002}
 
-\leavevmode\vadjust pre{\hypertarget{ref-cassidy2005theory}{}}%
-Cassidy, K. W., Fineberg, D. S., Brown, K., \& Perkins, A. (2005). Theory of {Mind May Be Contagious}, but {You Don}'t {Catch It} from {Your Twin}. \emph{Child Development}, \emph{76}(1), 97--106.
-
 \leavevmode\vadjust pre{\hypertarget{ref-coelho2006searching}{}}%
 Coelho, E., George, N., Conty, L., Hugueville, L., \& Tijus, C. (2006). Searching for asymmetries in the detection of gaze contact versus averted gaze under different head views: A behavioural study. \emph{Spatial Vision}, \emph{19}(6), 529--545. \url{https://doi.org/10.1163/156856806779194026}
 
@@ -833,9 +763,6 @@ Cutting, A. L., \& Dunn, J. (1999). Theory of {Mind}, {Emotion Understanding}, {
 
 \leavevmode\vadjust pre{\hypertarget{ref-delbianco2019developmental}{}}%
 Del Bianco, T., Falck-Ytter, T., Thorup, E., \& Gredebäck, G. (2019). The {Developmental Origins} of {Gaze-Following} in {Human Infants}. \emph{Infancy}, \emph{24}(3), 433--454. \url{https://doi.org/10.1111/infa.12276}
-
-\leavevmode\vadjust pre{\hypertarget{ref-devine2018family}{}}%
-Devine, R. T., \& Hughes, C. (2018). Family {Correlates} of {False Belief Understanding} in {Early Childhood}: {A Meta-Analysis}. \emph{Child Development}, \emph{89}(3), 971--987. \url{https://doi.org/10.1111/cdev.12682}
 
 \leavevmode\vadjust pre{\hypertarget{ref-dunn1991young}{}}%
 Dunn, J., Brown, J., Slomkowski, C., Tesla, C., \& Youngblade, L. (1991). \href{https://www.ncbi.nlm.nih.gov/pubmed/1786720}{Young children's understanding of other people's feelings and beliefs: Individual differences and their antecedents}. \emph{Child Development}, \emph{62}(6), 1352--1366.
@@ -900,9 +827,6 @@ Mayer, A., \& Träuble, B. (2015). The weird world of cross-cultural false-belie
 \leavevmode\vadjust pre{\hypertarget{ref-mayes1996testretest}{}}%
 Mayes, L. C., Klin, A., Tercyak, K. P., Cicchetti, D. V., \& Cohen, D. J. (1996). Test-{Retest Reliability} for {False-Belief Tasks}. \emph{Journal of Child Psychology and Psychiatry}, \emph{37}(3), 313--319. \url{https://doi.org/10.1111/j.1469-7610.1996.tb01408.x}
 
-\leavevmode\vadjust pre{\hypertarget{ref-mcelreath2020statistical}{}}%
-McElreath, R. (2020). \emph{Statistical rethinking: {A Bayesian Course} with {Examples} in {R} and {Stan}} (Second). {Chapman and Hall/CRC}.
-
 \leavevmode\vadjust pre{\hypertarget{ref-mcewen2007origins}{}}%
 McEwen, F., Happé, F., Bolton, P., Rijsdijk, F., Ronald, A., Dworzynski, K., \& Plomin, R. (2007). Origins of individual differences in imitation: Links with language, pretend play, and socially insightful behavior in two-year-old twins. \emph{Child Development}, \emph{78}(2), 474--492. \url{https://doi.org/10.1111/j.1467-8624.2007.01010.x}
 
@@ -923,12 +847,6 @@ Palan, S., \& Schitter, C. (2018). Prolific.ac\textemdash{{A}} subject pool for 
 
 \leavevmode\vadjust pre{\hypertarget{ref-pavarini2013parental}{}}%
 Pavarini, G., de Hollanda Souza, D., \& Hawk, C. K. (2013). Parental {Practices} and {Theory} of {Mind Development}. \emph{Journal of Child and Family Studies}, \emph{22}(6), 844--853. \url{https://doi.org/10.1007/s10826-012-9643-8}
-
-\leavevmode\vadjust pre{\hypertarget{ref-perner1994theory}{}}%
-Perner, J., Ruffman, T., \& Leekam, S. R. (1994). Theory of {Mind Is Contagious}: {You Catch It} from {Your Sibs}. \emph{Child Development}, \emph{65}(4), 1228--1238. \url{https://doi.org/10.2307/1131316}
-
-\leavevmode\vadjust pre{\hypertarget{ref-peterson2000kindred}{}}%
-Peterson. (2000). Kindred spirits: {Influences} of siblings' perspectives on theory of mind. \emph{Cognitive Development}, \emph{15}(4), 435--455. \url{https://doi.org/10.1016/S0885-2014(01)00040-5}
 
 \leavevmode\vadjust pre{\hypertarget{ref-peterson2012mind}{}}%
 Peterson, Wellman, H. M., \& Slaughter, V. (2012). The {Mind Behind} the {Message}: {Advancing Theory-of-Mind Scales} for {Typically Developing Children}, and {Those With Deafness}, {Autism}, or {Asperger Syndrome}: {\textbf{The Mind Behind}}{ \textbf{the} }{\textbf{Message}}. \emph{Child Development}, \emph{83}(2), 469--485. \url{https://doi.org/10.1111/j.1467-8624.2011.01728.x}
@@ -987,9 +905,6 @@ Wellman, H. M., \& Liu, D. (2004). Scaling of {Theory-of-Mind Tasks}. \emph{Chil
 \leavevmode\vadjust pre{\hypertarget{ref-wimmer1983beliefs}{}}%
 Wimmer, H., \& Perner, J. (1983). Beliefs about beliefs: {Representation} and constraining function of wrong beliefs in young children's understanding of deception. \emph{Cognition}. \url{https://doi.org/10.1016/0010-0277(83)90004-5}
 
-\leavevmode\vadjust pre{\hypertarget{ref-zhang2021worse}{}}%
-Zhang, Z., Yu, H., Long, M., \& Li, H. (2021). Worse {Theory} of {Mind} in {Only-Children Compared} to {Children With Siblings} and {Its Intervention}. \emph{Frontiers in Psychology}, \emph{12}, 5073. \url{https://doi.org/10.3389/fpsyg.2021.754168}
-
 \end{CSLReferences}
 
 \endgroup
@@ -1015,69 +930,18 @@ Zhang, Z., Yu, H., Long, M., \& Li, H. (2021). Worse {Theory} of {Mind} in {Only
 }
 
 \caption{\textbf{Model comparison for exploratory webcam coding of parental interference}.
-Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level.}\label{fig:fig5}
+Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level.}\label{fig:fig4}
 \end{figure}
 
 Comparing the performances of children across our two data collection modes, we found that children participating remotely were slightly more precise. This difference was especially prominent in younger participants in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
 In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing. Due to the time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = 16). We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
 A trial was defined as the time between two eye blinking sounds. We transcribed all utterances by parents and children and counted the words uttered by each. We then classified the utterances into several categories: question asked by child, repeated test questions by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive \& negative feedback, motivational statements, and incomprehensible utterances.
 In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial.
-We conducted a model comparison to estimate the effects of parental interference. Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in \texttt{R:\ correct\ \textasciitilde{}\ age\ +\ (1\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}.\footnote{Attentive readers might notice that we simplified the structure of random effects. Compared to our models in the \emph{Individual differences} and \emph{External Validity} sections, this model does not include the random slope for symmetric target position within participants. We decided to do so since we had limited amount of data from few participants.}
+We conducted a model comparison to estimate the effects of parental interference. Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in \texttt{R:\ correct\ \textasciitilde{}\ age\ +\ (1\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}.\footnote{Attentive readers might notice that we simplified the structure of random effects. Compared to our models in the \emph{Individual differences} section, this model does not include the random slope for symmetric target position within participants. We decided to do so since we had limited amount of data from few participants.}
 
 We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample.
 We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
 On the trial level, the model including the verification of choice as a main effect performed best: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95\% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}). Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
-
-\hypertarget{appendix-to-external-validity-section}{%
-\subsubsection{Appendix to external validity section}\label{appendix-to-external-validity-section}}
-
-\hypertarget{scoring-of-sibling-variety-scores}{%
-\paragraph{Scoring of sibling variety scores}\label{scoring-of-sibling-variety-scores}}
-
-For assessing the external validity of our gaze understanding task, we calculated two sibling variety scores based on the existing Theory of Mind literature.
-First, we followed the approach by Peterson (2000). Here, only-children as well as firstborns with siblings under one year scored 0 points; lastborns with siblings above 12 years scored 0.5 points; children with twins, firstborns with siblings over one year, and lastborns with at least one sibling under 13 years scored 1 point, middleborns with at least one older and younger sibling aged one to 12 years scored 2 points.
-
-Second, we implemented the sibling variety score by Cassidy et al. (2005). The authors adjusted the original score of Peterson (2000) in the following way: only-children scored 0 points; children with a sibling under one year or above 12 years, and twins with no other sibling scored 0.5 points; children with a sibling above one year or under 13 years scored 1 point; middleborns with at least one older and younger sibling aged one to 12 years scored 2 points. Twins with additional siblings scored depending on the age and number of their siblings.
-
-The reasoning was that children between one and 13 years of age would engage in sibling play, while the youngest and most mature siblings would be less likely to participate in such. However, teenage siblings might provide opportunities for interesting discussions (Peterson, 2000).
-
-\hypertarget{waic-scores-and-weights-of-the-model-comparison}{%
-\paragraph{WAIC scores and weights of the model comparison}\label{waic-scores-and-weights-of-the-model-comparison}}
-
-As can be seen, ELPD difference scores are smaller than their respective standard errors. WAIC scores between models don't differ substantially (Table \ref{tab:extvali_table}). All effects except when a child entered childcare positively influence performance.
-
-\begin{table}[tbp]
-
-\begin{center}
-\begin{threeparttable}
-
-\caption{\label{tab:extvali_table}Model comparison for influences of children's social surrounding}
-
-\begin{tabular}{llllll}
-\toprule
-Predictor & \multicolumn{1}{c}{WAIC} & \multicolumn{1}{c}{SE\_WAIC} & \multicolumn{1}{c}{Weight} & \multicolumn{1}{c}{ELPD\_DIFF} & \multicolumn{1}{c}{SE\_ELPD\_DIFF}\\
-\midrule
-Average hours spent in childcare per day & 2,540.39 & 52.23 & 0.54 & 0.00 & 0.00\\
-Peer exposure index & 2,541.00 & 52.22 & 0.28 & -0.30 & 0.92\\
-\# Children in household aged 0-18 & 2,541.65 & 52.30 & 0.02 & -0.63 & 1.09\\
-Sibling variety score (Cassidy et al., 2005) & 2,541.76 & 52.33 & 0.01 & -0.68 & 1.05\\
-Sibling variety score (Peterson, 2000) & 2,541.80 & 52.38 & 0.02 & -0.71 & 1.10\\
-Age of childcare entry & 2,542.19 & 52.38 & 0.12 & -0.90 & 1.32\\
-\# Children in household aged 1-12 & 2,542.26 & 52.34 & 0.00 & -0.94 & 0.92\\
-Null model & 2,542.58 & 52.26 & 0.00 & -1.09 & 0.79\\
-\# Household members & 2,543.46 & 52.36 & 0.00 & -1.54 & 0.97\\
-\bottomrule
-\addlinespace
-\end{tabular}
-
-\begin{tablenotes}[para]
-\normalsize{\textit{Note.} All models included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants}
-\end{tablenotes}
-
-\end{threeparttable}
-\end{center}
-
-\end{table}
 
 \hypertarget{adult-sample}{%
 \subsection{Adult sample}\label{adult-sample}}
@@ -1146,7 +1010,7 @@ This is the content of our audio recordings that were played as instructions and
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
-\toprule
+\toprule()
 \endhead
 \textbf{Timeline} & \textbf{German} & \textbf{English} & \textbf{Filename} \\
 \textbf{welcome} & Hallo! Schön, dass du da bist. Wir spielen jetzt das Ballon-Spiel! Siehst du die Tiere auf dem Bild da? Wir möchten gleich zusammen mit den Tieren mit einem Ballon spielen. Was genau passiert, erklären wir dir jetzt ganz in Ruhe. & Hello! Great that you're here. We'll now play a balloon game. Can you see the animals in the picture over there? We want to play together with the animals using the balloon. We'll now talk you through exactly what will happen. & welcome.mp3 \\
@@ -1170,7 +1034,7 @@ This is the content of our audio recordings that were played as instructions and
 \textbf{landing sound of balloon} & - & - & balloon-lands.mp3 \\
 \textbf{sound of blinking eyes} & - & - & blink.mp3 \\
 \textbf{sound for target click} & - & - & positive-feedback.mp3 \\
-\bottomrule
+\bottomrule()
 \end{longtable}
 
 

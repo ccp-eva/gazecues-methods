@@ -1603,6 +1603,7 @@ splithalf_plot <- splithalf_data %>%
 
 splithalf_plot
 saveRDS(splithalf_plot, file = "../saves/gafo-splithalf-plot.rds")
+
 # ggsave("../figures/gafo_splithalf.png", width = 8, height = 2.5, scale = 1.2)
 ```
 
