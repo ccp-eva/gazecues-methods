@@ -54,6 +54,8 @@ header-includes:
 
 ```{r setup, include = FALSE}
 library("papaja")
+library(ggplot2)
+theme_set(theme_classic())
 # r_refs("r-references.bib")
 ```
 
@@ -284,6 +286,10 @@ Large points with 95% CI (based on non-parametric bootstrap) represent performan
 Small points show the mean performance for each subject. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds  for remote unsupervised data collection. Color of data points denotes age group.
 
 ```{r fig2, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
+hedge_variation_plot_GLMM <- readRDS(file = "../saves/gafo-hedge-variation-plot-GLMM.rds")
+box_variation_plot_GLMM <- readRDS(file = "../saves/gafo-box-variation-plot-GLMM.rds")
+box_variation_plot_GLMM
+
 knitr::include_graphics(c("../figures/gafo_results.png"))
 ``` 
 
