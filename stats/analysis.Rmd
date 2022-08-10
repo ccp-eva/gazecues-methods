@@ -90,7 +90,7 @@ mAgeHedge <- brm(clickDistInBalloons ~ age + datacollection + (symmetricPosition
                     iter   = 3000, 
                     chains = 4, 
                     inits  = "random",
-                    cores  = 4)
+                    cores  = 100)
 
 write.csv(mAgeHedge, "../saves/mAgeHedge.csv", quote = F, row.names = F)
 saveRDS(mAgeHedge, "../saves/mAgeHedge.rds")
@@ -191,7 +191,7 @@ mAgeBox <- brm(correctBox ~ age + datacollection + (symmetricPosition | subjID) 
                     iter   = 3000, 
                     chains = 4, 
                     inits  = "random",
-                    cores  = 4)
+                    cores  = 100)
 
 write.csv(mAgeBox, "../saves/mAgeBox.csv", quote = F, row.names = F)
 saveRDS(mAgeBox, "../saves/mAgeBox.rds")
@@ -502,7 +502,7 @@ splitscores_hedge_permutated_kids <- by_split(
   fn_score_hedge,
   replications = 5000,
   method = c("random"),
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
 )
 
 hedge_permutated_kids <- split_coefs(splitscores_hedge_permutated_kids, cor)
@@ -549,7 +549,7 @@ splitscores_hedge_permutatedStrat_kids <- by_split(
   fn_score_hedge,
   replications = 5000,
   method = c("random"),
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
   stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
 )
 
@@ -599,7 +599,7 @@ splitscores_hedge_montecarlo_kids <- by_split(
   method = c("random"),
   replace = TRUE,
   split_p = 1,
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
 )
 
 hedge_montecarlo_kids <- split_coefs(splitscores_hedge_montecarlo_kids, cor)
@@ -648,7 +648,7 @@ splitscores_hedge_montecarloStrat_kids <- by_split(
   method = c("random"),
   replace = TRUE,
   split_p = 1,
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
   stratification = hedge_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
 )
 
@@ -797,7 +797,7 @@ splitscores_hedge_permutated_adults <- by_split(
   fn_score_hedge,
   replications = 5000,
   method = c("random"),
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
 )
 
 hedge_permutated_adults <- split_coefs(splitscores_hedge_permutated_adults, cor)
@@ -844,7 +844,7 @@ splitscores_hedge_permutatedStrat_adults <- by_split(
   fn_score_hedge,
   replications = 5000,
   method = c("random"),
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
   stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
 )
 
@@ -894,7 +894,7 @@ splitscores_hedge_montecarlo_adults <- by_split(
   method = c("random"),
   replace = TRUE,
   split_p = 1,
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
 )
 
 hedge_montecarlo_adults <- split_coefs(splitscores_hedge_montecarlo_adults, cor)
@@ -943,7 +943,7 @@ splitscores_hedge_montecarloStrat_adults <- by_split(
   method = c("random"),
   replace = TRUE,
   split_p = 1,
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
   stratification = hedge_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
 )
 
@@ -1099,7 +1099,7 @@ splitscores_box_permutated_kids <- by_split(
   fn_score_box,
   replications = 5000,
   method = c("random"),
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
 )
 
 box_permutated_kids <- split_coefs(splitscores_box_permutated_kids, cor)
@@ -1146,7 +1146,7 @@ splitscores_box_permutatedStrat_kids <- by_split(
   fn_score_box,
   replications = 5000,
   method = c("random"),
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
 )
 
@@ -1196,7 +1196,7 @@ splitscores_box_montecarlo_kids <- by_split(
   method = c("random"),
   replace = TRUE,
   split_p = 1,
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
 )
 
 box_montecarlo_kids <- split_coefs(splitscores_box_montecarlo_kids, cor)
@@ -1245,7 +1245,7 @@ splitscores_box_montecarloStrat_kids <- by_split(
   method = c("random"),
   replace = TRUE,
   split_p = 1,
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
   stratification = box_intCon_data %>% filter(sample == "kids") %>% pull(symmetricPosition),
 )
 
@@ -1393,7 +1393,7 @@ splitscores_box_permutated_adults <- by_split(
   fn_score_box,
   replications = 5000,
   method = c("random"),
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
 )
 
 box_permutated_adults <- split_coefs(splitscores_box_permutated_adults, cor)
@@ -1440,7 +1440,7 @@ splitscores_box_permutatedStrat_adults <- by_split(
   fn_score_box,
   replications = 5000,
   method = c("random"),
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
 )
 
@@ -1490,7 +1490,7 @@ splitscores_box_montecarlo_adults <- by_split(
   method = c("random"),
   replace = TRUE,
   split_p = 1,
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
 )
 
 box_montecarlo_adults <- split_coefs(splitscores_box_montecarlo_adults, cor)
@@ -1539,7 +1539,7 @@ splitscores_box_montecarloStrat_adults <- by_split(
   method = c("random"),
   replace = TRUE,
   split_p = 1,
-  ncores = 7, # setting ncores equally to something less than detectCores()
+  ncores = 100, # setting ncores equally to something less than detectCores()
   stratification = box_intCon_data %>% filter(sample == "adults") %>% pull(symmetricPosition),
 )
 
@@ -1613,9 +1613,12 @@ knitr::kable(splithalf_data)
 ```{r save_splithalf_data}
 write.csv(splithalf_data, "../saves/gafo-splithalf.csv", quote = F, row.names = F)
 saveRDS(splithalf_data, file = "../saves/gafo-splithalf-table.rds")
+
+# clean up
+rm(list = ls(pattern = "^splitscores"))
 ```
 
-## Test-retest reliability 
+## Test-retest Reliability - Hedge
 
 ```{r retest_hedge_data}
 hedge_retest <- reli %>% 
@@ -1672,7 +1675,7 @@ mRetestHedge <- brm(clickDistInBalloons ~ age + (0 + reliday | subjID),
                               iter   = 3000, 
                               chains = 4, 
                               inits  = "random",
-                              cores  = 4)
+                              cores  = 100)
 
 write.csv(mRetestHedge, "../saves/mRetestHedge.csv", quote = F, row.names = F)
 saveRDS(mRetestHedge, "../saves/mRetestHedge.rds")
@@ -1700,7 +1703,8 @@ hedge_retest_kids <- hedge_retest %>%
 
 hedge_retest_kids
 
-ggsave("../figures/gafo_hedge_retest_kids.png", width = 6, height = 4)
+saveRDS(hedge_retest_kids, file = "../saves/gafo-hedge-retest-kids.rds")
+# ggsave("../figures/gafo_hedge_retest_kids.png", width = 6, height = 4)
 ```
 
 ```{r retest_hedge_adults}
@@ -1717,13 +1721,13 @@ hedge_retest_adults <- hedge_retest %>%
 
 hedge_retest_adults
 
-ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
+saveRDS(hedge_retest_adults, file = "../saves/gafo-hedge-retest-adults.rds")
+# ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
 ```
 
-
+## Test-retest Reliability - Box 
 
 ```{r retest_box_data}
-# take data of first reli day for internal consistency
 box_retest <- reli %>% 
   filter(studyversion == "box") %>% 
   group_by(subjID, reliday, sample, ageInYears) %>% 
@@ -1752,7 +1756,7 @@ box_retest %>%
     upper_reliday2 = mean(mean_reliday2, na.rm = T) + 3*sd(mean_reliday2, na.rm = T),
   )
 
-# check how many there are
+# check how many there are => there are none!
 box_retest %>% 
   group_by(sample) %>%
   filter(mean_reliday1 >= mean(mean_reliday1, na.rm = T) + 3*sd(mean_reliday1, na.rm = T) | 
@@ -1779,7 +1783,7 @@ mRetestBox <- brm(correctBox ~ age + (0 + reliday | subjID),
                               iter   = 3000, 
                               chains = 4, 
                               inits  = "random",
-                              cores  = 4)
+                              cores  = 100)
 
 write.csv(mRetestBox, "../saves/mRetestBox.csv", quote = F, row.names = F)
 saveRDS(mRetestBox, "../saves/mRetestBox.rds")
@@ -1800,7 +1804,8 @@ box_retest_kids <- box_retest %>%
 
 box_retest_kids
 
-ggsave("../figures/gafo_box_retest_kids.png", width = 6, height = 4)
+saveRDS(box_retest_kids, file = "../saves/gafo-box-retest-kids.rds")
+# ggsave("../figures/gafo_box_retest_kids.png", width = 6, height = 4)
 ```
 
 ```{r retest_box_adults}
@@ -1817,13 +1822,14 @@ box_retest_adults <- box_retest %>%
 
 box_retest_adults
 
-ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
+saveRDS(box_retest_adults, file = "../saves/gafo-box-retest-adults.rds")
+# ggsave("../figures/gafo_hedge_retest_adults.png", width = 6, height = 4)
 ```
 
 # Save plots
 
 ```{r arrange_plots}
-ggarrange(
+gafo_arrangedplot <- ggarrange(
 
   ggarrange(hedge_variation_plot_GLMM,
             NULL,
@@ -1865,296 +1871,7 @@ ggarrange(
   nrow = 3, heights = c(1.2, 0.1, 1.2)
 )
 
-ggsave("../figures/gafo_results_GLMM.png", width = 6.5, height = 5, scale = 1.6, bg = "white")
+gafo_arrangedplot
+saveRDS(gafo_arrangedplot, file = "../saves/gafo-arrangedplot.rds")
+# ggsave("../figures/gafo_arrangedplot.png", width = 6.5, height = 5, scale = 1.6, bg = "white")
 ```
-
-```{r}
-ggarrange(hedge_variation_plot,
-          NULL,
-          ggarrange(
-              hedge_intCon_kids, 
-              hedge_retest_kids, 
-              nrow = 1, 
-              ncol = 2, 
-              labels = c("B", "C")
-            ), 
-          nrow = 3, heights = c(0.625, 0.05, 0.325), labels = c("A", "", "")
-)
-
-ggsave("/Users/julia_prein/Downloads/gafo_poster.png", width = 6.5, height = 6, scale = 1.1, bg = "white")
-```
-
-# EXTERNAL VALIDITY
-
-```{r extvali_prepareData}
-mDataExtvali <- testtrials %>% 
-  filter(ageInYears < 6) %>% 
-  select(datacollection, studyversion, subjID, gender, trialNr, ageInMonths, ageInYears, correctBox, childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, targetPosition, symmetricPosition) %>% 
-  group_by(subjID) %>% 
-  # so that all models run with same nr of subjects
-  drop_na() %>% 
-  ungroup() %>% 
-  mutate(
-    # centered around minimum
-    hhSibs = siblingsNr, 
-    sibsChildAged = siblingsChildAged, 
-    
-    # centered around mean
-    trial = scale(trialNr, center = TRUE, scale = FALSE)[,1],
-    ccAge = scale(childcareAge, center = TRUE, scale = FALSE)[,1],
-    ccHours = scale(childcareHours, center = TRUE, scale = FALSE)[,1],
-    hhTotal = scale(householdTotal, center = TRUE, scale = FALSE)[,1],
-    
-    # scaled (centered around mean, SD = 1, i.e., z-transformed)
-    age = scale(ageInMonths, center = TRUE, scale = TRUE)[,1], 
-    peerExposure = scale(childcareHours, center = TRUE, scale = TRUE) + scale(siblingsNr, center = TRUE, scale = TRUE)[,1],
-    pe = scale(peerExposure, center = TRUE, scale = TRUE)[,1], 
-  ) %>% 
-  select(datacollection, studyversion, subjID, trial, age, targetPosition, symmetricPosition, correctBox, ccAge, ccHours, hhTotal, hhSibs, sibsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, pe) %>% 
-  mutate_if(is.character, as.factor)
-
-n_distinct(mDataExtvali$subjID)
-```
-
-```{r extvali_nullmodel}
-mExtvalinull <- brm(correctBox ~ age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                    data = mDataExtvali,
-                    family = bernoulli(link = "logit"),
-                    warmup = 1000, 
-                    iter   = 3000, 
-                    chains = 4, 
-                    inits  = "random",
-                    cores  = 4)
-```
-
-```{r extvali_fullmodels}
-mExtvaliccAge <- update(mExtvalinull,
-                      newdata = mDataExtvali,
-                      formula = correctBox ~ ccAge + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                      family = bernoulli(link = "logit"),
-                      warmup = 1000, 
-                      iter   = 3000, 
-                      chains = 4, 
-                      inits  = "random",
-                      cores  = 4)
-
-mExtvaliccHours <- update(mExtvalinull,
-                      newdata = mDataExtvali,
-                      formula = correctBox ~ ccHours + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                      family = bernoulli(link = "logit"), 
-                      warmup = 1000, 
-                      iter   = 3000, 
-                      chains = 4, 
-                      inits  = "random",
-                      cores  = 4)
-
-mExtvalihhTotal <- update(mExtvalinull,
-                      newdata = mDataExtvali,
-                      formula = correctBox ~ hhTotal + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                      family = bernoulli(link = "logit"), 
-                      warmup = 1000, 
-                      iter   = 3000, 
-                      chains = 4, 
-                      inits  = "random",
-                      cores  = 4)
-
-mExtvalihhSibs <- update(mExtvalinull,
-                      newdata = mDataExtvali,
-                      formula = correctBox ~ hhSibs + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                      family = bernoulli(link = "logit"), 
-                      warmup = 1000, 
-                      iter   = 3000, 
-                      chains = 4, 
-                      inits  = "random",
-                      cores  = 4)
-
-mExtvalisibsChildAged <- update(mExtvalinull,
-                      newdata = mDataExtvali,
-                      formula = correctBox ~ sibsChildAged + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                      family = bernoulli(link = "logit"), 
-                      warmup = 1000, 
-                      iter   = 3000, 
-                      chains = 4, 
-                      inits  = "random",
-                      cores  = 4)
-
-mExtvalisiblingsVarietyScoreP <- update(mExtvalinull,
-                      newdata = mDataExtvali,
-                      formula = correctBox ~ siblingsVarietyScoreP + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                      family = bernoulli(link = "logit"), 
-                      warmup = 1000, 
-                      iter   = 3000, 
-                      chains = 4, 
-                      inits  = "random",
-                      cores  = 4)
-
-mExtvalisiblingsVarietyScoreW <- update(mExtvalinull,
-                      newdata = mDataExtvali,
-                      formula = correctBox ~ siblingsVarietyScoreW + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                      family = bernoulli(link = "logit"), 
-                      warmup = 1000, 
-                      iter   = 3000, 
-                      chains = 4, 
-                      inits  = "random",
-                      cores  = 4)
-
-mExtvaliPE <- update(mExtvalinull,
-                      newdata = mDataExtvali,
-                      formula = correctBox ~ pe + age + datacollection + studyversion + (symmetricPosition | subjID) + (1 | targetPosition),
-                      family = bernoulli(link = "logit"), 
-                      warmup = 1000, 
-                      iter   = 3000, 
-                      chains = 4, 
-                      inits  = "random",
-                      cores  = 4)
-```
-
-```{r extvali_modelcomparisons}
-mExtvalinull <- add_criterion(mExtvalinull, "waic")
-mExtvaliccAge <- add_criterion(mExtvaliccAge, "waic")
-mExtvaliccHours <- add_criterion(mExtvaliccHours, "waic")
-mExtvalihhTotal <- add_criterion(mExtvalihhTotal, "waic")
-mExtvalihhSibs <- add_criterion(mExtvalihhSibs, "waic")
-mExtvalisibsChildAged <- add_criterion(mExtvalisibsChildAged, "waic")
-mExtvalisiblingsVarietyScoreP <- add_criterion(mExtvalisiblingsVarietyScoreP, "waic")
-mExtvalisiblingsVarietyScoreW <- add_criterion(mExtvalisiblingsVarietyScoreW, "waic")
-mExtvaliPE <- add_criterion(mExtvaliPE, "waic")
-
-mExtvaliComparison <- as_tibble(loo_compare(mExtvalinull, mExtvaliccAge, mExtvaliccHours, mExtvalihhTotal, mExtvalihhSibs, mExtvalisibsChildAged, mExtvalisiblingsVarietyScoreP, mExtvalisiblingsVarietyScoreW, mExtvaliPE, criterion = "waic"), rownames = "model")
-
-mExtvaliComparison
-
-mExtvaliComparisonWeights <- as_tibble(model_weights(mExtvalinull, mExtvaliccAge, mExtvaliccHours, mExtvalihhTotal, mExtvalihhSibs, mExtvalisibsChildAged, mExtvalisiblingsVarietyScoreP, mExtvalisiblingsVarietyScoreW, mExtvaliPE, criterion = "waic"), rownames = "model")
-
-mExtvaliComparisonWeights %>% arrange(-value)
-
-extvaliModelorder <- mExtvaliComparisonWeights %>% arrange(value) %>%  pull(model)
-```
-
-```{r extvali_savemodels}
-write.csv(mExtvalinull, "../saves/extvali-mExtvalinull.csv", quote = F, row.names = F)
-saveRDS(mExtvalinull, "../saves/extvali-mExtvalinull.rds")
-
-write.csv(mExtvaliccAge, "../saves/extvali-mExtvaliccAge.csv", quote = F, row.names = F)
-saveRDS(mExtvaliccAge, "../saves/extvali-mExtvaliccAge.rds")
-
-write.csv(mExtvaliccHours, "../saves/extvali-mExtvaliccHours.csv", quote = F, row.names = F)
-saveRDS(mExtvaliccHours, "../saves/extvali-mExtvaliccHours.rds")
-
-write.csv(mExtvalihhTotal, "../saves/extvali-mExtvalihhTotal.csv", quote = F, row.names = F)
-saveRDS(mExtvalihhTotal, "../saves/extvali-mExtvalihhTotal.rds")
-
-write.csv(mExtvalihhSibs, "../saves/extvali-mExtvalihhSibs.csv", quote = F, row.names = F)
-saveRDS(mExtvalihhSibs, "../saves/extvali-mExtvalihhSibs.rds")
-
-write.csv(mExtvalisibsChildAged, "../saves/extvali-mExtvalisibsChildAged.csv", quote = F, row.names = F)
-saveRDS(mExtvalisibsChildAged, "../saves/extvali-mExtvalisibsChildAged.rds")
-
-write.csv(mExtvalisiblingsVarietyScoreP, "../saves/extvali-mExtvalisiblingsVarietyScoreP.csv", quote = F, row.names = F)
-saveRDS(mExtvalisiblingsVarietyScoreP, "../saves/extvali-mExtvalisiblingsVarietyScoreP.rds")
-
-write.csv(mExtvalisiblingsVarietyScoreW, "../saves/extvali-mExtvalisiblingsVarietyScoreW.csv", quote = F, row.names = F)
-saveRDS(mExtvalisiblingsVarietyScoreW, "../saves/extvali-mExtvalisiblingsVarietyScoreW.rds")
-
-write.csv(mExtvaliPE, "../saves/extvali-mExtvaliPE.csv", quote = F, row.names = F)
-saveRDS(mExtvaliPE, "../saves/extvali-mExtvaliPE.rds")
-```
-
-```{r extvali_save}
-extvali_results <- mExtvaliComparison %>%
-  left_join(mExtvaliComparisonWeights) %>%
-  select(model, waic, se_waic, value, elpd_diff, se_diff) %>%
-  rename(
-    Predictor = model, 
-    WAIC = waic, 
-    SE_WAIC = se_waic,
-    Weight = value, 
-    ELPD_DIFF = elpd_diff, 
-    SE_ELPD_DIFF = se_diff,
-  ) %>% 
-  mutate(
-    Predictor = recode(Predictor, 
-                   "mExtvaliPE" = "Peer exposure index", 
-                   "mExtvalisiblingsVarietyScoreW" = "Sibling variety score (Cassidy et al., 2005)", 
-                   "mExtvalihhSibs" = "# Children in household aged 0-18", 
-                   "mExtvaliccHours" = "Average hours spent in childcare per day",
-                   "mExtvalinull" = "Null model", 
-                   "mExtvalihhTotal" = "# Household members",
-                   "mExtvaliccAge" = "Age of childcare entry", 
-                   "mExtvalisiblingsVarietyScoreP" = "Sibling variety score (Peterson, 2000)", 
-                   "mExtvalisibsChildAged" = "# Children in household aged 1-12",
-                   )
-  )
-
-
-write.csv(extvali_results, "../saves/extvali-results.csv", quote = F, row.names = F)
-saveRDS(extvali_results, "../saves/extvali-results.rds")
-```
-
-```{r extvali_posteriordraws}
-extvali_draws <- bind_rows(
-  mExtvaliccAge %>% gather_draws(b_ccAge),
-  mExtvaliccHours %>% gather_draws(b_ccHours), 
-  mExtvalihhTotal %>% gather_draws(b_hhTotal), 
-  mExtvalihhSibs %>% gather_draws(b_hhSibs), 
-  mExtvalisibsChildAged %>% gather_draws(b_sibsChildAged), 
-  mExtvalisiblingsVarietyScoreP %>% gather_draws(b_siblingsVarietyScoreP), 
-  mExtvalisiblingsVarietyScoreW %>% gather_draws(b_siblingsVarietyScoreW),
-  mExtvaliPE %>% gather_draws(b_pe)
-  ) %>% 
-  mutate(
-    Predictor = factor(.variable, 
-                       levels = c("b_hhSibs", 
-                                  "b_siblingsVarietyScoreP", 
-                                  "b_sibsChildAged", 
-                                  "b_hhTotal", 
-                                  "b_ccHours", 
-                                  "b_ccAge", 
-                                  "b_siblingsVarietyScoreW", 
-                                  "b_pe"), 
-                       labels = c("# Children in household aged 0-18", 
-                                  "Sibling variety score (Peterson, 2000)", 
-                                  "# Children in household aged 1-12", 
-                                  "# Household members", 
-                                  "Average hours spent in childcare per day", 
-                                  "Age of childcare entry", 
-                                  "Sibling variety score (Cassidy et al., 2005)", 
-                                  "Peer exposure index")
-                       )  
-  )
-
-write.csv(extvali_draws, "../saves/extvali-draws.csv", quote = F, row.names = F)
-saveRDS(extvali_draws, "../saves/extvali-draws.rds")
-```
-
-```{r extvali_plot}
-ggplot(extvali_draws, aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
- tidybayes::stat_halfeye(alpha = .8, .width = c(.95, .80), scale = 3) +
-    labs(x = "Posterior estimate", y = "")+
-  guides(fill = "none")+
-  geom_vline(xintercept = 0, linetype = "dashed") +
-  scale_fill_manual(values = c("grey","#85AD00")) +
-  xlim(-0.2, 0.6) +
-  theme_minimal()
-
-ggsave("../figures/extvali_results_all.png", width = 10, height = 6, scale = 0.7, bg = "white")
-
-extvali_draws %>% 
-  filter(
-          Predictor == "Peer exposure index" ||
-          Predictor == "Sibling variety score (Cassidy et al., 2005)" ||
-          Predictor == "Number of children in household aged 0-18" ||
-          Predictor == "Average hours spent in childcare per day", 
-         ) %>% 
-  ggplot(., aes(y = Predictor, x = .value, fill = stat(x) > 0)) +
- tidybayes::stat_halfeye(alpha = .8, .width = c(.95, .80)) +
-    labs(x = "Posterior estimate", y = "") +
-  guides(fill = "none")+
-  geom_vline(xintercept = 0, linetype = "dashed") +
-  scale_fill_manual(values = c("grey","#85AD00")) +
-  scale_x_continuous(limits = c(-0.6, 1), breaks = seq(-0.5, 1, 0.25)) + 
-  theme_minimal()
-
-ggsave("../figures/extvali_results.png", width = 10, height = 6, scale = 0.7, bg = "white")
-```
-
