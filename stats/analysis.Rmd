@@ -1684,9 +1684,35 @@ saveRDS(mRetestHedge, "../saves/mRetestHedge.rds")
 
 ```{r retest_hedge_exclude_outliers}
 # exclude outliers
-hedge_retest <- hedge_retest %>%
-  filter(mean_reliday1 < mean(mean_reliday1) + 3*sd(mean_reliday1), mean_reliday1 > mean(mean_reliday1) - 3*sd(mean_reliday1),
-         mean_reliday2 < mean(mean_reliday2) + 3*sd(mean_reliday2), mean_reliday2 > mean(mean_reliday2) - 3*sd(mean_reliday2))
+hedge_retest_all <- hedge_retest
+    
+hedge_retest <- hedge_retest_all %>%
+  group_by(sample) %>%
+  filter(mean_reliday1 <= mean(mean_reliday1) + 3*sd(mean_reliday1),
+         mean_reliday1 >= mean(mean_reliday1) - 3*sd(mean_reliday1),
+         mean_reliday2 <= mean(mean_reliday2) + 3*sd(mean_reliday2), 
+         mean_reliday2 >= mean(mean_reliday2) - 3*sd(mean_reliday2))
+  
+# see how subject exclusion influences the retest correlation
+hedge_retest_correlationcoefficients <- rbind(
+  (hedge_retest %>%
+  group_by(sample) %>%
+  summarise(
+    n = n_distinct(subjID),
+    pearson_retest = cor(mean_reliday1, mean_reliday2, method = "pearson") %>% round(2), 
+    analysis = "outlier excluded",
+  )), 
+  (hedge_retest_all %>%
+  group_by(sample) %>%
+  summarise(
+    n = n_distinct(subjID),
+    pearson_retest = cor(mean_reliday1, mean_reliday2, method = "pearson") %>% round(2), 
+    analysis = "outlier included",
+  )))
+
+hedge_retest_correlationcoefficients
+
+saveRDS(hedge_retest_correlationcoefficients, file = "../saves/gafo-hedge-retest-correlationcoefficients.rds")
 ```
 
 ```{r retest_hedge_kids}

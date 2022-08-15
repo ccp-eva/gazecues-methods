@@ -402,7 +402,7 @@ All participants received 15 test trials. In the box version, we decided to adju
 
 All test trials without voice over description were included in our analyses. We ran all analyses in R version 4.2.0 (2022-04-22) (R Core Team, 2022). Regression models were fit as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses, using the function \texttt{brm} from the package \texttt{brms} (Bürkner, 2017, 2018).
 
-To estimate the developmental trajectory of gaze understanding and the effect of data collection mode, we fit a GLMM predicting the task performance by age (in months, z-transformed) and data collection mode (reference category: in-person supervised). The model included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants (model notation in \texttt{R:\ performance\ \textasciitilde{}\ age\ +\ datacollection\ +\ (symmetricPosition\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}). Here, \texttt{targetPosition} refers to the exact bin/box of the target, while \texttt{symmetricPosition} refers to the absolute distance from the stimulus center (i.e., smaller value meaning more central target position). We expected that trials could differ in their difficulty depending on the target centrality and that these these item effects could vary between participants.
+To estimate the developmental trajectory of gaze understanding and the effect of data collection mode, we fit a GLMM predicting the task performance in each trial by age (in months, z-transformed) and data collection mode (reference category: in-person supervised). The model included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants (model notation in \texttt{R:\ performance\ \textasciitilde{}\ age\ +\ datacollection\ +\ (symmetricPosition\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}). Here, \texttt{targetPosition} refers to the exact bin/box of the target, while \texttt{symmetricPosition} refers to the absolute distance from the stimulus center (i.e., smaller value meaning more central target position). We expected that trials could differ in their difficulty depending on the target centrality and that these these item effects could vary between participants.
 
 For the hedge version, performance was defined as the absolute click distance between the target center and the click X coordinate, scaled according to target widths, and modeled by a \texttt{lognormal} distribution. For the box version, the model predicted correct responses (0/1) using a \texttt{Bernoulli} distribution with a logit link function. We inspected the posterior distribution (mean and 95\% Confidence Interval (CI)) for the age and data collection estimates.
 
@@ -431,7 +431,7 @@ For the hedge version, performance was defined as the absolute click distance be
 (G) Internal consistency (odd-even split) in box child sample. (H) Internal consistency in box adult sample. (I) Test-retest reliability in box child sample. (J) Test-retest reliability in box adult sample.
 Regression lines with 95\% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with \emph{Pearson}'s correlation coefficient \emph{r}.
 Large points with 95\% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year).
-Small points show the mean performance for each subject. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds for remote unsupervised data collection. Color of data points denotes age group.}\label{fig:fig2}
+Small points show the mean performance for each subject averaged across trials. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds for remote unsupervised data collection. Color of data points denotes age group.}\label{fig:fig2}
 \end{figure}
 
 We found a strong developmental effect: with increasing age, participants got more and more accurate in locating the target. In the hedge version, children's click imprecision decreased with age, while, in the box version the proportion of correct responses increased (see Figure \ref{fig:fig2}A and F). Most participants in the box version performed above chance level. By the end of their sixth year of life, children came close to the adult's proficiency level. Most importantly, however, we found substantial inter-individual variation across study versions and age groups. For example, some three-year-olds were more precise in their responses than some five-year-olds. Even though variation is smaller, we even find inter-individual differences in the adult sample.
@@ -513,7 +513,7 @@ Similarly to the results of Pronk et al. (2021), we found that more robust split
 Reliability coefficients per splitting method, stratification level, study version and age group. Error bars show the 95\% confidence intervals of the coefficient estimates, calculated with the function \texttt{by\_split} from the \texttt{splithalfr} package (Pronk et al., 2021).}\label{fig:fig3}
 \end{figure}
 
-For the test-retest reliability, we show the association between raw performance scores of the two test days and corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}D, E, I and J.\footnote{In the hedge version, we excluded one 5-year-old child from the test-retest analysis. The performance of the mentioned child was 3 standard deviations above the mean on both test days. Including the child yielded a \emph{Pearson} correlation coefficient of \emph{r} = 0.87.}
+For the test-retest reliability, we show the association between raw performance scores of the two test days and corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}D, E, I and J.\footnote{In the hedge version, we excluded one 3-year-old, one 5-year-old, and two adults from the test-retest analysis. The performance of the mentioned participants was 3 standard deviations above/below the mean of each sample. Including the two children yielded a \emph{Pearson} correlation coefficient of \emph{r} = 0.89. Including the two adults yielded a \emph{Pearson} correlation coefficient of \emph{r} = 0.73.}
 
 The age-corrected, GLMM based retest reliabilities for children yielded similar results. In hedge version it was 0.90 (95\% CI {[}0.67;1.00{]}).
 In the box version it was 0.91 (95\% CI {[}0.69;1.00{]}).
@@ -930,7 +930,7 @@ Wimmer, H., \& Perner, J. (1983). Beliefs about beliefs: {Representation} and co
 }
 
 \caption{\textbf{Model comparison for exploratory webcam coding of parental interference}.
-Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level.}\label{fig:fig4}
+Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level (i.e., average across trials per subject).}\label{fig:fig4}
 \end{figure}
 
 Comparing the performances of children across our two data collection modes, we found that children participating remotely were slightly more precise. This difference was especially prominent in younger participants in the box version of the task. It is conceivable that caregivers were especially prone to influence the behavior of younger children. In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
@@ -942,6 +942,42 @@ We conducted a model comparison to estimate the effects of parental interference
 We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects. Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect. Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample.
 We compared models using WAIC (widely applicable information criterion) scores and weights. As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit. WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
 On the trial level, the model including the verification of choice as a main effect performed best: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95\% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}). Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
+
+\begin{table}[tbp]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:webcam_table}Model comparison for exploratory webcam coding of parental interference}
+
+\begin{tabular}{lllll}
+\toprule
+Predictor & \multicolumn{1}{c}{WAIC} & \multicolumn{1}{c}{Weight} & \multicolumn{1}{c}{ELPD} & \multicolumn{1}{c}{SE}\\
+\midrule
+By trial - \# Verification choice & 262.98 & 0.57 & 0.00 & 0.00\\
+By trial - Null model & 263.25 & 0.43 & -0.13 & 1.19\\
+By trial - Parental interference index & 264.32 & 0.00 & -0.67 & 0.97\\
+By trial - \# Repeated testquestion & 265.34 & 0.00 & -1.18 & 1.26\\
+By trial - \# Words uttered by caregiver & 266.27 & 0.00 & -1.65 & 1.21\\
+By trial - \# Hints eyes & 266.33 & 0.00 & -1.68 & 1.27\\
+By subject - \# Repeated testquestion & 83.83 & 0.70 & 0.00 & 0.00\\
+By subject - Parental interference index & 88.50 & 0.00 & -2.34 & 3.56\\
+By subject - Null model & 89.62 & 0.00 & -2.90 & 3.60\\
+By subject - \# Verification choice & 89.75 & 0.30 & -2.96 & 4.46\\
+By subject - \# Words uttered by caregiver & 90.46 & 0.00 & -3.32 & 4.21\\
+By subject - \# Hints eyes & 92.90 & 0.00 & -4.54 & 3.73\\
+\bottomrule
+\addlinespace
+\end{tabular}
+
+\begin{tablenotes}[para]
+\normalsize{\textit{Note.} All models included random intercepts for participant and target position.}
+\end{tablenotes}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
 
 \hypertarget{adult-sample}{%
 \subsection{Adult sample}\label{adult-sample}}

@@ -56,6 +56,8 @@ header-includes:
 library("papaja")
 library("ggplot2")
 library("ggpubr")
+library("tidyverse")
+library("brms")
 theme_set(theme_classic())
 ```
 
@@ -66,8 +68,6 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
 ```{r load_data}
-library(tidyverse)
-library(brms)
 testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>% 
   # determine order of factors
   mutate(
@@ -271,7 +271,7 @@ All participants received 15 test trials. In the box version, we decided to adju
 ## Analysis
 All test trials without voice over description were included in our analyses. We ran all analyses in `r R.version$version.string` [@rcoreteam2022language]. Regression models were fit as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses, using the function `brm` from the package `brms` [@burkner2017brms; @burkner2018advanced].
 
-To estimate the developmental trajectory of gaze understanding and the effect of data collection mode, we fit a GLMM predicting the task performance by age (in months, z-transformed) and data collection mode (reference category: in-person supervised). The model included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants (model notation in `R: performance ~ age + datacollection + (symmetricPosition | subjID) + (1 | targetPosition)`). Here, `targetPosition` refers to the exact bin/box of the target, while `symmetricPosition` refers to the absolute distance from the stimulus center (i.e., smaller value meaning more central target position). We expected that trials could differ in their difficulty depending on the target centrality and that these these item effects could vary between participants.
+To estimate the developmental trajectory of gaze understanding and the effect of data collection mode, we fit a GLMM predicting the task performance in each trial by age (in months, z-transformed) and data collection mode (reference category: in-person supervised). The model included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants (model notation in `R: performance ~ age + datacollection + (symmetricPosition | subjID) + (1 | targetPosition)`). Here, `targetPosition` refers to the exact bin/box of the target, while `symmetricPosition` refers to the absolute distance from the stimulus center (i.e., smaller value meaning more central target position). We expected that trials could differ in their difficulty depending on the target centrality and that these these item effects could vary between participants.
 
 For the hedge version, performance was defined as the absolute click distance between the target center and the click X coordinate, scaled according to target widths, and modeled by a `lognormal` distribution. For the box version, the model predicted correct responses (0/1) using a `Bernoulli` distribution with a logit link function. We inspected the posterior distribution (mean and 95% Confidence Interval (CI)) for the age and data collection estimates.
 
@@ -283,7 +283,7 @@ For the hedge version, performance was defined as the absolute click distance be
 (G) Internal consistency (odd-even split) in box child sample. (H) Internal consistency in box adult sample. (I) Test-retest reliability in box child sample. (J) Test-retest reliability in box adult sample.
 Regression lines with 95% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with *Pearson*'s correlation coefficient *r*.
 Large points with 95% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year). 
-Small points show the mean performance for each subject. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds  for remote unsupervised data collection. Color of data points denotes age group.
+Small points show the mean performance for each subject averaged across trials. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds  for remote unsupervised data collection. Color of data points denotes age group.
 
 ```{r fig2, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
 knitr::include_graphics(c("../figures/gafo_arrangedplot.png"))
@@ -403,7 +403,11 @@ mRetestBox <- readRDS(file = "../saves/mRetestBox.rds")
 ```
 For the test-retest reliability, we show the association between raw performance scores of the two test days and corresponding *Pearson* correlation coefficients in Figure \@ref(fig:fig2)D, E, I and J.[^fn2]
 
-[^fn2]: In the hedge version, we excluded one 5-year-old child from the test-retest analysis. The performance of the mentioned child was 3 standard deviations above the mean on both test days. Including the child yielded a *Pearson* correlation coefficient of *r* = 0.87. 
+```{r hedge_retest_correlationcoefficients}
+hedge_retest_correlationcoefficients <- readRDS(file = "../saves/gafo-hedge-retest-correlationcoefficients.rds")
+```
+
+[^fn2]: In the hedge version, we excluded one 3-year-old, one 5-year-old, and two adults from the test-retest analysis. The performance of the mentioned participants was 3 standard deviations above/below the mean of each sample. Including the two children yielded a *Pearson* correlation coefficient of *r* = `r hedge_retest_correlationcoefficients$pearson_retest[hedge_retest_correlationcoefficients$sample == "kids" & hedge_retest_correlationcoefficients$analysis == "outlier included"]`. Including the two adults yielded a *Pearson* correlation coefficient of *r* = `r hedge_retest_correlationcoefficients$pearson_retest[hedge_retest_correlationcoefficients$sample == "adults" & hedge_retest_correlationcoefficients$analysis == "outlier included"]`. 
 
 The age-corrected, GLMM based retest reliabilities for children yielded similar results. In hedge version it was `r posterior_summary(mRetestHedge)["cor_subjID__relidayreliday1__relidayreliday2", "Estimate"]` (95% CI [`r posterior_summary(mRetestHedge)["cor_subjID__relidayreliday1__relidayreliday2", "Q2.5"]`;`r posterior_summary(mRetestHedge)["cor_subjID__relidayreliday1__relidayreliday2", "Q97.5"]`]). 
 In the box version it was `r posterior_summary(mRetestBox)["cor_subjID__relidayreliday1__relidayreliday2", "Estimate"]` (95% CI [`r posterior_summary(mRetestBox)["cor_subjID__relidayreliday1__relidayreliday2", "Q2.5"]`;`r posterior_summary(mRetestBox)["cor_subjID__relidayreliday1__relidayreliday2", "Q97.5"]`]).  
@@ -556,7 +560,7 @@ optional: please review the submission guidelines from the journal whether state
 ## Child sample
 ### Webcam coding
 (ref:figlab4) **Model comparison for exploratory webcam coding of parental interference**. 
-Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level.
+Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level (i.e., average across trials per subject).
 
 ```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
 knitr::include_graphics("../figures/supplements_webcamcoding_draws.png")
@@ -575,16 +579,16 @@ We compared models using WAIC (widely applicable information criterion) scores a
 On the trial level, the model including the verification of choice as a main effect performed best: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box. Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments. On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box. In all cases, however, ELPD difference scores were smaller than their standard errors. Similarly, 95% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}). Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
 
 ```{r webcam_table, results = "asis"}
-# webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
-#   mutate(across(c(WAIC, SE_WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>% 
-#   mutate_if(is.numeric, round, 2)
-#     
-# papaja::apa_table(
-#   webcam_models, 
-#   caption = "Model comparison for exploratory webcam coding of parental interference", 
-#   note = "All models included random intercepts for participant and target position.", 
-#   escape = T
-# )
+webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
+  mutate(across(c(WAIC, Weight, ELPD, SE), as.numeric)) %>%
+  mutate_if(is.numeric, round, 2)
+
+papaja::apa_table(
+  webcam_models,
+  caption = "Model comparison for exploratory webcam coding of parental interference",
+  note = "All models included random intercepts for participant and target position.",
+  escape = T
+)
 ```
 
 ## Adult sample
