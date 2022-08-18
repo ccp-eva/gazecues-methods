@@ -192,9 +192,10 @@ Correspondence concerning this article should be addressed to Julia Prein, Max P
 \affiliation{\vspace{0.5cm}\textsuperscript{1} Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany}
 
 \abstract{%
-To explain and predict the behavior of agents, we use social cognition: we represent and reason about others' perspectives, knowledge, intentions, beliefs, and preferences. However, traditional measures of social cognition (e.g., false belief change-of-location tasks) often lack satisfactory psychometric properties: they are not designed to capture variation \emph{between} children and rely on low trial numbers, dichotomous measures, and group averages. This has profound implications for what these studies can show. Poor measurement of social cognition on an individual level may conceal relations between different aspects of cognition and may obscure developmental change. To fully understand how social-cognitive abilities emerge and relate to each other, we need new tools that can reliably measure individual differences.
-We designed a gaze understanding task to study social cognition in young children and adults to approach this issue. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze understanding -- the ability to locate and use the attentional focus of an agent. Our interactive task works across devices and enables supervised and unsupervised, as well as in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants' click imprecision and is easily adaptable to different study requirements.
-Here we show that our task induces inter-individual differences in a child (N = XXX) and an adult (N = XXX) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
+To navigate the social world and interact with other agents, we use social cognition. Traditional measures of social cognition often lack satisfactory psychometric properties and are not designed to capture variation \emph{between} individuals. This is problematic because developmental theories emphasize the role of social interaction on the development of social cognition which varies substantially across individuals and contexts. To fully understand how social-cognitive abilities emerge and relate to each other, we need new tools that can reliably measure individual differences.
+Here, we present a new task to study individual differences in social cognition in children and adults. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze understanding -- the ability to locate and use the attentional focus of an agent. Our interactive browser-based task works across devices and enables in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants' click imprecision and is easily adaptable to different study requirements.
+Our task induces inter-individual differences in a child (N = 387) and an adult (N = 236) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
+All materials and code are freely accessible to interested researchers. The task can be found here: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
 }
 
 
@@ -267,11 +268,12 @@ This is needed for precisely calculating exact pupil and target locations and si
 Additionally, it makes it easy to adjust the stimuli and, for example, add another agent to the scene.
 The web app generates two file types: (1) a text file (.json) containing meta-data, trial specifications, and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 These files can either be sent to a server or downloaded to the local device.
+Personalized links can be created by passing on URL parameters.
 
 \hypertarget{stimuli}{%
 \subsection{Stimuli}\label{stimuli}}
 
-Our newly implemented task features an online game where children or adults are asked to search for a balloon.
+Our newly implemented task asks children and adults to search for a balloon.
 The events proceed as follows (see Figure \ref{fig:fig1}B and C).
 An animated agent (a sheep, monkey, or pig) looks out of a window of a house.
 A balloon (i.e., target; blue, green, yellow, or red) is located in front of them.
@@ -302,7 +304,7 @@ They are then asked to click on the hidden balloon, i.e., the location where the
 In test trials, participants have no visual access to the target flight or the end location.
 Participants are expected to use the agent's gaze as a cue to locate the target.
 The first trial of each type comprises a voice-over description of the presented events.
-The audio descriptions explicitly state that the agent is always looking at the target (see Appendix for audio script).
+The audio descriptions explicitly state that the agent is always looking at the target (see Supplements for audio script).
 After the four training trials, participants receive 15 test trials.
 The complete sequence of four training trials and 15 test trials can be easily completed within 5-10 minutes.
 
@@ -361,7 +363,9 @@ In-person testing with children took place in kindergartens in Leipzig, Germany.
 The in-person child sample consisted of 120 children, including 40 3-year-olds (mean = 41.45 months, SD = 3.85, range = 36 - 47, 22 girls), 40 4-year-olds (mean = 54.60 months, SD = 3.10, range = 48 - 59, 19 girls), and 40 5-year-olds (mean = 66.95 months, SD = 3.39, range = 60 - 71, 22 girls).
 
 For our remote child sample, we recruited families via an internal database of children living in Leipzig, Germany, whose parents volunteered to participate in child development studies and who indicated an interest in online studies.
-Families received an email with a short study description and a personalized link and received a reminder two weeks later if they had not already participated in the study.
+Families received an email with a short study description and a personalized link.
+If they had not participated in the study within two weeks, they received a reminder via email.
+Response rate to invitations after the reminder was \textasciitilde50\%.
 
 The remote child sample included 147 children, including 45 3-year-olds (mean = 42.62 months, SD = 3.35, range = 36 - 47, 14 girls), 47 4-year-olds (mean = 52.64 months, SD = 3.40, range = 48 - 59, 25 girls), and 55 5-year-olds (mean = 65.11 months, SD = 3.77, range = 60 - 71, 27 girls).
 Children in our sample grow up in an industrialized, urban Central-European context.
@@ -370,13 +374,14 @@ Information on socioeconomic status was not formally recorded, although the majo
 Adults were recruited via \emph{Prolific} (Palan \& Schitter, 2018).
 \emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-American subject pool.
 Participants consisted of 100 English-speakers with an average age of 31.34 years (SD = 10.77, range = 18 - 63, 64 females).
-For completing the study, subjects were paid above the fixed minimum wage (on average £10.00 per hour).
+For completing the study, subjects were paid above the fixed minimum wage (on average £10.00 per hour; see Supplements for further detail).
 
 \hypertarget{procedure}{%
 \subsection{Procedure}\label{procedure}}
 
 Children in our in-person sample were tested on a tablet in a quiet room in their kindergarten.
 An experimenter guided the child through the study.
+
 Children in the remote sample received a personalized link to the study website, and families could participate at any time or location.
 At the beginning of the online study, families were invited to enter our ``virtual institute''.
 We welcomed them with a short introductory video of the study leader, describing the research background and further procedure.
@@ -454,7 +459,7 @@ Our task induced inter-individual variation in both children and adults.
 We see substantial developmental gains: with increasing age, participants became more and more precise in locating the target.
 The five-year-olds reached a proficiency level close to the adults' level.
 For neither study version nor age group did we find any floor or ceiling effects.
-The presentation as a tablet game kept children interested and motivated throughout the 15 test trials.
+The presentation as a web-app with cartoon-like features kept children interested and motivated throughout the 15 test trials.
 Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample.
 This illustrates the flexibility of the task design.
 
@@ -463,7 +468,7 @@ This illustrates the flexibility of the task design.
 
 As a next step, we aimed to investigate whether the variation that we captured with our gaze understanding task is reliable.
 We assessed internal consistency (as split-half reliability) and test-retest reliability.
-Data collection and analysis were pre-registered (can be found here: \url{https://osf.io/xqm73} for the child sample and \url{https://osf.io/nu62m} for the adult sample).
+Data collection and analysis were pre-registered (\url{https://osf.io/xqm73} for the child sample and \url{https://osf.io/nu62m} for the adult sample).
 Participants were equally distributed across the two study versions.
 The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology.
 Data was collected between July 2021 and June 2022.
@@ -485,10 +490,10 @@ The target locations, as well as the succession of agents and target colors, wer
 The child sample received 15 test trials.
 In the hedge version, each bin occurred once, making up ten of the test trials.
 For the remaining five test trials, we repeated one out of two adjacent bins (i.e., randomly chose between bin 1 \& 2, bin 3 \& 4, etc.).
-In the box version, we ensured that each of the five boxes occurred exactly three times.
-For the remaining training trials, we repeated a fixed order of four random bins/boxes.
+In the box version, we ensured that each of the five boxes occurred exactly three times during test trials.
 Adults in the hedge version received 30 test trials, each of the ten bin occurring exactly three times.
 Adults in the box version received 32 test trials, with each of the eight boxes occurring exactly four times.
+For the four training trials, we repeated a fixed order of random bins/boxes.
 
 \hypertarget{analysis-1}{%
 \subsection{Analysis}\label{analysis-1}}
@@ -497,15 +502,16 @@ We assessed reliability in two ways.
 First, we focused on internal consistency by calculating split-half reliability coefficients.
 For each subject, trials were split into odd and even trials, performance was aggregated and then correlated using \emph{Pearson} coefficients.
 For this, we used the data of the first test day.
-Performance was defined according to study version: in the hedge version, performance referred to the mean absolute difference between the target center and the click coordinate, scaled according to target widths; in the box version, we computed the mean proportion of correct choices.
+Performance was defined according to each study version: in the hedge version, performance referred to the mean absolute difference between the target center and the click coordinate, scaled according to target widths; in the box version, we computed the mean proportion of correct choices.
+
 Pronk, Molenaar, Wiers, and Murre (2021) recently compared various methods for computing split-half reliability that differ in how the trials are split into parts and whether they are combined with stratification by task design.
-To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position.
+To compare our traditional approach of a simple odd-even split, we additionally calculated split-half reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position.
 First-second and odd-even splits belong to single sample methods since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling.
 Analyses were run using the function \texttt{by\_split} from the \texttt{splithalfr} package (Pronk et al., 2021).
 
-Second, we assessed the test-retest reliability.
+Second, we assessed test-retest reliability.
 We calculated performance scores (depending on study version as described above) for each participant in each test session and correlated them using \emph{Pearson} correlation coefficients.
-Furthermore, for our child sample, we report an age-corrected correlation between the two test days using a GLMM based approach (Rouder \& Haaf, 2019).
+Furthermore, for our child sample, we report an age-corrected correlation between the two test days using a GLMM-based approach (Rouder \& Haaf, 2019).
 We fit trial-by-trial data with a fixed effect of age, a random intercept for each subject, and a random slope for test day (model notation in \texttt{R:\ performance\ \textasciitilde{}\ age\ (0\ +\ reliday\ \textbar{}\ subjID)}).
 For the hedge version, performance was modeled by a lognormal distribution, while the model for the box version used a Bernoulli distribution with a logit link function.
 The model computes a correlation between the participant-specific estimates for each test day.
@@ -520,8 +526,9 @@ A high correlation between our participant-specific model estimates would indica
 \hypertarget{results-1}{%
 \subsection{Results}\label{results-1}}
 
-We found that our gaze understanding task induced systematic variation: split-half and test-retest reliability was high for most samples.
+We found that our gaze understanding task induced systematic variation: split-half and test-retest reliability was medium to high.
 For internal consistency, we show traditional odd-even splits on our data and the corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}B, C, G, and H.
+
 Figure \ref{fig:fig3} compares split-half reliability coefficients by splitting and stratification method (Pronk et al., 2021).
 In the hedge version, the split-half reliability coefficients ranged from 0.65 to 0.93.
 In the box version, split-half reliability coefficients ranged from 0.48 to 0.86.
@@ -540,21 +547,21 @@ As expected, we found higher coefficients for the samples with higher variation,
 \caption{\textbf{Internal Consistency}. Reliability coefficients per splitting method, stratification level, study version, and age group. Error bars show the 95\% confidence intervals of the coefficient estimates, calculated with the function \texttt{by\_split} from the \texttt{splithalfr} package (Pronk et al., 2021).}\label{fig:fig3}
 \end{figure}
 
-For the test-retest reliability, we show the association between raw performance scores of the two test days and corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}D, E, I and J.\footnote{In the hedge version, we excluded one 3-year-old, one 5-year-old, and two adults from the test-retest analysis.
+For test-retest reliability, we show the association between raw performance scores of the two test days and corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}D, E, I and J.\footnote{In the hedge version, we excluded one 3-year-old, one 5-year-old, and two adults from the test-retest analysis.
   The performance of the mentioned participants was 3 standard deviations above/below the mean of each sample.
   Including the two children yielded a \emph{Pearson} correlation coefficient of \emph{r} = 0.89.
   Including the two adults yielded a \emph{Pearson} correlation coefficient of \emph{r} = 0.73.}
 
 The age-corrected, GLMM-based retest reliabilities for children yielded similar results.
-In the hedge version, the correlation between testdays was 0.90 (95\% CI {[}0.67;1.00{]}).
-In the box version, the correlation between testdays was 0.91 (95\% CI {[}0.69;1.00{]}).
+In the hedge version, the correlation between test days was 0.90 (95\% CI {[}0.67;1.00{]}).
+In the box version, the correlation between test days was 0.91 (95\% CI {[}0.69;1.00{]}).
 
 \hypertarget{discussion-1}{%
 \subsection{Discussion}\label{discussion-1}}
 
 Our results indicated that the measured variation was systematic.
 As expected, the continuous measure of the hedge version yielded higher reliability estimates than the discrete box version.
-For children, the model based reliability estimates showed that the task did capture individual differences even when correcting for age.
+For children, the model-based reliability estimates showed that the task did capture individual differences even when correcting for age.
 This corroborates what we already see in Figure \ref{fig:fig2}: there was a clear overlap between age groups, indicating that age is predictive of performance for the mean, but is not the main source of individual differences.
 
 \hypertarget{general-discussion}{%
@@ -574,17 +581,16 @@ One of the main contributions of the gaze understanding task is that it induces 
 This is primarily achieved through the implementation of short trials, resulting in over a dozen replicates per subject (15 test trials within 5-10 minutes testing time).
 
 In our task, participants are asked to locate a balloon by using the gaze cues of another agent.
-The outcome measure depends on the presented study version: in the hedge version, we implemented a continuous measure, while the box version employs a categorical measure.
-
+The outcome measure depends on the presented study version: the box version employs a categorical measure (i.e., proportion of correct choices), while the hedge version uses a continuous outcome (i.e., imprecision as distance between target and click).
 Our continuous measure of children's gaze understanding moves away from treating a social-cognitive ability as an all-or-nothing matter (e.g., dichotomous measures in pass/fail situations) toward an ability on a continuum (Beaudoin et al., 2020; Hughes \& Devine, 2015).
 Identifying variability in social-cognitive abilities is vital for accurately quantifying developmental change and revealing relations between different aspects of cognition and children's real-life social surroundings.
 Dedicated measures of individual differences will help us to design meaningful interventions and progress in psychological theory building (Hedge et al., 2018).
 
 Our continuous hedge version yields higher internal consistency estimates than the categorical box version.
 Both study versions exhibit high retest reliability, also when controlling for age.
-Therefore, when a sufficient amount of trials is presented, the box version of the task can yield reliable individual estimates (cf. Hughes et al. (2000); improved reliability through aggregation).
+Therefore, when a sufficient amount of trials is presented, the box version of the task can also yield reliable individual estimates (cf. Hughes et al. (2000); improved reliability through aggregation).
 When testing time is limited (and number of trials might be low), we recommend using the continuous study version for higher internal consistency.
-However, the categorical box version demonstrates design features that might be preferable in some research contexts: researchers could induce different levels of salience for each box.
+However, the categorical box version demonstrates design features that might be preferable in some research contexts: for example, researchers could induce different levels of salience for each box.
 Our task could consequently be used to study bias, preferences, and diverse desires (e.g., matching the box appearance to some feature/behavioral characteristic of the agent).
 
 Adding complexity to our gaze understanding task might increase individual differences in an adult sample.
@@ -605,7 +611,7 @@ This enables presentation across devices without any prior installation.
 Stimuli presentation is achieved through the use of SVGs.
 This has several advantages: the aspect ratio and stimulus quality are kept constant no matter which size the web browser displays.
 The cartoon-like presentation makes the task engaging for children and adults alike.
-Most importantly, we can dynamically modify the stimulus details (e.g., positions) on a trial-by-trial basis.
+Most importantly, we can dynamically modify the stimulus details (e.g., target positions) on a trial-by-trial basis.
 Presented agents and objects can be easily adapted for future task modifications or specific cultural settings.
 
 The web-based implementation allows for different data collection modes: participants can be tested in person with supervision or remotely at home.
@@ -613,14 +619,13 @@ Test instructions are standardized and with prior informed consent the webcam re
 This allows us to scale up data collection: testing is flexible, fast, and requires no further experimenter training.
 We compared children participating in-person, supervised in kindergartens with children who participated remotely at home.
 Our results suggest a comparable developmental trajectory of gaze understanding in both samples.
-Children in the remote sample are slightly more precise.
-This effect is most pronounced in the three-year-olds in the box version (for an analysis of the webcam recordings, see Supplements).
+Children in the remote sample were slightly more precise.
+This effect was most pronounced in the three-year-olds in the box version (for an analysis of the webcam recordings, see Supplements).
 Therefore, we recommend using a tablet for remote data collection.
 Children can click for themselves and caregivers have less chance to interfere.
-
 The design choices of the infrastructure underline how our study design can act as a versatile framework for addressing further research questions on social-cognitive development.
 
-After having proven satisfactory psychometric properties, the next step will be to ensure the validity of our task.
+After having probed our new testing infrastructure and psychometric properties, the next step will be to ensure the validity of our gaze understanding task.
 Validity is often assessed by looking at concurrent relations between measures.
 Studies on gaze following traditionally present children with a simultaneous, congruent movement of eyes and head orientation.
 In our study, however, children only observe a subtle eye movement.
@@ -628,20 +633,20 @@ Therefore, our results are not directly comparable to traditional gaze following
 Another promising way to assess validity is to correlate the social-cognitive ability in question to concepts that are thought to be theoretically related.
 For example, it has been postulated that social-cognitive abilities are predicted by family-level variables and children's language abilities.
 In our sample, caregivers were asked to fill out a short questionnaire on children's daily surroundings (e.g., sibling composition; information on childcare).
-In addition, a subset of our remote child sample completed a receptive vocabulary task (Bohn, Prein, Delikaya, Haun, \& Gagarina, n.d.). We will report the association between these family-level factors and children's language on their gaze understanding abilities in a separate paper (in preparation). In order to match our fine-grained, parametric measure of gaze understanding, however, we hope that future technological advances will enable the continuous measures of children's real-life social surroundings (Barr et al., 2020; Long, Kachergis, Agrawal, \& Frank, 2020; Rogoff, Dahl, \& Callanan, 2018).
+In addition, a subset of our remote child sample completed a receptive vocabulary task (Bohn, Prein, Delikaya, Haun, \& Gagarina, n.d.). We will report the association between these family-level factors and children's language skills on their gaze understanding abilities in a separate paper (in preparation). In order to match our fine-grained, parametric measure of gaze understanding, however, we hope that future technological advances will enable the continuous measures of children's real-life social surroundings (Barr et al., 2020; Long, Kachergis, Agrawal, \& Frank, 2020; Rogoff, Dahl, \& Callanan, 2018).
 
 Our future goal is to utilize the presented testing infrastructure for further studies on social-cognitive abilities.
 As has been pointed out, social cognition encompasses a whole range of abilities which could be best assessed by task batteries (Hughes et al., 2011; Schaafsma et al., 2015).
-We want to move from the most fundamental social-cognitive abilities to more complex processes like knowledge-ignorance or false belief understanding.
+We want to move from the most fundamental social-cognitive abilities to more complex processes like knowledge-ignorance or false belief understanding to get a complete picture of children's social cognition.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
-We have presented a new experimental paradigm to study individual differences in gaze understanding across the lifespan.
-The gaze understanding task captures individual differences and shows highly satisfactory psychometric properties with respect to internal consistency and retest reliability.
+We have presented a new experimental paradigm to study gaze understanding across the lifespan.
+Our gaze understanding task captures individual differences and shows highly satisfactory psychometric properties with respect to internal consistency and retest reliability.
 The web-based testing infrastructure allows for standardized, portable data collection at scale, both remotely as well as in person.
 Ultimately, this work shows a promising way forward toward more precise measures of cognitive development.
-The data set and the analysis code are freely available in the associated online repository (\url{https://github.com/ccp-eva/gazecues-methods}).
+The data sets and the analysis code are freely available in the associated online repository (\url{https://github.com/ccp-eva/gazecues-methods}).
 A demo version of the task is available at the following website: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
 The implementation architecture (JavaScript and HTML code) and the materials can be accessed in the following repository: \url{https://github.com/ccp-eva/gafo-demo}.
 These resources allow interested researchers to use, extend and adapt the task.
