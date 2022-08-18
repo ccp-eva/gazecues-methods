@@ -1,0 +1,257 @@
+---
+title             : |
+                    <center> Supplements for the manuscript </center>
+                    <center> "Measuring individual differences in the understanding of gaze cues across the lifespan" </center>
+shorttitle        : "Supplements"
+author: 
+  
+  - name          : "Julia Prein"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Max Planck Institute for Evolutionary Anthropology, Deutscher Platz 6, 04103 Leipzig, Germany"
+    email         : "julia_prein@eva.mpg.de"
+    
+  - name          : "Manuel Bohn"
+    affiliation   : "1"
+  - name          : "Steven Kalinke"
+    affiliation   : "1"
+    
+  - name          : "Daniel M. Haun"
+    affiliation   : "1"
+affiliation:
+  - id            : "1"
+    institution   : "Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany"
+floatsintext      : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+header-includes:
+  - \usepackage{setspace}
+  - \captionsetup[figure]{font={stretch=1}}
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+library("tidyverse")
+theme_set(theme_classic())
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Child sample
+## Webcam coding
+(ref:figlab4) **Model comparison for exploratory webcam coding of parental interference**. Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level (i.e., average across trials per subject).
+
+```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
+knitr::include_graphics("../figures/supplements_webcamcoding_draws.png")
+```
+
+```{r sample}
+testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>% 
+  # determine order of factors
+  mutate(
+    targetPosition = factor(targetPosition, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "box1", "box2", "box3", "box4", "box5")), 
+    studyversion = factor(studyversion, levels = c("hedge", "box")), 
+    datacollection = factor(datacollection, levels = c("in-person - supervised", "remote - unsupervised")),
+    sample = factor(sample, levels = c("kids", "adults")), 
+    studytype = factor(studytype, levels = c("vali", "vali2", "reli"))
+  )
+```
+
+Comparing the performances of children across our two data collection modes, we found that children participating remotely were slightly more precise.
+This difference was especially prominent in younger participants in the box version of the task.
+It is conceivable that caregivers were especially prone to influence the behavior of younger children.
+In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
+In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing.
+Due to the time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = `r n_distinct(testtrials$subjID[testtrials$datacollection == "remote - unsupervised" & testtrials$ageInYears == 3 & testtrials$studyversion == "box" & testtrials$webcam == TRUE & testtrials$studytype == "vali"])`).
+We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
+A trial was defined as the time between two eye blinking sounds.
+We transcribed all utterances by parents and children and counted the words uttered by each.
+We then classified the utterances into several categories: question asked by child, repeated test questions by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive & negative feedback, motivational statements, and incomprehensible utterances.
+In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial.
+We conducted a model comparison to estimate the effects of parental interference.
+Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in `R: correct ~ age + (1 | subjID) + (1 | targetPosition)`.[^3]
+
+[^3]: Attentive readers might notice that we simplified the structure of random effects.
+    Compared to our models in the *Individual differences* section, this model does not include the random slope for symmetric target position within participants.
+    We decided to do so since we had limited amount of data from few participants.
+
+We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects.
+Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect.
+Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample.
+We compared models using WAIC (widely applicable information criterion) scores and weights.
+As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit.
+WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
+On the trial level, the model including the verification of choice as a main effect performed best: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box.
+Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments.
+On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box.
+In all cases, however, ELPD difference scores were smaller than their standard errors.
+Similarly, 95% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}).
+Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
+
+```{r webcam_table, results = "asis"}
+webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
+  mutate(across(c(WAIC, Weight, ELPD, SE), as.numeric)) %>%
+  mutate_if(is.numeric, round, 2)
+
+papaja::apa_table(
+  webcam_models,
+  caption = "Model comparison for exploratory webcam coding of parental interference",
+  note = "All models included random intercepts for participant and target position.",
+  escape = T
+)
+```
+
+\newpage
+
+# Adult sample
+## Recruitment
+We recruited participants using the online participant recruitment service *Prolific* from the University of Oxford.
+*Prolific*'s subject pool consists of a mostly European and US-american sample although subjects from all over the world are included.
+The recruitment platform realises ethical payment of participants, which requires researchers to pay participants a fixed minimum wage of £5.00 (around US\$6.50 or €6.00) per hour.
+We decided to pay all participants the same fixed fee which was in relation to the estimated average time taken to complete the task.
+*Prolific* distributed our study link to potential participants, while the hosting of the online study was done by local servers in the Max Planck Institute for Evolutionary Anthropology, Leipzig.
+Therefore, study data was saved only on our internal servers, while *Prolific* provided demographic information of the participants.
+Participants' *Prolific* ID was forwarded to our study website using URL parameters.
+This way, we could match participant demographic data to our study data.
+The same technique was used to confirm study completion: we redirected participants from our study website back to the *Prolific* website using URL parameters.
+We used *Prolific*'s inbuilt prescreening filter to include only participants who were fluent in English and could therefore properly understand our written and oral study instructions.
+
+## Study 1 - Validation hedge version
+The aim of Study 1 was to validate the hedge version of our gaze understanding task.
+The pre-registration can be found here: <https://osf.io/r3bhn>.
+We recruited participants online by advertising the study on *Prolific*.
+
+50 adults participated in the study.
+One additional subject returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
+Data collection took place in May 2021.
+Participants were compensated with £1.25 for completing the study.
+We estimated an average completion time of 6 minutes, resulting in an estimated hourly rate of £10.00.
+On average, participants took 05:56min to complete the study.
+Participants were required to complete the study on a tablet or desktop.
+Participation on mobile devices was disabled since the display would be too small and would harm click precision.
+It was indicated that the study required audio sound.
+
+We stored *Prolific*'s internal demographic information, while not asking for additional personal information.
+
+## Study 2 - Validation box version
+As in study 1, we recruited participants on *Prolific*, and employed the same methodology.
+However, this time we focussed on validating the box version of the task in an adult sample.
+Participants were presented with eight boxes in which the target could land.
+50 adults participated in the study.
+One additional subject returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
+Data collection took place in June 2021.
+Participants were compensated with £1.00 for completing the study.
+We estimated an average completion time of 6 minutes, resulting in an estimated hourly rate of £10.00.
+On average, participants took 04:43min to complete the study.
+
+## Study 3 - Reliability hedge version
+In stuyy 3 and 4, we assessed the test-retest reliability of our gaze understanding task in an adult sample.
+The pre-registration can be found here: <https://osf.io/nu62m>.
+We tested the same participants twice with a delay of two weeks.
+The testing conditions were as specified in Study 1 and 2.
+However, the target locations as well as the succession of animals and target colors was randomized once.
+Each participant then received the same fixed randomized order of target location, animal, and target color.
+Participants received 30 test trials without voice-over description, so that each of the ten bins occurred exactly three times.
+
+In addition to the beforementioned prescreening settings, we used a whitelist.
+*Prolific* has a so-called *custom allowlist prescreening filter* where one can enter the *Prolific* IDs of participants who completed a previous study.
+Only these subjects are then invited to participate in a study.
+This way, repeated measurements can be implemented, collecting data from the same subjects at different points in time.
+
+In a first round, 60 participants took part on the first testday.
+Additional two subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
+One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
+The maximum time is calculated by *Prolific*, based on the estimated average completion time.
+For this study, the maximum time amounted to 41 minutes.
+For the first testday, participants were compensated with £1.25.
+We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £8.33.
+On average, participants took 07:11min to complete the first part.
+
+Of the 60 participants that completed testday 1, 41 subjects finished testday 2.
+One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
+Participants were compensated with £1.50 for completing the second part of the study.
+We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £10.
+On average, participants took 06:36min to complete the second part of the study.
+
+Since we aimed for a minimum sample size of 60 subjects participating on both testdays, we reran the first testday with additional 50 participants.
+Additional seven subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
+Two additional participants timed out, i.e., did not finish the survey within the allowed maximum time.
+Again, participants were compensated with £1.25 for completing the first part of the study (estimated average completion time 9 minutes, estimated hourly rate of £8.33).
+On average, participants took 06:51min to complete the first part.
+
+Of the additional 50 participants that completed testday 1, 29 subjects finished testday 2.
+Again, participants were compensated with £1.50 for completing the second part of the study (estimated average completion time 9 minutes, estimated hourly rate of £10).
+On average, participants took 06:26min to complete the second part of the study.
+
+## Study 4 - Reliability box version
+As in study 3, we recruited participants on *Prolific*, and employed the same methodology.
+However, this time participants were presented with the box version of the task.
+Participants received 32 test trials without voice-over description, so that each of the eight boxes occurred exactly four times.
+As in study 2, we employed eight boxes in which the target could land.
+
+In a first round, 60 participants took part on the first testday.
+Additional five subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
+For the first testday, participants were compensated with £1.25.
+We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £8.33.
+On average, participants took 07:33min to complete the first part.
+
+Of the 60 participants that completed testday 1, 41 subjects finished testday 2.
+Participants were compensated with £1.50 for completing the second part of the study.
+We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £10.
+On average, participants took 07:50min to complete the second part of the study.
+
+Since we aimed for a minimum sample size of 60 subjects participating on both testdays, we reran the first testday with additional 50 participants.
+Additional eight subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
+One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
+Again, participants were compensated with £1.25 for completing the first part of the study (estimated average completion time 9 minutes, estimated hourly rate of £8.33).
+On average, participants took 07:37min to complete the first part.
+
+Of the additional 50 participants that completed testday 1, 28 subjects finished testday 2.
+Additional three subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
+One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
+Again, participants were compensated with £1.50 for completing the second part of the study (estimated average completion time 9 minutes, estimated hourly rate of £10).
+On average, participants took 06:30min to complete the second part of the study.
+
+\newpage
+
+# Instructions and voice-over descriptions
+This is the content of our audio recordings that were played as instructions and during voice-over trials.
+
+|                              |                                                                                                                                                                                                                                                  |                                                                                                                                                                                                                                                       |                       |
+|------------------|------------------|------------------|------------------|
+| **Timeline**                 | **German**                                                                                                                                                                                                                                       | **English**                                                                                                                                                                                                                                           | **Filename**          |
+| **welcome**                  | Hallo! Schön, dass du da bist. Wir spielen jetzt das Ballon-Spiel! Siehst du die Tiere auf dem Bild da? Wir möchten gleich zusammen mit den Tieren mit einem Ballon spielen. Was genau passiert, erklären wir dir jetzt ganz in Ruhe.            | Hello! Great that you're here. We'll now play a balloon game. Can you see the animals in the picture over there? We want to play together with the animals using the balloon. We'll now talk you through exactly what will happen.                    | welcome.mp3           |
+| **touch**                    | Schau mal, da steht ein Tier im Fenster. Und siehst du den Ballon da? Der Ballon fällt immer runter und landet auf dem Boden. Und du musst ihn dann finden. Das Tier hilft Dir und schaut immer den Ballon an.                                   | Look, an animal is standing in the window. And can you see the balloon over there? The balloon always falls down and lands on the ground. And you have to find it! The animal helps you and always looks at the balloon.                              | touch-1.mp3           |
+|                              | Wo ist der Ballon? Drück auf den Ballon!                                                                                                                                                                                                         | Where is the balloon? Click on the balloon!                                                                                                                                                                                                           | prompt-touch-long.mp3 |
+| **fam - HEDGE**              | Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er hinter eine Hecke. Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. | Perfect, that was great! Now, we'll continue playing. Can you see the animal and the balloon again? The balloon will fall down again. This time, it will fall behind a hedge. And you have to find it! The animal helps you and looks at the balloon. | fam-hedge-1.mp3       |
+|                              | Wo ist der Ballon? Drücke auf die Hecke - wo der Ballon ist.                                                                                                                                                                                     | Where is the balloon? On the hedge, click where the balloon is.                                                                                                                                                                                       | prompt-hedge-long.mp3 |
+| **fam - BOX**                | Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er in eine Kiste. <br>Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. | Perfect, that was great! Now, we'll continue playing. Can you see the animal and the balloon again? The balloon falls down again. This time, it falls into a box. And you have to find it! The animal helps you and looks at the balloon.             | fam-box-1.mp3         |
+|                              | Wo ist der Ballon? Drücke auf die Kiste mit dem Ballon.                                                                                                                                                                                          | Where is the balloon? Click on the box with the balloon.                                                                                                                                                                                              | prompt-box-long.mp3   |
+| **test - HEDGE**             | Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Hecke. Die Hecke wächst jetzt hoch.                                                                                                       | Nice, good job! Now, we'll continue playing. There is the balloon, the animal and the hedge. The hedge is growing a bit now.                                                                                                                          | test-hedge-1.mp3      |
+|                              | Der Ballon ist nun hinter der Hecke. Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon auf den Boden und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an.                                            | The balloon is behind the hedge now. You can't see it - but the animal can! The balloon falls to the ground and you have to find it. Remember - the animal always looks at the balloon!                                                               | test-hedge-2.mp3      |
+|                              | Dann schrumpft die Hecke. Drücke auf die Hecke - wo der Ballon ist.                                                                                                                                                                              | Now, the hedge is shrinking. On the hedge, click where the balloon is.                                                                                                                                                                                | test-hedge-3.mp3      |
+| **test - BOX**               | Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Kisten. Jetzt wächst eine Hecke hoch.                                                                                                     | Nice, good job! Now, we'll continue playing. There is the balloon and the animal. Now, a hedge is growing.                                                                                                                                            | test-box-1.mp3        |
+|                              | Der Ballon ist nun hinter der Hecke. Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon in eine Kiste und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an.                                            | The balloon is behind the hedge now. You can't see it - but the animal can! The balloon falls into a box and you have to find it. Remember - the animal always looks at the balloon!                                                                  | test-box-2.mp3        |
+|                              | Dann schrumpft die Hecke. Drücke auf die Kiste mit dem Ballon.                                                                                                                                                                                   | Now, the hedge is shrinking. Click on the box with the balloon.                                                                                                                                                                                       | test-box-3.mp3        |
+| **goodbye**                  | Geschafft! Die Tiere sind schon ganz glücklich vom Spielen! Vielen Dank für deine Hilfe! Bis zum nächsten Mal und liebe Grüße vom Schwein, Affen und Schaf                                                                                       | The animals are super happy after playing. Thanks a lot for your help! See you soon and goodbye from the pig, monkey and sheep                                                                                                                        | goodbye.mp3           |
+| **general prompt**           | Wo ist der Ballon?                                                                                                                                                                                                                               | Where is the balloon?                                                                                                                                                                                                                                 | prompt-general.mp3    |
+| **touch - no response**      | Drück auf den Ballon!                                                                                                                                                                                                                            | Click on the balloon!                                                                                                                                                                                                                                 | prompt-touch.mp3      |
+| **hedge - no response**      | Drücke auf die Hecke - wo der Ballon ist!                                                                                                                                                                                                        | On the hedge, click where the balloon is!                                                                                                                                                                                                             | prompt-hedge.mp3      |
+| **box - no response**        | Drücke auf die Kiste mit dem Ballon!                                                                                                                                                                                                             | Click on the box with the balloon!                                                                                                                                                                                                                    | prompt-box.mp3        |
+| **landing sound of balloon** | \-                                                                                                                                                                                                                                               | \-                                                                                                                                                                                                                                                    | balloon-lands.mp3     |
+| **sound of blinking eyes**   | \-                                                                                                                                                                                                                                               | \-                                                                                                                                                                                                                                                    | blink.mp3             |
+| **sound for target click**   | \-                                                                                                                                                                                                                                               | \-                                                                                                                                                                                                                                                    | positive-feedback.mp3 |

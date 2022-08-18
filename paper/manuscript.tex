@@ -33,16 +33,6 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
-\usepackage{longtable,booktabs,array}
-\usepackage{calc} % for calculating minipage widths
-% Correct order of tables after \paragraph or \subparagraph
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-\makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-\makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -216,15 +206,15 @@ Here we show that our task induces inter-individual differences in a child (N = 
 \section{Introduction}\label{introduction}}
 
 Social cognition -- representing and reasoning about an agent's perspectives, knowledge states, intentions, beliefs, and preferences to explain and predict their behavior -- is among the most-studied phenomena in developmental research.
-In recent decades, much progress has been made in determining the average age at which a specific social-cognitive ability emerges in development (Gopnik \& Slaughter, 1991; Peterson, Wellman, \& Slaughter, 2012; Rakoczy, 2022; Wellman, Cross, \& Watson, 2001; Wellman \& Liu, 2004). Yet, there are always individual differences. Identifying variability in social-cognitive abilities and factors influencing their development is vital in theory building (e.g., to test causal predictions) and for designing interventions (Happé, Cook, \& Bird, 2017; Kidd, Donnelly, \& Christiansen, 2018; Lecce, Bianco, Devine, Hughes, \& Banerjee, 2014; Mundy et al., 2007; Underwood, 1975).
+In recent decades, much progress has been made in determining the average age at which a specific social-cognitive ability emerges in development (Gopnik \& Slaughter, 1991; Peterson, Wellman, \& Slaughter, 2012; Rakoczy, 2022; Wellman, Cross, \& Watson, 2001; Wellman \& Liu, 2004). Yet, there are always individual differences. Identifying variability in social-cognitive abilities and factors influencing their development is vital in theory building (e.g., to test causal predictions) and designing interventions (Happé, Cook, \& Bird, 2017; Kidd, Donnelly, \& Christiansen, 2018; Lecce, Bianco, Devine, Hughes, \& Banerjee, 2014; Mundy et al., 2007; Underwood, 1975).
 
 Numerous studies have already examined individual differences in social cognition (for an overview, see Hughes \& Devine, 2015; Slaughter, 2015). These individual differences studies often focus on the relationship between social-cognitive abilities and: (1) family influences, (2) other cognitive constructs, and (3) social behavioral outcome (for an overview, see Repacholi, 2003). Studies on social-cognitive abilities and family influences include the effect of parenting practices (for a review, see Pavarini, de Hollanda Souza, \& Hawk, 2013), attachment quality (e.g., Astor et al., 2020), mental state talk (Gola, 2012; Hughes, Ensor, \& Marks, 2011; Lecce et al., 2014), and family background as parental education, occupation, sibling interaction and childcare (Bulgarelli \& Molina, 2016; Cutting \& Dunn, 1999; Dunn, Brown, Slomkowski, Tesla, \& Youngblade, 1991). Another group of individual differences studies focuses on the interplay of social and physical cognition (Herrmann, Hernández-Lloreda, Call, Hare, \& Tomasello, 2010), executive functions (Benson, Sabbagh, Carlson, \& Zelazo, 2012; Buttelmann, Kühn, \& Zmyj, 2021; Carlson \& Moses, 2001; Carlson, Moses, \& Claxton, 2004; Hughes \& Ensor, 2007), and language abilities (McEwen et al., 2007; Milligan, Astington, \& Dack, 2007; Okumura, Kanakogi, Kobayashi, \& Itakura, 2017). Studies on social behavioral outcomes measured the interplay of social cognition and prosociality (for a review, see Imuta, Henry, Slaughter, Selcuk, \& Ruffman, 2016; Walker, 2005), stereotypes and resource allocations (Rizzo \& Killen, 2018), and moral intentions (Sodian et al., 2016).
 
-However, frequently, developmental psychologists are surprised to find minor or no association between measures of social cognition that are thought to be theoretically related -- cross-sectionally and/or longitudinally (e.g., Sodian et al., 2016). This might be because traditional measures of social cognition are not designed to capture variation between children: they often rely on low trial numbers, small sample sizes, and dichotomous measures. A recent review showed that many studies on social cognition measures failed to report relevant psychometric properties at all (Beaudoin, Leblanc, Gagner, \& Beauchamp, 2020) or -- when they did -- showed mixed results on test-retest reliability (Hughes et al., 2000; Mayes, Klin, Tercyak, Cicchetti, \& Cohen, 1996).
+However, developmental psychologists are frequently surprised to find minor or no association between measures of social cognition that are thought to be theoretically related -- cross-sectionally and/or longitudinally (e.g., Sodian et al., 2016). This might be because traditional measures of social cognition are not designed to capture variation between children: they often rely on low trial numbers, small sample sizes, and dichotomous measures. A recent review showed that many studies on social cognition measures failed to report relevant psychometric properties at all (Beaudoin, Leblanc, Gagner, \& Beauchamp, 2020) or -- when they did -- showed mixed results on test-retest reliability (Hughes et al., 2000; Mayes, Klin, Tercyak, Cicchetti, \& Cohen, 1996).
 
-To give an example: perhaps the most commonly applied prototypical measure for social cognition is the change-of-location false belief task (Baron-Cohen, Leslie, \& Frith, 1985; Wimmer \& Perner, 1983). Here, children watch a short sequence of events (often acted out or narrated by the experimenters). A doll called Sally puts her marble into a basket. After Sally leaves the scene, a second doll named Anne takes the marble and moves it into a box. Participants then get asked where Sally will look for her marble once she returns. The outcome measures false belief understanding in a dichotomous way: children pass the task if they take the protagonist's epistemic state into account and answer that she will look into the basket. Many years of research utilizing these verbal change-of-location tasks suggest that children develop belief-representing abilities at four to five years of age (for a review, see Wellman et al., 2001). Several cross-cultural studies supported this evidence (Barrett et al., 2013; Callaghan et al., 2005; cf. Mayer \& Träuble, 2015).
+To give an example: the most commonly applied prototypical measure for social cognition is the change-of-location false belief task (Baron-Cohen, Leslie, \& Frith, 1985; Wimmer \& Perner, 1983). Here, children watch a short sequence of events (often acted out or narrated by the experimenters). A doll called Sally puts her marble into a basket. After Sally leaves the scene, a second doll named Anne takes the marble and moves it into a box. Participants then get asked where Sally will look for her marble once she returns. The outcome measures false belief understanding in a dichotomous way: children pass the task if they take the protagonist's epistemic state into account and answer that she will look into the basket. Many years of research utilizing these verbal change-of-location tasks suggest that children develop belief-representing abilities at four to five years of age (for a review, see Wellman et al., 2001). Several cross-cultural studies supported this evidence (Barrett et al., 2013; Callaghan et al., 2005; cf. Mayer \& Träuble, 2015).
 
-However, from this age onwards, the change-of-location task shows ceiling effects and has very limited diagnostic value (Repacholi, 2003). Thus, this sort of task seems to be well suited to track group-level developmental trends, yet it fails to capture individual differences (cf.~``reliability paradox,'' Hedge, Powell, \& Sumner, 2018).
+However, from this age onwards, the change-of-location task shows ceiling effects and has very limited diagnostic value (Repacholi, 2003). Thus, this task seems well suited to track group-level developmental trends, yet it fails to capture individual differences (cf.~``reliability paradox,'' Hedge, Powell, \& Sumner, 2018).
 As Wellman (2012) put it, ``it's really only passing/failing one sort of understanding averaged across age'' (p.~317).
 This has profound implications for what studies on individual differences using this task (or others) can show.
 Poor measurement of social cognition on an individual level is likely to conceal relations between different aspects of cognition and may obscure developmental change.
@@ -236,7 +226,7 @@ Schaafsma, Pfaff, Spunt, and Adolphs (2015) compiled a ``wish-list'' for new soc
 They advocated for parametric -- instead of dichotomous -- measures covering proficiency as a range, avoiding floor and ceiling effects, and showing satisfactory test-retest reliability estimates (see also Beaudoin et al., 2020; Hughes \& Devine, 2015).
 New tasks should induce variation across age groups, including older children and adults (Repacholi, 2003).
 Another goal in creating new tasks should be to focus on the ``face value'': measures should probe the underlying social-cognitive ability as straight-forward and directly as possible.
-Keeping task demands minimal is also beneficial for using the paradigm in a variety of different cultural, clinical and demographic contexts (Molleman, Kurvers, \& van den Bos, 2019).
+Keeping task demands minimal is also beneficial for using the paradigm in a variety of different cultural, clinical, and demographic contexts (Molleman, Kurvers, \& van den Bos, 2019).
 The task should serve as a proxy for behavior as it appears in the real world and should be validated in relation to real-world experiences (Repacholi, 2003).
 
 \hypertarget{a-new-measure-of-gaze-understanding}{%
@@ -248,16 +238,16 @@ The first component of this ability is often termed gaze following -- turning on
 Following an agent's gaze provides insights into their intentions, thoughts, and feelings by acting as a ``front end ability'' (Brooks \& Meltzoff, 2005, p. 535).
 In our definition, gaze understanding goes one step further by including the \emph{acting on the gaze-cued location} -- therefore, using the available social information to guide one's behavior as needed in real-life conditions.
 
-To address the psychometric shortcoming of earlier work, we implemented the following design features: First, we used a continuous measure which allowed us to capture fine grained individual differences at different ages.
+To address the psychometric shortcoming of earlier work, we implemented the following design features: First, we used a continuous measure which allowed us to capture fine-grained individual differences at different ages.
 Second, we designed short trials that facilitate more than a dozen replicates per subject.
-The result are more precise individual-level estimates.
+The result is more precise individual-level estimates.
 Third, we systematically investigated the psychometric properties of the new task.
 
 Designing this task required a new testing infrastructure.
 We designed the task as an interactive browser-based web app.
 This greatly increased the flexibility with which we could modify the stimuli on a trial-by-trial basis.
 Furthermore, because the task is largely self-contained, it is much more controlled and standardized.
-Most importantly perhaps, it makes the task portable: testing is possible in-person using tablets but also remotely via the internet (no installation needed).
+Most importantly, it makes the task portable: testing is possible in-person using tablets but also remotely via the internet (no installation needed).
 As such, it provides a solid basis to study individual differences in gaze understanding across ages at scale.
 We make the task and its source code openly accessible for other researchers to use and modify.
 
@@ -267,15 +257,15 @@ We make the task and its source code openly accessible for other researchers to 
 \hypertarget{implementation}{%
 \subsection{Implementation}\label{implementation}}
 
-The code is open-source (\url{https://github.com/ccp-eva/gafo-demo}) and a live demo version can be found under: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
+The code is open-source (\url{https://github.com/ccp-eva/gafo-demo}), and a live demo version can be found under: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
 
 The web app was programmed in \texttt{JavaScript}, \texttt{HTML5}, \texttt{CSS} and \texttt{PHP}.
 For stimulus presentation, a scalable vector graphic (SVG) composition was parsed.
-This way, the composition scales according to the user's view port without loss of quality, while keeping the aspect ratio and relative object positions constant.
+This way, the composition scales according to the user's viewport without loss of quality while keeping the aspect ratio and relative object positions constant.
 Furthermore, SVGs allow us to define all composite parts of the scene (e.g., pupil of the agent) individually.
 This is needed for precisely calculating exact pupil and target locations and sizes.
 Additionally, it makes it easy to adjust the stimuli and, for example, add another agent to the scene.
-The web app generates two file types: (1) a text file (.json) containing meta-data, trial specifications and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
+The web app generates two file types: (1) a text file (.json) containing meta-data, trial specifications, and participants' click responses, and (2) a video file (.webm) of the participant's webcam recording.
 These files can either be sent to a server or downloaded to the local device.
 
 \hypertarget{stimuli}{%
@@ -286,8 +276,7 @@ The events proceed as follows (see Figure \ref{fig:fig1}B and C).
 An animated agent (a sheep, monkey, or pig) looks out of a window of a house.
 A balloon (i.e., target; blue, green, yellow, or red) is located in front of them.
 The target then falls to the ground.
-At all times, the agent's gaze tracks the movement of the target.
-That is, the pupils and iris of the agent move in a way that their center aligns with the center of the target.
+At all times, the agent's gaze tracks the movement of the target: the pupils and iris move so that their center aligns with the center of the target.
 While the distance of the target's flight depends on the final location, the target moves at a constant speed.
 Participants are then asked to locate the target: they respond by touching or clicking on the screen.
 Visual access to the target's true location is manipulated by a hedge.
@@ -298,8 +287,8 @@ To keep participants engaged and interested, the presentation of events is accom
 Each trial starts with an attention-getter: an eye-blinking sound plays while the pupils and iris of the agent enlarge (increase to 130\%) and change in opacity (decrease to 75\%) for 0.3 sec.
 The landing of the target is accompanied by a tapping sound.
 Once the target landed, the instructor's voice asks ``Where is the balloon?''.
-For confirming the participant's click, a short plop sound plays and a small orange circle appears at the location of choice.
-Participants do not receive differential feedback so that learning effects are reduced and trials stay comparable across the sample.
+For confirming the participant's click, a short plop sound plays, and a small orange circle appears at the location of choice.
+Participants do not receive differential feedback so that learning effects are reduced, and trials stay comparable across the sample.
 If no response is registered within 5 secs after the target landed, an audio prompt reminds the participant to respond.
 
 \hypertarget{trials}{%
@@ -320,12 +309,12 @@ The complete sequence of four training trials and 15 test trials can be easily c
 \hypertarget{study-versions}{%
 \subsection{Study versions}\label{study-versions}}
 
-We designed two study versions which differ in the final hiding place of the target and, consequently, on the outcome measure: a \emph{hedge version} (continuous) and a \emph{box version} (discrete).
+We designed two study versions that differ in the target's final hiding place and, consequently, on the outcome measure: a \emph{hedge version} (continuous) and a \emph{box version} (discrete).
 Both versions use the same first training trial and then differ in the consecutive training and test trials.
 In the hedge version, participants have to indicate their estimated target location directly on a hedge.
 Here, the dependent variable is imprecision, which is defined as the absolute difference between the target center and the x coordinate of the participant's click.
-In the box version, the target lands in a box and participants are asked to click on the box that hides the target.
-Researchers have the choice how many boxes are shown: one up to eight boxes can be displayed as potential hiding locations.
+In the box version, the target lands in a box, and participants are asked to click on the box that hides the target.
+Researchers can choose how many boxes are shown: one up to eight boxes can be displayed as potential hiding locations.
 Here, we use a categorical outcome (i.e., which box was clicked) to calculate the proportion of correct responses.
 Note that in the test trials of both versions, the target flight is covered by a hedge.
 In the hedge version, the hedge then shrinks to a minimum height required to cover the target's end location.
@@ -340,7 +329,7 @@ The boxes then hide the target's final destination (see Figure \ref{fig:fig1}B a
 
 }
 
-\caption{\textbf{Study setup}. (A) Infrastructure for online testing. (i) Subjects aged 3 -- 99+ can participate. Data collection can take place anywhere: online, in kindergartens or research labs. (ii) The task is presented as a website that works across devices. (iii) The scripts for the website and the recorded data are stored on secure local servers. (B) Hedge version (continuous) of the gaze understanding task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground. The agent's eyes track the movement of the target. (C) Box version (discrete) of the gaze understanding task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set according to the researcher's need.}\label{fig:fig1}
+\caption{\textbf{Study setup}. (A) Infrastructure for online testing. (i) Subjects aged 3 -- 99+ can participate. Data collection can take place anywhere: online, in kindergartens, or research labs. (ii) The task is presented as a website that works across devices. (iii) The scripts for the website and the recorded data are stored on secure local servers. (B) Hedge version (continuous) of the gaze understanding task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground. The agent's eyes track the movement of the target. (C) Box version (discrete) of the gaze understanding task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set according to the researcher's need.}\label{fig:fig1}
 \end{figure}
 
 \hypertarget{randomization}{%
@@ -359,7 +348,7 @@ As with agent and color choice, each bin/box occurs equally often and can only o
 Our first aim was to assess whether our gaze understanding task induces inter-individual variation in a child and adult sample.
 Furthermore, we were interested in how the data collection mode (in-person vs.~remote) influences responses.
 
-Methods, sample size and analysis were pre-registered: \url{https://osf.io/snju6} (child sample) and \url{https://osf.io/r3bhn} (adult sample).
+Methods, sample size, and analysis were pre-registered: \url{https://osf.io/snju6} (child sample) and \url{https://osf.io/r3bhn} (adult sample).
 Participants were equally distributed across the two study versions.
 The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology.
 Data was collected between May and October 2021.
@@ -371,35 +360,36 @@ We collected data from an in-person child sample, a remote child sample, and a r
 In-person testing with children took place in kindergartens in Leipzig, Germany.
 The in-person child sample consisted of 120 children, including 40 3-year-olds (mean = 41.45 months, SD = 3.85, range = 36 - 47, 22 girls), 40 4-year-olds (mean = 54.60 months, SD = 3.10, range = 48 - 59, 19 girls), and 40 5-year-olds (mean = 66.95 months, SD = 3.39, range = 60 - 71, 22 girls).
 
-For our remote child sample, we recruited families via an internal database of children living in Leipzig, Germany, whose parents volunteered to participate in studies on child development and who indicated interest in online studies.
-Families received an email with a short study description and a personalized link, and received a reminder two weeks later if they had not already participated in the study.
+For our remote child sample, we recruited families via an internal database of children living in Leipzig, Germany, whose parents volunteered to participate in child development studies and who indicated an interest in online studies.
+Families received an email with a short study description and a personalized link and received a reminder two weeks later if they had not already participated in the study.
 
 The remote child sample included 147 children, including 45 3-year-olds (mean = 42.62 months, SD = 3.35, range = 36 - 47, 14 girls), 47 4-year-olds (mean = 52.64 months, SD = 3.40, range = 48 - 59, 25 girls), and 55 5-year-olds (mean = 65.11 months, SD = 3.77, range = 60 - 71, 27 girls).
 Children in our sample grow up in an industrialized, urban Central-European context.
 Information on socioeconomic status was not formally recorded, although the majority of families come from mixed, mainly mid to high socioeconomic backgrounds with high levels of parental education.
 
 Adults were recruited via \emph{Prolific} (Palan \& Schitter, 2018).
-\emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-american subject pool.
+\emph{Prolific} is an online participant recruitment service from the University of Oxford with a predominantly European and US-American subject pool.
 Participants consisted of 100 English-speakers with an average age of 31.34 years (SD = 10.77, range = 18 - 63, 64 females).
-For completing the study, subjects were payed above the fixed minimum wage (in average £10.00 per hour).
+For completing the study, subjects were paid above the fixed minimum wage (on average £10.00 per hour).
 
 \hypertarget{procedure}{%
 \subsection{Procedure}\label{procedure}}
 
 Children in our in-person sample were tested on a tablet in a quiet room in their kindergarten.
 An experimenter guided the child through the study.
-Children in the remote sample received a personalized link to the study website and families could participate at any time or location they wanted.
-In the beginning of the online study, families were invited to enter our ``virtual institute'' and were welcomed by an introductory video of the study leader, shortly describing the research background and further procedure.
+Children in the remote sample received a personalized link to the study website, and families could participate at any time or location.
+At the beginning of the online study, families were invited to enter our ``virtual institute''.
+We welcomed them with a short introductory video of the study leader, describing the research background and further procedure.
 Then, caregivers were informed about data security and were asked for their informed consent.
 They were asked to enable the sound and seat their child centrally in front of their device.
 Before the study started, families were instructed how to setup their webcam and enable the recording permissions.
 We stressed that caregivers should not help their children.
-Study participation was video recorded whenever possible in order to ensure that the answers were generated by the children themselves.
+Study participation was video recorded whenever possible in order to ensure that children themselves generated the answers.
 Depending on the participant's device, the website automatically presented the hedge or box version of the study.
 For families that used a tablet with touchscreen, the hedge version was shown.
-Here, children could directly click on the touchscreen themselves to indicate where the target is.
+Here, children could directly click on the touchscreen to indicate where the target is.
 For families that used a computer without touchscreen, the website presented the box version of the task.
-We assumed that younger children in our sample would not be acquainted with the usage of a computer mouse.
+We assumed that younger children in our sample would not be acquainted with using a computer mouse.
 Therefore, we asked children to point to the screen, while caregivers were asked to act as the ``digital finger'' of their children and click on the indicated box.
 
 All participants received 15 test trials.
@@ -408,14 +398,14 @@ In the box version, we decided to adjust the task difficulty according to the sa
 \hypertarget{analysis}{%
 \subsection{Analysis}\label{analysis}}
 
-All test trials without voice over description were included in our analyses.
+All test trials without voice-over description were included in our analyses.
 We ran all analyses in R version 4.2.0 (2022-04-22) (R Core Team, 2022).
 Regression models were fit as Bayesian generalized linear mixed models (GLMMs) with default priors for all analyses, using the function \texttt{brm} from the package \texttt{brms} (Bürkner, 2017, 2018).
 
 To estimate the developmental trajectory of gaze understanding and the effect of data collection mode, we fit a GLMM predicting the task performance in each trial by age (in months, z-transformed) and data collection mode (reference category: in-person supervised).
 The model included random intercepts for each participant and each target position, and a random slope for symmetric target position within participants (model notation in \texttt{R:\ performance\ \textasciitilde{}\ age\ +\ datacollection\ +\ (symmetricPosition\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}).
 Here, \texttt{targetPosition} refers to the exact bin/box of the target, while \texttt{symmetricPosition} refers to the absolute distance from the stimulus center (i.e., smaller value meaning more central target position).
-We expected that trials could differ in their difficulty depending on the target centrality and that these these item effects could vary between participants.
+We expected that trials could differ in their difficulty depending on the target centrality and that these item effects could vary between participants.
 
 For the hedge version, performance was defined as the absolute click distance between the target center and the click X coordinate, scaled according to target widths, and modeled by a \texttt{lognormal} distribution.
 For the box version, the model predicted correct responses (0/1) using a \texttt{Bernoulli} distribution with a logit link function.
@@ -432,11 +422,11 @@ We inspected the posterior distribution (mean and 95\% Confidence Interval (CI))
 
 }
 
-\caption{\textbf{Measuring inter-individual variation}. (A) Developmental trajectory in continuous hedge version. Performance is measured as imprecision, i.e., the absolute distance between the target's center and the participant's click (averaged across trials). The unit of imprecision is counted in the width of the target, i.e., a participant with an imprecision of 1 clicked in average one target width to the left or right of the true target center. (B) Internal consistency (odd-even split) in hedge child sample. (C) Internal consistency in hedge adult sample. (D) Test-retest reliability in hedge child sample. (E) Test-retest reliability in hedge adult sample. (F) Developmental trajectory in discrete box version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that actually contained the target. Dotted black line shows level of performance expected by chance (for child sample 20\%, i.e., 1 out of 5 boxes; for adult sample 12.5\%, i.e., 1 out of 8 boxes). (G) Internal consistency (odd-even split) in box child sample. (H) Internal consistency in box adult sample. (I) Test-retest reliability in box child sample. (J) Test-retest reliability in box adult sample. For (A) and (F), regression lines show the predicted developmental trajectories (with 95\% CrI) based on GLMMs, with the line type indicating the data collection mode. For (B-E) and (G-J), regression lines with 95\% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with \emph{Pearson}'s correlation coefficient \emph{r}. Large points with 95\% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year). Small points show the mean performance for each subject averaged across trials. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds for remote unsupervised data collection. Color of data points denotes age group.}\label{fig:fig2}
+\caption{\textbf{Measuring inter-individual variation}. (A) Developmental trajectory in continuous hedge version. Performance is measured as imprecision, i.e., the absolute distance between the target's center and the participant's click (averaged across trials). The unit of imprecision is counted in the width of the target, i.e., a participant with imprecision of 1 clicked on average one target width to the left or right of the true target center. (B) Internal consistency (odd-even split) in hedge child sample. (C) Internal consistency in hedge adult sample. (D) Test-retest reliability in hedge child sample. (E) Test-retest reliability in hedge adult sample. (F) Developmental trajectory in discrete box version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that contained the target. Dotted black line shows level of performance expected by chance (for child sample 20\%, i.e., 1 out of 5 boxes; for adult sample 12.5\%, i.e., 1 out of 8 boxes). (G) Internal consistency (odd-even split) in box child sample. (H) Internal consistency in box adult sample. (I) Test-retest reliability in box child sample. (J) Test-retest reliability in box adult sample. For (A) and (F), regression lines show the predicted developmental trajectories (with 95\% CrI) based on GLMMs, with the line type indicating the data collection mode. For (B-E) and (G-J), regression lines with 95\% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with \emph{Pearson}'s correlation coefficient \emph{r}. Large points with 95\% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year). Small points show the mean performance for each subject averaged across trials. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds for remote unsupervised data collection. Color of data points denotes age group.}\label{fig:fig2}
 \end{figure}
 
-We found a strong developmental effect: with increasing age, participants got more and more accurate in locating the target.
-In the hedge version, children's click imprecision decreased with age, while, in the box version the proportion of correct responses increased (see Figure \ref{fig:fig2}A and F).
+We found a strong developmental effect: with increasing age, participants got more accurate in locating the target.
+In the hedge version, children's click imprecision decreased with age, while in the box version the proportion of correct responses increased (see Figure \ref{fig:fig2}A and F).
 Most participants in the box version performed above chance level.
 By the end of their sixth year of life, children came close to the adult's proficiency level.
 Most importantly, however, we found substantial inter-individual variation across study versions and age groups.
@@ -445,7 +435,7 @@ Even though variation is smaller, we could even find inter-individual difference
 
 As Figure \ref{fig:fig2}A and F show, our remotely collected child data resembled the data from the kindergarten sample.
 We found evidence that responses of children participating remotely were slightly more precise.
-This difference was mainly driven by the younger participants and especially prominent in the box version of the task.
+This difference was mainly driven by the younger participants and was especially prominent in the box version of the task.
 It is conceivable that caregivers were especially prone to influence the behavior of younger children.
 In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.\footnote{In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing.
   We focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = 16).
@@ -455,25 +445,25 @@ In the box version, caregivers might have had more opportunities to interfere si
 
 Our GLMM analysis corroborated the visual inspection of the data: in the hedge version, the estimates for age (\(\beta\) = -0.33; 95\% CI {[}-0.41; -0.24{]}) and data collection mode -0.32 (95\% CI {[}-0.50; -0.14{]}) were negative and reliably different from zero.
 In the box version, the estimate of age (\(\beta\) =0.63 (95\% CI {[}0.40; 0.87{]}) and the estimate of data collection mode (\(\beta\) = 1.12 (95\% CI {[}0.68; 1.56{]}) were positive and reliably different from zero.
-Note that even though confidence intervals from the data collection estimates were wide, the effect was positive and reliably different from zero in a way that our remote sample performed more accurately than our in-person sample.
+Note that even though confidence intervals from the data collection estimates were wide, the effect was positive and reliably different from zero in that our remote sample performed more accurately than our in-person sample.
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
 
 Our task induced inter-individual variation in both children and adults.
-We see substantial developmental gains: with increasing age, participants got more and more precise in locating the target.
+We see substantial developmental gains: with increasing age, participants became more and more precise in locating the target.
 The five-year-olds reached a proficiency level close to the adults' level.
 For neither study version nor age group did we find any floor or ceiling effects.
-The presentation as a tablet game kept children interest and motivated throughout the 15 test trials.
+The presentation as a tablet game kept children interested and motivated throughout the 15 test trials.
 Furthermore, we found a comparable developmental trajectory for an unsupervised remote child sample.
 This illustrates the flexibility of the task design.
 
 \hypertarget{internal-consistency-and-retest-reliability}{%
 \section{Internal consistency and retest reliability}\label{internal-consistency-and-retest-reliability}}
 
-As a next step, we aimed at investigating whether the variation that we captured with our gaze understanding task is reliable.
-We assessed internal consistency (as splithalf reliability) and test-retest reliability.
-Data collection and analysis were pre-registered (can be found here: \url{https://osf.io/xqm73} for the child sample, and \url{https://osf.io/nu62m} for the adult sample).
+As a next step, we aimed to investigate whether the variation that we captured with our gaze understanding task is reliable.
+We assessed internal consistency (as split-half reliability) and test-retest reliability.
+Data collection and analysis were pre-registered (can be found here: \url{https://osf.io/xqm73} for the child sample and \url{https://osf.io/nu62m} for the adult sample).
 Participants were equally distributed across the two study versions.
 The study was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology.
 Data was collected between July 2021 and June 2022.
@@ -491,32 +481,32 @@ The adult sample consisted of 136 English-speakers with an average age of 25.73 
 
 We applied the same procedure as in the first study, with the following differences.
 Participants completed the study twice, with a delay of 14 ± 3 days.
-The target locations as well as the succession of agents and target colors was randomized once and then held constant across participants.
+The target locations, as well as the succession of agents and target colors, were randomized once and then held constant across participants.
 The child sample received 15 test trials.
 In the hedge version, each bin occurred once, making up ten of the test trials.
-For the remaining five test trials, we repeated one out of two adjacent bins (i.e., randomly chose between bin 1 \& 2, bin 3 \& 4, etc).
+For the remaining five test trials, we repeated one out of two adjacent bins (i.e., randomly chose between bin 1 \& 2, bin 3 \& 4, etc.).
 In the box version, we ensured that each of the five boxes occurred exactly three times.
 For the remaining training trials, we repeated a fixed order of four random bins/boxes.
 Adults in the hedge version received 30 test trials, each of the ten bin occurring exactly three times.
-Adults in the box version received 32 test trials with each of the eight boxes occurring exactly four times.
+Adults in the box version received 32 test trials, with each of the eight boxes occurring exactly four times.
 
 \hypertarget{analysis-1}{%
 \subsection{Analysis}\label{analysis-1}}
 
 We assessed reliability in two ways.
-First, we focused on the internal consistency by calculating splithalf reliability coefficients.
+First, we focused on internal consistency by calculating split-half reliability coefficients.
 For each subject, trials were split into odd and even trials, performance was aggregated and then correlated using \emph{Pearson} coefficients.
 For this, we used the data of the first test day.
 Performance was defined according to study version: in the hedge version, performance referred to the mean absolute difference between the target center and the click coordinate, scaled according to target widths; in the box version, we computed the mean proportion of correct choices.
-Pronk, Molenaar, Wiers, and Murre (2021) recently compared various methods for computing splithalf reliability that differ in how the trials are split into parts and whether they are combined with stratification by task design.
+Pronk, Molenaar, Wiers, and Murre (2021) recently compared various methods for computing split-half reliability that differ in how the trials are split into parts and whether they are combined with stratification by task design.
 To compare our traditional approach of a simple odd-even split, we additionally calculated reliability estimates using first-second, odd-even, permutated, and Monte Carlo splits without and with stratification by target position.
-First-second and odd-even splits belong to single sample methods, since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling.
+First-second and odd-even splits belong to single sample methods since each participant has a single pair of performance scores, while permutated (without replacement) and Monte Carlo (with replacement) splits make use of resampling.
 Analyses were run using the function \texttt{by\_split} from the \texttt{splithalfr} package (Pronk et al., 2021).
 
 Second, we assessed the test-retest reliability.
 We calculated performance scores (depending on study version as described above) for each participant in each test session and correlated them using \emph{Pearson} correlation coefficients.
-Furthermore, for our child sample we report an age-corrected correlation between the two test days using a GLMM based approach (Rouder \& Haaf, 2019).
-We fit trial-by-trial data with a fixed effect of age, a random intercept for each subject and a random slope for test day (model notation in \texttt{R:\ performance\ \textasciitilde{}\ age\ (0\ +\ reliday\ \textbar{}\ subjID)}).
+Furthermore, for our child sample, we report an age-corrected correlation between the two test days using a GLMM based approach (Rouder \& Haaf, 2019).
+We fit trial-by-trial data with a fixed effect of age, a random intercept for each subject, and a random slope for test day (model notation in \texttt{R:\ performance\ \textasciitilde{}\ age\ (0\ +\ reliday\ \textbar{}\ subjID)}).
 For the hedge version, performance was modeled by a lognormal distribution, while the model for the box version used a Bernoulli distribution with a logit link function.
 The model computes a correlation between the participant-specific estimates for each test day.
 This can be interpreted as the test-retest reliability.
@@ -524,20 +514,20 @@ By using this approach, we do not need to compromise on data aggregation and, th
 Since the model uses hierarchical shrinkage, we obtain regularized, more accurate person-specific estimates.
 Most importantly, the model includes age as a fixed effect.
 The correlation between the two person-specific estimates is consequently the age-independent estimate for test-retest reliability.
-This rules out the possibility that a high correlation between test days arises from domain general cognitive development instead of study-specific inter-individual differences.
-A high correlation between our participant specific model estimates would speak for a high association between test days.
+This rules out the possibility that a high correlation between test days arises from domain-general cognitive development instead of study-specific inter-individual differences.
+A high correlation between our participant-specific model estimates would indicate a high association between test days.
 
 \hypertarget{results-1}{%
 \subsection{Results}\label{results-1}}
 
-We found that our gaze understanding task induced systematic variation: splithalf and test-retest reliability was high for most samples.
-For the internal consistency, we show traditional odd-even splits on our data and the corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}B, C, G and H.
-Figure \ref{fig:fig3} compares splithalf reliability coefficients by splitting and stratification method (Pronk et al., 2021).
-In the hedge version, the splithalf reliability coefficients ranged from 0.65 to 0.93.
-In the box version, splithalf reliability coefficients ranged from 0.48 to 0.86.
-Similarly to the results of Pronk et al. (2021), we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients.
-In the majority of cases, stratifying by target position lead to similar or even higher estimates compared to no stratification.
-As might be expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
+We found that our gaze understanding task induced systematic variation: split-half and test-retest reliability was high for most samples.
+For internal consistency, we show traditional odd-even splits on our data and the corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}B, C, G, and H.
+Figure \ref{fig:fig3} compares split-half reliability coefficients by splitting and stratification method (Pronk et al., 2021).
+In the hedge version, the split-half reliability coefficients ranged from 0.65 to 0.93.
+In the box version, split-half reliability coefficients ranged from 0.48 to 0.86.
+Similar to the results of Pronk et al. (2021), we found that more robust splitting methods that are less prone to task design or time confounds yielded higher reliability coefficients.
+In most cases, stratifying by target position lead to similar or even higher estimates compared to no stratification.
+As expected, we found higher coefficients for the samples with higher variation, i.e., for our continuous hedge version of the task.
 
 
 
@@ -547,7 +537,7 @@ As might be expected, we found higher coefficients for the samples with higher v
 
 }
 
-\caption{\textbf{Internal Consistency}. Reliability coefficients per splitting method, stratification level, study version and age group. Error bars show the 95\% confidence intervals of the coefficient estimates, calculated with the function \texttt{by\_split} from the \texttt{splithalfr} package (Pronk et al., 2021).}\label{fig:fig3}
+\caption{\textbf{Internal Consistency}. Reliability coefficients per splitting method, stratification level, study version, and age group. Error bars show the 95\% confidence intervals of the coefficient estimates, calculated with the function \texttt{by\_split} from the \texttt{splithalfr} package (Pronk et al., 2021).}\label{fig:fig3}
 \end{figure}
 
 For the test-retest reliability, we show the association between raw performance scores of the two test days and corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}D, E, I and J.\footnote{In the hedge version, we excluded one 3-year-old, one 5-year-old, and two adults from the test-retest analysis.
@@ -555,7 +545,7 @@ For the test-retest reliability, we show the association between raw performance
   Including the two children yielded a \emph{Pearson} correlation coefficient of \emph{r} = 0.89.
   Including the two adults yielded a \emph{Pearson} correlation coefficient of \emph{r} = 0.73.}
 
-The age-corrected, GLMM based retest reliabilities for children yielded similar results.
+The age-corrected, GLMM-based retest reliabilities for children yielded similar results.
 In the hedge version, the correlation between testdays was 0.90 (95\% CI {[}0.67;1.00{]}).
 In the box version, the correlation between testdays was 0.91 (95\% CI {[}0.69;1.00{]}).
 
@@ -563,7 +553,7 @@ In the box version, the correlation between testdays was 0.91 (95\% CI {[}0.69;1
 \subsection{Discussion}\label{discussion-1}}
 
 Our results indicated that the measured variation was systematic.
-As could be expected, the continuous measure of the hedge version yielded higher reliability estimates than the discrete box version.
+As expected, the continuous measure of the hedge version yielded higher reliability estimates than the discrete box version.
 For children, the model based reliability estimates showed that the task did capture individual differences even when correcting for age.
 This corroborates what we already see in Figure \ref{fig:fig2}: there was a clear overlap between age groups, indicating that age is predictive of performance for the mean, but is not the main source of individual differences.
 
@@ -572,11 +562,12 @@ This corroborates what we already see in Figure \ref{fig:fig2}: there was a clea
 
 We have presented a new experimental paradigm to study individual differences in gaze understanding across the lifespan.
 This paper contributes to methodological advances in developmental psychology in the following ways.
-First, we could captured fine-grained individual differences in gaze understanding at different ages -- from early childhood until adulthood.
+First, we could capture fine-grained individual differences in gaze understanding at different ages -- from early childhood until adulthood.
 Individuals behaved consistently different from one another.
 Second, our task showed satisfactory psychometric properties with respect to internal consistency and retest reliability estimates.
-Third, our new web-based testing infrastructure proved useful for standardized, portable data collection at scale, both remotely as well as in-person.
-In sum, our gaze understanding task provides a step towards more robust and reliable research methods, especially with regards to individual differences research.The web app (\url{https://ccp-odc.eva.mpg.de/gafo-demo/}) and its source code (\url{https://github.com/ccp-eva/gafo-demo}) are freely accessible.
+Third, our new web-based testing infrastructure proved useful for standardized, portable data collection at scale, both remotely as well as in person.
+In sum, our gaze understanding task provides a step toward more robust and reliable research methods, especially with regard to individual differences research.
+The web app (\url{https://ccp-odc.eva.mpg.de/gafo-demo/}) and its source code (\url{https://github.com/ccp-eva/gafo-demo}) are freely accessible.
 We want to highlight that researchers are welcome to use and modify our task according to their needs.
 
 One of the main contributions of the gaze understanding task is that it induces variation between participants.
@@ -585,28 +576,28 @@ This is primarily achieved through the implementation of short trials, resulting
 In our task, participants are asked to locate a balloon by using the gaze cues of another agent.
 The outcome measure depends on the presented study version: in the hedge version, we implemented a continuous measure, while the box version employs a categorical measure.
 
-Our continuous measure of children's gaze understanding moves away from treating a social-cognitive ability as an all-or-nothing matter (e.g., dichotomous measures in pass/fail situations) towards an ability on a continuum (Beaudoin et al., 2020; Hughes \& Devine, 2015).
+Our continuous measure of children's gaze understanding moves away from treating a social-cognitive ability as an all-or-nothing matter (e.g., dichotomous measures in pass/fail situations) toward an ability on a continuum (Beaudoin et al., 2020; Hughes \& Devine, 2015).
 Identifying variability in social-cognitive abilities is vital for accurately quantifying developmental change and revealing relations between different aspects of cognition and children's real-life social surroundings.
 Dedicated measures of individual differences will help us to design meaningful interventions and progress in psychological theory building (Hedge et al., 2018).
 
-Our continuous hedge version yields higher internal consistency estimates compared to the categorical box version.
+Our continuous hedge version yields higher internal consistency estimates than the categorical box version.
 Both study versions exhibit high retest reliability, also when controlling for age.
 Therefore, when a sufficient amount of trials is presented, the box version of the task can yield reliable individual estimates (cf. Hughes et al. (2000); improved reliability through aggregation).
-When testing time is limited, we would recommend the use of the continuous study version for higher internal consistency.
+When testing time is limited (and number of trials might be low), we recommend using the continuous study version for higher internal consistency.
 However, the categorical box version demonstrates design features that might be preferable in some research contexts: researchers could induce different levels of salience for each box.
-Our task could consequently be used to study bias, preferences and diverse desires (e.g.~matching the box appearance to some feature/behavioral characteristic of the agent).
+Our task could consequently be used to study bias, preferences, and diverse desires (e.g., matching the box appearance to some feature/behavioral characteristic of the agent).
 
 Adding complexity to our gaze understanding task might increase individual differences in an adult sample.
-Researchers could consider to adjust the task difficulty, for example, by adjusting the target speed or implementing a saccade version (i.e., where the agent only briefly looks at the target position and then back to the center).
+Researchers could consider adjusting the task difficulty, for example, by changing the target speed or implementing a saccade version (i.e., where the agent only briefly looks at the target position and then back to the center).
 Another task extension could realize differential feedback dependent on the participant's accuracy.
 By inducing more between-person variance, reliability estimates could further increase.
 
-As we could see in the splithalf reliability calculations, the more accurately the statistical method represents the task structure, the higher our reliability estimates are.
+As we could see in the split-half reliability calculations, the more accurately the statistical method represents the task structure, the higher our reliability estimates are.
 Therefore, we argue that future research should aim at implementing statistical analyses that mirror the experimental design in its complexity.
-A potentially promising approach are computational cognitive models.
+Computational cognitive models are a promising approach forward.
 We could take advantage of all available information and model variation between and within individuals in an even more fine-grained and psychologically interpretable manner.
 Computational frameworks could also be used to model performance and their underlying cognitive processes across tasks.
-With nested hierarchical models, we could assess the systematic relation between various social-cognitive abilities and recover potentially shared structures between cognitive processes (Bohn, Tessler, Kordt, Hausmann, \& Frank, 2022)
+With nested hierarchical models, we could assess the systematic relation between various social-cognitive abilities and recover potentially shared structures between cognitive processes (Bohn, Tessler, Kordt, Hausmann, \& Frank, 2022).
 
 In addition to the new task design itself, we designed a new testing infrastructure.
 Our gaze understanding task is presented as an interactive web app.
@@ -617,10 +608,10 @@ The cartoon-like presentation makes the task engaging for children and adults al
 Most importantly, we can dynamically modify the stimulus details (e.g., positions) on a trial-by-trial basis.
 Presented agents and objects can be easily adapted for future task modifications or specific cultural settings.
 
-The web-based implementation allows for different data collection modes: participants can be tested in-person with supervision or remotely at home.
-Test instructions are standardized and, with prior informed consent, the webcam records study participation.
-This allows us to scale up data collection: testing is flexible, fast and requires no further experimenter training.
-We compared children participating in-person, supervised in kindergartens with children participated remotely at home.
+The web-based implementation allows for different data collection modes: participants can be tested in person with supervision or remotely at home.
+Test instructions are standardized and with prior informed consent the webcam records study participation.
+This allows us to scale up data collection: testing is flexible, fast, and requires no further experimenter training.
+We compared children participating in-person, supervised in kindergartens with children who participated remotely at home.
 Our results suggest a comparable developmental trajectory of gaze understanding in both samples.
 Children in the remote sample are slightly more precise.
 This effect is most pronounced in the three-year-olds in the box version (for an analysis of the webcam recordings, see Supplements).
@@ -640,7 +631,7 @@ In our sample, caregivers were asked to fill out a short questionnaire on childr
 In addition, a subset of our remote child sample completed a receptive vocabulary task (Bohn, Prein, Delikaya, Haun, \& Gagarina, n.d.). We will report the association between these family-level factors and children's language on their gaze understanding abilities in a separate paper (in preparation). In order to match our fine-grained, parametric measure of gaze understanding, however, we hope that future technological advances will enable the continuous measures of children's real-life social surroundings (Barr et al., 2020; Long, Kachergis, Agrawal, \& Frank, 2020; Rogoff, Dahl, \& Callanan, 2018).
 
 Our future goal is to utilize the presented testing infrastructure for further studies on social-cognitive abilities.
-As has been pointed out, social cognition is encompasses a whole range of abilities which could be best assessed by task batteries (Hughes et al., 2011; Schaafsma et al., 2015).
+As has been pointed out, social cognition encompasses a whole range of abilities which could be best assessed by task batteries (Hughes et al., 2011; Schaafsma et al., 2015).
 We want to move from the most fundamental social-cognitive abilities to more complex processes like knowledge-ignorance or false belief understanding.
 
 \hypertarget{conclusion}{%
@@ -648,12 +639,14 @@ We want to move from the most fundamental social-cognitive abilities to more com
 
 We have presented a new experimental paradigm to study individual differences in gaze understanding across the lifespan.
 The gaze understanding task captures individual differences and shows highly satisfactory psychometric properties with respect to internal consistency and retest reliability.
-The web-based testing infrastructure allows for standardized, portable data collection at scale, both remotely as well as in-person.
-Ultimately, this work shows a promising way forward towards more precise measures of cognitive development.
-The dataset and the analysis code are freely available in the associated online repository (\url{https://github.com/ccp-eva/gazecues-methods}).
+The web-based testing infrastructure allows for standardized, portable data collection at scale, both remotely as well as in person.
+Ultimately, this work shows a promising way forward toward more precise measures of cognitive development.
+The data set and the analysis code are freely available in the associated online repository (\url{https://github.com/ccp-eva/gazecues-methods}).
 A demo version of the task is available at the following website: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
 The implementation architecture (JavaScript and HTML code) and the materials can be accessed in the following repository: \url{https://github.com/ccp-eva/gafo-demo}.
 These resources allow interested researchers to use, extend and adapt the task.
+
+\newpage
 
 \hypertarget{declarations}{%
 \section{Declarations}\label{declarations}}
@@ -662,14 +655,15 @@ These resources allow interested researchers to use, extend and adapt the task.
 \subsection{Open practices statement}\label{open-practices-statement}}
 
 The web application (\url{https://ccp-odc.eva.mpg.de/gafo-demo/}) described here is open source (\url{https://github.com/ccp-eva/gafo-demo}).
-The datasets generated during and/or analysed during the current study are available in the {[}gazecues-methods{]} repository, (\url{https://github.com/jprein/gazecues-methods}).
+The data sets generated during and/or analysed during the current study are available in the {[}gazecues-methods{]} repository, (\url{https://github.com/jprein/gazecues-methods}).
 All experiments were preregistered (\url{https://osf.io/zjhsc/}).
 
 \hypertarget{funding}{%
 \subsection{Funding}\label{funding}}
 
 This study was funded by the Max Planck Society for the Advancement of Science, a noncommercial, publicly financed scientific organization (no grant number).
-We thank all the children, caregivers and adults who participated in the study. We thank Jana Jurkat for her help with data collection.
+We thank all the children, caregivers and adults who participated in the study.
+We thank Jana Jurkat for her help with data collection.
 
 \hypertarget{conflicts-of-interest}{%
 \subsection{Conflicts of interest}\label{conflicts-of-interest}}
@@ -908,251 +902,6 @@ Wimmer, H., \& Perner, J. (1983). Beliefs about beliefs: {Representation} and co
 \end{CSLReferences}
 
 \endgroup
-
-\newpage
-
-\hypertarget{supplements}{%
-\section{Supplements}\label{supplements}}
-
-\hypertarget{child-sample}{%
-\subsection{Child sample}\label{child-sample}}
-
-\hypertarget{webcam-coding}{%
-\subsubsection{Webcam coding}\label{webcam-coding}}
-
-
-
-\begin{figure}
-
-{\centering \includegraphics[width=1\linewidth]{../figures/supplements_webcamcoding_draws} 
-
-}
-
-\caption{\textbf{Model comparison for exploratory webcam coding of parental interference}. Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level (i.e., average across trials per subject).}\label{fig:fig4}
-\end{figure}
-
-Comparing the performances of children across our two data collection modes, we found that children participating remotely were slightly more precise.
-This difference was especially prominent in younger participants in the box version of the task.
-It is conceivable that caregivers were especially prone to influence the behavior of younger children.
-In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
-In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing.
-Due to the time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = 16).
-We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
-A trial was defined as the time between two eye blinking sounds.
-We transcribed all utterances by parents and children and counted the words uttered by each.
-We then classified the utterances into several categories: question asked by child, repeated test questions by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive \& negative feedback, motivational statements, and incomprehensible utterances.
-In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial.
-We conducted a model comparison to estimate the effects of parental interference.
-Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in \texttt{R:\ correct\ \textasciitilde{}\ age\ +\ (1\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}.\footnote{Attentive readers might notice that we simplified the structure of random effects.
-  Compared to our models in the \emph{Individual differences} section, this model does not include the random slope for symmetric target position within participants.
-  We decided to do so since we had limited amount of data from few participants.}
-
-We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects.
-Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect.
-Remaining variables that we coded for were not included since there was not enough variation and/or occurrences in our sample.
-We compared models using WAIC (widely applicable information criterion) scores and weights.
-As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit.
-WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
-On the trial level, the model including the verification of choice as a main effect performed best: here, the less the caregivers asked for children's responses again, the more likely children clicked on the correct box.
-Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments.
-On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box.
-In all cases, however, ELPD difference scores were smaller than their standard errors.
-Similarly, 95\% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}).
-Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
-
-\begin{table}[tbp]
-
-\begin{center}
-\begin{threeparttable}
-
-\caption{\label{tab:webcam_table}Model comparison for exploratory webcam coding of parental interference}
-
-\begin{tabular}{lllll}
-\toprule
-Predictor & \multicolumn{1}{c}{WAIC} & \multicolumn{1}{c}{Weight} & \multicolumn{1}{c}{ELPD} & \multicolumn{1}{c}{SE}\\
-\midrule
-By trial - \# Verification choice & 262.98 & 0.57 & 0.00 & 0.00\\
-By trial - Null model & 263.25 & 0.43 & -0.13 & 1.19\\
-By trial - Parental interference index & 264.32 & 0.00 & -0.67 & 0.97\\
-By trial - \# Repeated testquestion & 265.34 & 0.00 & -1.18 & 1.26\\
-By trial - \# Words uttered by caregiver & 266.27 & 0.00 & -1.65 & 1.21\\
-By trial - \# Hints eyes & 266.33 & 0.00 & -1.68 & 1.27\\
-By subject - \# Repeated testquestion & 83.83 & 0.70 & 0.00 & 0.00\\
-By subject - Parental interference index & 88.50 & 0.00 & -2.34 & 3.56\\
-By subject - Null model & 89.62 & 0.00 & -2.90 & 3.60\\
-By subject - \# Verification choice & 89.75 & 0.30 & -2.96 & 4.46\\
-By subject - \# Words uttered by caregiver & 90.46 & 0.00 & -3.32 & 4.21\\
-By subject - \# Hints eyes & 92.90 & 0.00 & -4.54 & 3.73\\
-\bottomrule
-\addlinespace
-\end{tabular}
-
-\begin{tablenotes}[para]
-\normalsize{\textit{Note.} All models included random intercepts for participant and target position.}
-\end{tablenotes}
-
-\end{threeparttable}
-\end{center}
-
-\end{table}
-
-\hypertarget{adult-sample}{%
-\subsection{Adult sample}\label{adult-sample}}
-
-\hypertarget{recruitment}{%
-\subsubsection{Recruitment}\label{recruitment}}
-
-We recruited participants using the online participant recruitment service \emph{Prolific} from the University of Oxford.
-\emph{Prolific}'s subject pool consists of a mostly European and US-american sample although subjects from all over the world are included.
-The recruitment platform realises ethical payment of participants, which requires researchers to pay participants a fixed minimum wage of £5.00 (around US\$6.50 or €6.00) per hour.
-We decided to pay all participants the same fixed fee which was in relation to the estimated average time taken to complete the task.
-\emph{Prolific} distributed our study link to potential participants, while the hosting of the online study was done by local servers in the Max Planck Institute for Evolutionary Anthropology, Leipzig.
-Therefore, study data was saved only on our internal servers, while \emph{Prolific} provided demographic information of the participants.
-Participants' \emph{Prolific} ID was forwarded to our study website using URL parameters.
-This way, we could match participant demographic data to our study data.
-The same technique was used to confirm study completion: we redirected participants from our study website back to the \emph{Prolific} website using URL parameters.
-We used \emph{Prolific}'s inbuilt prescreening filter to include only participants who were fluent in English and could therefore properly understand our written and oral study instructions.
-
-\hypertarget{study-1---validation-hedge-version}{%
-\subsubsection{Study 1 - Validation hedge version}\label{study-1---validation-hedge-version}}
-
-The aim of Study 1 was to validate the hedge version of our gaze understanding task.
-The pre-registration can be found here: \url{https://osf.io/r3bhn}.
-We recruited participants online by advertising the study on \emph{Prolific}.
-
-50 adults participated in the study.
-One additional subject returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
-Data collection took place in May 2021.
-Participants were compensated with £1.25 for completing the study.
-We estimated an average completion time of 6 minutes, resulting in an estimated hourly rate of £10.00.
-In average, participants took 05:56min to complete the study.
-Participants were required to complete the study on a tablet or desktop.
-Participation on mobile devices was disabled since the display would be too small and would harm click precision.
-It was indicated that the study required audio sound.
-
-We stored \emph{Prolific}'s internal demographic information, while not asking for additional personal information.
-
-\hypertarget{study-2---validation-box-version}{%
-\subsubsection{Study 2 - Validation box version}\label{study-2---validation-box-version}}
-
-As in study 1, we recruited participants on \emph{Prolific}, and employed the same methodology.
-However, this time we focussed on validating the box version of the task in an adult sample.
-Participants were presented with eight boxes in which the target could land.
-50 adults participated in the study.
-One additional subject returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
-Data collection took place in June 2021.
-Participants were compensated with £1.00 for completing the study.
-We estimated an average completion time of 6 minutes, resulting in an estimated hourly rate of £10.00.
-In average, participants took 04:43min to complete the study.
-
-\hypertarget{study-3---reliability-hedge-version}{%
-\subsubsection{Study 3 - Reliability hedge version}\label{study-3---reliability-hedge-version}}
-
-In study 3 and 4, we assessed the test-retest reliability of our gaze understanding task in an adult sample.
-The pre-registration can be found here: \url{https://osf.io/nu62m}.
-We tested the same participants twice with a delay of two weeks.
-The testing conditions were as specified in Study 1 and 2.
-However, the target locations as well as the succession of animals and target colors was randomized once.
-Each participant then received the same fixed randomized order of target location, animal, and target color.
-Participants received 30 test trials without voice-over description, so that each of the ten bins occurred exactly three times.
-
-In addition to the beforementioned prescreening settings, we used a whitelist.
-\emph{Prolific} has a so-called \emph{custom allowlist prescreening filter} where one can enter the \emph{Prolific} IDs of participants who completed a previous study.
-Only these subjects are then invited to participate in a study.
-This way, repeated measurements can be implemented, collecting data from the same subjects at different points in time.
-
-In a first round, 60 participants took part on the first testday.
-Additional two subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
-One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
-The maximum time is calculated by \emph{Prolific}, based on the estimated average completion time.
-For this study, the maximum time amounted to 41 minutes.
-For the first testday, participants were compensated with £1.25.
-We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £8.33.
-In average, participants took 07:11min to complete the first part.
-
-Of the 60 participants that completed testday 1, 41 subjects finished testday 2.
-One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
-Participants were compensated with £1.50 for completing the second part of the study.
-We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £10.
-In average, participants took 06:36min to complete the second part of the study.
-
-Since we aimed for a minimum sample size of 60 subjects participating on both testdays, we reran the first testday with additional 50 participants.
-Additional seven subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
-Two additional participants timed out, i.e., did not finish the survey within the allowed maximum time.
-Again, participants were compensated with £1.25 for completing the first part of the study (estimated average completion time 9 minutes, estimated hourly rate of £8.33).
-In average, participants took 06:51min to complete the first part.
-
-Of the additional 50 participants that completed testday 1, 29 subjects finished testday 2.
-Again, participants were compensated with £1.50 for completing the second part of the study (estimated average completion time 9 minutes, estimated hourly rate of £10).
-In average, participants took 06:26min to complete the second part of the study.
-
-\hypertarget{study-4---reliability-box-version}{%
-\subsubsection{Study 4 - Reliability box version}\label{study-4---reliability-box-version}}
-
-As in study 3, we recruited participants on \emph{Prolific}, and employed the same methodology.
-However, this time participants were presented with the box version of the task.
-Participants received 32 test trials without voice-over description, so that each of the eight boxes occurred exactly four times.
-As in study 2, we employed eight boxes in which the target could land.
-
-In a first round, 60 participants took part on the first testday.
-Additional five subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
-For the first testday, participants were compensated with £1.25.
-We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £8.33.
-In average, participants took 07:33min to complete the first part.
-
-Of the 60 participants that completed testday 1, 41 subjects finished testday 2.
-Participants were compensated with £1.50 for completing the second part of the study.
-We estimated an average completion time of 9 minutes, resulting in an estimated hourly rate of £10.
-In average, participants took 07:50min to complete the second part of the study.
-
-Since we aimed for a minimum sample size of 60 subjects participating on both testdays, we reran the first testday with additional 50 participants.
-Additional eight subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
-One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
-Again, participants were compensated with £1.25 for completing the first part of the study (estimated average completion time 9 minutes, estimated hourly rate of £8.33).
-In average, participants took 07:37min to complete the first part.
-
-Of the additional 50 participants that completed testday 1, 28 subjects finished testday 2.
-Additional three subjects returned their submission, i.e., decided to leave the study early or withdrew their submission after study completion.
-One additional participant timed out, i.e., did not finish the survey within the allowed maximum time.
-Again, participants were compensated with £1.50 for completing the second part of the study (estimated average completion time 9 minutes, estimated hourly rate of £10).
-In average, participants took 06:30min to complete the second part of the study.
-
-\hypertarget{instructions-and-voice-over-descriptions}{%
-\section{Instructions and voice over descriptions}\label{instructions-and-voice-over-descriptions}}
-
-This is the content of our audio recordings that were played as instructions and during voice over trials.
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
-\toprule()
-\endhead
-\textbf{Timeline} & \textbf{German} & \textbf{English} & \textbf{Filename} \\
-\textbf{welcome} & Hallo! Schön, dass du da bist. Wir spielen jetzt das Ballon-Spiel! Siehst du die Tiere auf dem Bild da? Wir möchten gleich zusammen mit den Tieren mit einem Ballon spielen. Was genau passiert, erklären wir dir jetzt ganz in Ruhe. & Hello! Great that you're here. We'll now play a balloon game. Can you see the animals in the picture over there? We want to play together with the animals using the balloon. We'll now talk you through exactly what will happen. & welcome.mp3 \\
-\textbf{touch} & Schau mal, da steht ein Tier im Fenster. Und siehst du den Ballon da? Der Ballon fällt immer runter und landet auf dem Boden. Und du musst ihn dann finden. Das Tier hilft Dir und schaut immer den Ballon an. & Look, an animal is standing in the window. And can you see the balloon over there? The balloon always falls down and lands on the ground. And you have to find it! The animal helps you and always looks at the balloon. & touch-1.mp3 \\
-& Wo ist der Ballon? Drück auf den Ballon! & Where is the balloon? Click on the balloon! & prompt-touch-long.mp3 \\
-\textbf{fam - HEDGE} & Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er hinter eine Hecke. Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. & Perfect, that was great! Now, we'll continue playing. Can you see the animal and the balloon again? The balloon will fall down again. This time, it will fall behind a hedge. And you have to find it! The animal helps you and looks at the balloon. & fam-hedge-1.mp3 \\
-& Wo ist der Ballon? Drücke auf die Hecke - wo der Ballon ist. & Where is the balloon? On the hedge, click where the balloon is. & prompt-hedge-long.mp3 \\
-\textbf{fam - BOX} & Klasse, das war super! Jetzt spielen wir weiter. Siehst du wieder das Tier und den Ballon da? Der Ballon fällt wieder runter. Diesmal fällt er in eine Kiste. Du musst ihn wieder finden. Das Tier hilft dir und schaut immer den Ballon an. & Perfect, that was great! Now, we'll continue playing. Can you see the animal and the balloon again? The balloon falls down again. This time, it falls into a box. And you have to find it! The animal helps you and looks at the balloon. & fam-box-1.mp3 \\
-& Wo ist der Ballon? Drücke auf die Kiste mit dem Ballon. & Where is the balloon? Click on the box with the balloon. & prompt-box-long.mp3 \\
-\textbf{test - HEDGE} & Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Hecke. Die Hecke wächst jetzt hoch. & Nice, good job! Now, we'll continue playing. There is the balloon, the animal and the hedge. The hedge is growing a bit now. & test-hedge-1.mp3 \\
-& Der Ballon ist nun hinter der Hecke.~Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon auf den Boden und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an. & The balloon is behind the hedge now. You can't see it - but the animal can! The balloon falls to the ground and you have to find it. Remember - the animal always looks at the balloon! & test-hedge-2.mp3 \\
-& Dann schrumpft die Hecke. Drücke auf die Hecke - wo der Ballon ist. & Now, the hedge is shrinking. On the hedge, click where the balloon is. & test-hedge-3.mp3 \\
-\textbf{test - BOX} & Klasse , das hast du toll gemacht! Nun spielen wir weiter. Da sind wieder der Ballon, das Tier und die Kisten. Jetzt wächst eine Hecke hoch. & Nice, good job! Now, we'll continue playing. There is the balloon and the animal. Now, a hedge is growing. & test-box-1.mp3 \\
-& Der Ballon ist nun hinter der Hecke.~Du kannst das nicht sehen - das Tier aber! Jetzt fällt der Ballon in eine Kiste und du musst ihn wieder finden. Denk dran - das Tier schaut immer den Ballon an. & The balloon is behind the hedge now. You can't see it - but the animal can! The balloon falls into a box and you have to find it. Remember - the animal always looks at the balloon! & test-box-2.mp3 \\
-& Dann schrumpft die Hecke. Drücke auf die Kiste mit dem Ballon. & Now, the hedge is shrinking. Click on the box with the balloon. & test-box-3.mp3 \\
-\textbf{goodbye} & Geschafft! Die Tiere sind schon ganz glücklich vom Spielen! Vielen Dank für deine Hilfe! Bis zum nächsten Mal und liebe Grüße vom Schwein, Affen und Schaf & The animals are super happy after playing. Thanks a lot for your help! See you soon and goodbye from the pig, monkey and sheep & goodbye.mp3 \\
-\textbf{general prompt} & Wo ist der Ballon? & Where is the balloon? & prompt-general.mp3 \\
-\textbf{touch - no response} & Drück auf den Ballon! & Click on the balloon! & prompt-touch.mp3 \\
-\textbf{hedge - no response} & Drücke auf die Hecke - wo der Ballon ist! & On the hedge, click where the balloon is! & prompt-hedge.mp3 \\
-\textbf{box - no response} & Drücke auf die Kiste mit dem Ballon! & Click on the box with the balloon! & prompt-box.mp3 \\
-\textbf{landing sound of balloon} & - & - & balloon-lands.mp3 \\
-\textbf{sound of blinking eyes} & - & - & blink.mp3 \\
-\textbf{sound for target click} & - & - & positive-feedback.mp3 \\
-\bottomrule()
-\end{longtable}
 
 
 \end{document}
