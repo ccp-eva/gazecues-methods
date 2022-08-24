@@ -1,5 +1,5 @@
 ---
-title             : "Measuring individual differences in the understanding of gaze cues across the lifespan"
+title             : "Measuring individual differences in the understanding of gaze cues across the lifespan [Julia: ich würde mehr info in den titel packen - sowas wie reliable, open-source, web-based task to measure individual differences in gaze cue understanding in children (vll sogar age range) and adults. Ich denke bei do nem methods paper ist es wichtig das man weiß was phase ist basierend auf dem Titel. Vll willst DU auch ein Acronym? :)]"
 shorttitle        : "gaze understanding"
 author: 
   
@@ -21,10 +21,9 @@ affiliation:
     institution   : "Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany"
 authornote: |
 abstract: |
-  To navigate the social world and interact with other agents, we use social cognition. Traditional measures of social cognition often lack satisfactory psychometric properties and are not designed to capture variation *between* individuals. This is problematic because developmental theories emphasize the role of social interaction on the development of social cognition which varies substantially across individuals. To fully understand how social-cognitive abilities emerge and relate to each other, we need new tools that can reliably measure individual differences.
-   Here, we present a new task to study individual differences in social cognition in children and adults. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze understanding – the ability to locate and use the attentional focus of an agent. Our interactive browser-based task works across devices and enables in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants’ click imprecision and is easily adaptable to different study requirements. 
+  Traditional measures of social cognition used in developmental research often lack satisfactory psychometric properties and are not designed to capture variation *between* individuals [Julia: hab die zwei Sätze raus gelöscht weil nicht unbedingt relevant für methods paper]. Here, we present a new task to study individual differences in social cognition in children and adults. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze understanding – the ability to locate and use the attentional focus of an agent. Our interactive browser-based task works across devices and enables in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants’ click imprecision and is easily adaptable to different study requirements. 
    Our task induces inter-individual differences in a child (N = 387) and an adult (N = 236) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
-  All materials and code are freely accessible to interested researchers. The task can be found here: https://ccp-odc.eva.mpg.de/gafo-demo/. 
+  All materials and code are freely accessible to interested researchers. A version of the task is accessible online: https://ccp-odc.eva.mpg.de/gafo-demo/. 
   
 keywords          : "social cognition, individual differences, gaze cues, cognitive development"
 wordcount         : "X"
@@ -114,7 +113,7 @@ The result is more precise individual-level estimates.
 Third, we systematically investigated the psychometric properties of the new task.
 
 Designing this task required a new testing infrastructure.
-We designed the task as an interactive browser-based web app.
+We designed the task as an interactive browser-based web app [Julia: hier noch folgendes paper zitieren: http://dx.doi.org/https://doi.org/10.1080/15248372.2015.1061528; falls du den ansatz noch mehr "legitimieren" willst, kannst du auch noch eins oder zwei meiner tablet paper zitieren, zB: https://onlinelibrary.wiley.com/doi/10.1111/desc.13049  oder https://www.nature.com/articles/s41562-021-01145-1. Zeigt einfach dass das schon "erfolgreich" eingesetzt wird.].
 This greatly increased the flexibility with which we could modify the stimuli on a trial-by-trial basis.
 Furthermore, because the task is largely self-contained, it is much more controlled and standardized.
 Most importantly, it makes the task portable: testing is possible in-person using tablets but also remotely via the internet (no installation needed).
@@ -305,6 +304,8 @@ For the box version, the model predicted correct responses (0/1) using a `Bernou
 We inspected the posterior distribution (mean and 95% Confidence Interval (CI)) for the age and data collection estimates.
 
 ## Results
+
+[Julia: Kannst du in Figure 2 panel F noch chance linie mit rein machen?]
 
 (ref:figlab2) **Measuring inter-individual variation**. (A) Developmental trajectory in continuous hedge version. Performance is measured as imprecision, i.e., the absolute distance between the target's center and the participant's click (averaged across trials). The unit of imprecision is counted in the width of the target, i.e., a participant with imprecision of 1 clicked on average one target width to the left or right of the true target center. (B) Internal consistency (odd-even split) in hedge child sample. (C) Internal consistency in hedge adult sample. (D) Test-retest reliability in hedge child sample. (E) Test-retest reliability in hedge adult sample. (F) Developmental trajectory in discrete box version. Performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that contained the target. Dotted black line shows level of performance expected by chance (for child sample 20%, i.e., 1 out of 5 boxes; for adult sample 12.5%, i.e., 1 out of 8 boxes). (G) Internal consistency (odd-even split) in box child sample. (H) Internal consistency in box adult sample. (I) Test-retest reliability in box child sample. (J) Test-retest reliability in box adult sample. For (A) and (F), regression lines show the predicted developmental trajectories (with 95% CrI) based on GLMMs, with the line type indicating the data collection mode. For (B-E) and (G-J), regression lines with 95% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with *Pearson*'s correlation coefficient *r*. Large points with 95% CI (based on non-parametric bootstrap) represent performance means by age group (binned by year). Small points show the mean performance for each subject averaged across trials. Shape of data points represents data collection mode: opaque circles for in-person supervised data collection, translucent diamonds for remote unsupervised data collection. Color of data points denotes age group.
 
@@ -523,14 +524,16 @@ Our task could consequently be used to study bias, preferences, and diverse desi
 Adding complexity to our gaze understanding task might increase individual differences in an adult sample.
 Researchers could consider adjusting the task difficulty, for example, by changing the target speed or implementing a saccade version (i.e., where the agent only briefly looks at the target position and then back to the center).
 Another task extension could realize differential feedback dependent on the participant's accuracy.
-By inducing more between-person variance, reliability estimates could further increase.
+By inducing more between-person variance, reliability estimates could further increase [Julia: hier vll nochmal sagen, dass die momentanen properties abers chon gut sind].
 
 As we could see in the split-half reliability calculations, the more accurately the statistical method represents the task structure, the higher our reliability estimates are.
-Therefore, we argue that future research should aim at implementing statistical analyses that mirror the experimental design in its complexity.
+Therefore, we argue that future research should aim at implementing statistical analyses that mirror the experimental design in its complexity [Julia: Hier noch das zitieren: https://psyarxiv.com/xr7y3/].
 Computational cognitive models are a promising approach forward.
 We could take advantage of all available information and model variation between and within individuals in an even more fine-grained and psychologically interpretable manner.
 Computational frameworks could also be used to model performance and their underlying cognitive processes across tasks.
 With nested hierarchical models, we could assess the systematic relation between various social-cognitive abilities and recover potentially shared structures between cognitive processes [@bohn2022individual].
+
+[Julia: Hier oder weiter oben eingebaut könntest du nochmal die wishlist aufgreifen und sagen in wie fern der task die Forderungen darin abdeckt - muss nicht sein, aber wäre denke ich nett weil das so ein coole Rechfertigung ist.]
 
 In addition to the new task design itself, we designed a new testing infrastructure.
 Our gaze understanding task is presented as an interactive web app.
@@ -539,7 +542,7 @@ Stimuli presentation is achieved through the use of SVGs.
 This has several advantages: the aspect ratio and stimulus quality are kept constant no matter which size the web browser displays.
 The cartoon-like presentation makes the task engaging for children and adults alike.
 Most importantly, we can dynamically modify the stimulus details (e.g., target positions) on a trial-by-trial basis.
-Presented agents and objects can be easily adapted for future task modifications or specific cultural settings.
+Presented agents, voice-over instructions and objects can be easily adapted for future task modifications or specific linguistic and cultural settings.
 
 The web-based implementation allows for different data collection modes: participants can be tested in person with supervision or remotely at home.
 Test instructions are standardized and with prior informed consent the webcam records study participation.
@@ -558,9 +561,8 @@ Studies on gaze following traditionally present children with a simultaneous, co
 In our study, however, children only observe a subtle eye movement.
 Therefore, our results are not directly comparable to traditional gaze following studies.
 Another promising way to assess validity is to correlate the social-cognitive ability in question to concepts that are thought to be theoretically related.
-For example, it has been postulated that social-cognitive abilities are predicted by family-level variables and children's language abilities.
-In our sample, caregivers were asked to fill out a short questionnaire on children's daily surroundings (e.g., sibling composition; information on childcare).
-In addition, a subset of our remote child sample completed a receptive vocabulary task [@bohnorev]. We will report the association between these family-level factors and children's language skills on their gaze understanding abilities in a separate paper (in preparation). In order to match our fine-grained, parametric measure of gaze understanding, however, we hope that future technological advances will enable the continuous measures of children's real-life social surroundings [@barr2020screen; @long2020detecting; @rogoff2018importance].
+For example, it has been postulated that social-cognitive abilities are predicted by family-level variables and children's language abilities [Julia: hier noch eine ziation jeweils, also einmal family einmal language].
+[Julia: Hab das alles raus genommen - macht meiner meinung nach wenig sinn das an zu teasern und dann zu sagen das kommt in nem anderen paper. ich als reviewer oder editor würde sagen: pack das hie rein. Daher eher sagen: future research should probe these realtions (family level und language)].
 
 Our future goal is to utilize the presented testing infrastructure for further studies on social-cognitive abilities.
 As has been pointed out, social cognition encompasses a whole range of abilities which could be best assessed by task batteries [@hughes2011individual; @schaafsma2015deconstructing].
@@ -575,7 +577,7 @@ Ultimately, this work shows a promising way forward toward more precise measures
 The data sets and the analysis code are freely available in the associated online repository (<https://github.com/ccp-eva/gazecues-methods>).
 A demo version of the task is available at the following website: <https://ccp-odc.eva.mpg.de/gafo-demo/>.
 The implementation architecture (JavaScript and HTML code) and the materials can be accessed in the following repository: <https://github.com/ccp-eva/gafo-demo>.
-These resources allow interested researchers to use, extend and adapt the task.
+These resources allow interested researchers to use, extend and adapt the task. [Julia: Du könntest überlegen hier oder weiter oben noch einen screenshot von der demo version als figure zu nehmen. Das macht die usability nochmal konkreter.]
 
 \newpage
 
