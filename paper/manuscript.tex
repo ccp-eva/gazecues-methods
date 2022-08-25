@@ -169,19 +169,19 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Measuring individual differences in the understanding of gaze cues across the lifespan},
-  pdfauthor={Julia Prein1, Manuel Bohn1, Steven Kalinke1, \& Daniel M. Haun1},
+  pdftitle={TANGO: A reliable, open-source, web-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults},
+  pdfauthor={Julia Prein1, Manuel Bohn1, Steven Kalinke1, \& Daniel B. M. Haun1},
   pdflang={en-EN},
   pdfkeywords={social cognition, individual differences, gaze cues, cognitive development},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Measuring individual differences in the understanding of gaze cues across the lifespan}
-\author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1}, Steven Kalinke\textsuperscript{1}, \& Daniel M. Haun\textsuperscript{1}}
+\title{TANGO: A reliable, open-source, web-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults}
+\author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1}, Steven Kalinke\textsuperscript{1}, \& Daniel B. M. Haun\textsuperscript{1}}
 \date{}
 
 
-\shorttitle{gaze understanding}
+\shorttitle{assessing individual differences in gaze understanding}
 
 \authornote{
 
@@ -192,10 +192,11 @@ Correspondence concerning this article should be addressed to Julia Prein, Max P
 \affiliation{\vspace{0.5cm}\textsuperscript{1} Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany}
 
 \abstract{%
-To navigate the social world and interact with other agents, we use social cognition. Traditional measures of social cognition often lack satisfactory psychometric properties and are not designed to capture variation \emph{between} individuals. This is problematic because developmental theories emphasize the role of social interaction on the development of social cognition which varies substantially across individuals and contexts. To fully understand how social-cognitive abilities emerge and relate to each other, we need new tools that can reliably measure individual differences.
-Here, we present a new task to study individual differences in social cognition in children and adults. We concentrate on an essential ability that is involved in many social-cognitive reasoning processes: gaze understanding -- the ability to locate and use the attentional focus of an agent. Our interactive browser-based task works across devices and enables in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants' click imprecision and is easily adaptable to different study requirements.
+``Traditional measures of social cognition used in developmental research often lack satisfactory psychometric properties and are not designed to capture variation \emph{between} individuals.
+Here we present TANGO (Task for Assessing iNdividual differences in Gaze understanding - Open); a brief(approx. 5-10min), reliable, open-source task to quantify individual differences in the understanding of gaze cues.
+Our interactive browser-based task works across devices and enables in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants' click imprecision and is easily adaptable to different study requirements.
 Our task induces inter-individual differences in a child (N = 387) and an adult (N = 236) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test-retest reliability estimates underline that the captured variation is systematic. This work shows a promising way forward in the study of individual differences in social cognition and will help us explore the in(ter)dependence of our core social-cognitive processes in greater detail.
-All materials and code are freely accessible to interested researchers. The task can be found here: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
+All materials and code are freely accessible to interested researchers. A version of the task is accessible online: \url{https://ccp-odc.eva.mpg.de/tango-demo/}.''
 }
 
 
@@ -223,7 +224,7 @@ Poor measurement of social cognition on an individual level is likely to conceal
 Thus, developmental psychology faces a dilemma: many research questions are questions about individual differences, yet, there is a lack of tasks to measure these individual differences reliably.
 To capture the emergence of social-cognitive abilities and related social factors in greater precision and detail, we must consequently address the methodological limitations of existing study designs (Hughes et al., 2011; Hughes \& Leekam, 2004).
 
-Schaafsma, Pfaff, Spunt, and Adolphs (2015) compiled a ``wish-list'' for new social-cognitive paradigms.
+Schaafsma, Pfaff, Spunt, and Adolphs (2015) compiled a ``wish list'' for new social-cognitive paradigms.
 They advocated for parametric -- instead of dichotomous -- measures covering proficiency as a range, avoiding floor and ceiling effects, and showing satisfactory test-retest reliability estimates (see also Beaudoin et al., 2020; Hughes \& Devine, 2015).
 New tasks should induce variation across age groups, including older children and adults (Repacholi, 2003).
 Another goal in creating new tasks should be to focus on the ``face value'': measures should probe the underlying social-cognitive ability as straight-forward and directly as possible.
@@ -246,6 +247,7 @@ Third, we systematically investigated the psychometric properties of the new tas
 
 Designing this task required a new testing infrastructure.
 We designed the task as an interactive browser-based web app.
+Previous research has successfully used online study implementations that compare well to in-person data collection (Bohn, Le, Peloquin, Köymen, \& Frank, 2021; Bohn, Tessler, Merrick, \& Frank, 2021; Frank, Sugarman, Horowitz, Lewis, \& Yurovsky, 2016).
 This greatly increased the flexibility with which we could modify the stimuli on a trial-by-trial basis.
 Furthermore, because the task is largely self-contained, it is much more controlled and standardized.
 Most importantly, it makes the task portable: testing is possible in-person using tablets but also remotely via the internet (no installation needed).
@@ -258,7 +260,7 @@ We make the task and its source code openly accessible for other researchers to 
 \hypertarget{implementation}{%
 \subsection{Implementation}\label{implementation}}
 
-The code is open-source (\url{https://github.com/ccp-eva/gafo-demo}), and a live demo version can be found under: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
+The code is open-source (\url{https://github.com/ccp-eva/tango-demo}), and a live demo version can be found under: \url{https://ccp-odc.eva.mpg.de/tango-demo/}.
 
 The web app was programmed in \texttt{JavaScript}, \texttt{HTML5}, \texttt{CSS} and \texttt{PHP}.
 For stimulus presentation, a scalable vector graphic (SVG) composition was parsed.
@@ -327,11 +329,11 @@ The boxes then hide the target's final destination (see Figure \ref{fig:fig1}B a
 
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{../figures/gafo_procedure} 
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_procedure} 
 
 }
 
-\caption{\textbf{Study setup}. (A) Infrastructure for online testing. (i) Subjects aged 3 -- 99+ can participate. Data collection can take place anywhere: online, in kindergartens, or research labs. (ii) The task is presented as a website that works across devices. (iii) The scripts for the website and the recorded data are stored on secure local servers. (B) Hedge version (continuous) of the gaze understanding task. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground. The agent's eyes track the movement of the target. (C) Box version (discrete) of the gaze understanding task. Number of boxes (min. 1; max. 8) as potential hiding locations can be set according to the researcher's need.}\label{fig:fig1}
+\caption{\textbf{Study setup}. (A) Infrastructure for online testing. (i) Subjects aged 3 -- 99+ can participate. Data collection can take place anywhere: online, in kindergartens, or research labs. (ii) The task is presented as a website that works across devices. (iii) The scripts for the website and the recorded data are stored on secure local servers. (B) Hedge version (continuous) of the TANGO. (i) The agent stands in a window with the target in front of them. (ii) A hedge grows and covers the target. (iii) The target falls to a random location on the ground. The agent's eyes track the movement of the target. (C) Box version (discrete) of the TANGO. Number of boxes (min. 1; max. 8) as potential hiding locations can be set according to the researcher's need.}\label{fig:fig1}
 \end{figure}
 
 \hypertarget{randomization}{%
@@ -347,7 +349,7 @@ As with agent and color choice, each bin/box occurs equally often and can only o
 \hypertarget{individual-differences}{%
 \section{Individual differences}\label{individual-differences}}
 
-Our first aim was to assess whether our gaze understanding task induces inter-individual variation in a child and adult sample.
+Our first aim was to assess whether the TANGO induces inter-individual variation in a child and adult sample.
 Furthermore, we were interested in how the data collection mode (in-person vs.~remote) influences responses.
 
 Methods, sample size, and analysis were pre-registered: \url{https://osf.io/snju6} (child sample) and \url{https://osf.io/r3bhn} (adult sample).
@@ -423,7 +425,7 @@ We inspected the posterior distribution (mean and 95\% Confidence Interval (CI))
 
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{../figures/gafo_arrangedplot} 
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_arrangedplot} 
 
 }
 
@@ -466,7 +468,7 @@ This illustrates the flexibility of the task design.
 \hypertarget{internal-consistency-and-retest-reliability}{%
 \section{Internal consistency and retest reliability}\label{internal-consistency-and-retest-reliability}}
 
-As a next step, we aimed to investigate whether the variation that we captured with our gaze understanding task is reliable.
+As a next step, we aimed to investigate whether the variation that we captured with the TANGO is reliable.
 We assessed internal consistency (as split-half reliability) and test-retest reliability.
 Data collection and analysis were pre-registered (\url{https://osf.io/xqm73} for the child sample and \url{https://osf.io/nu62m} for the adult sample).
 Participants were equally distributed across the two study versions.
@@ -526,7 +528,7 @@ A high correlation between our participant-specific model estimates would indica
 \hypertarget{results-1}{%
 \subsection{Results}\label{results-1}}
 
-We found that our gaze understanding task induced systematic variation: split-half and test-retest reliability was medium to high.
+We found that the TANGO induced systematic variation: split-half and test-retest reliability was medium to high.
 For internal consistency, we show traditional odd-even splits on our data and the corresponding \emph{Pearson} correlation coefficients in Figure \ref{fig:fig2}B, C, G, and H.
 
 Figure \ref{fig:fig3} compares split-half reliability coefficients by splitting and stratification method (Pronk et al., 2021).
@@ -540,7 +542,7 @@ As expected, we found higher coefficients for the samples with higher variation,
 
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{../figures/gafo_splithalf} 
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_splithalf} 
 
 }
 
@@ -573,11 +575,11 @@ First, we could capture fine-grained individual differences in gaze understandin
 Individuals behaved consistently different from one another.
 Second, our task showed satisfactory psychometric properties with respect to internal consistency and retest reliability estimates.
 Third, our new web-based testing infrastructure proved useful for standardized, portable data collection at scale, both remotely as well as in person.
-In sum, our gaze understanding task provides a step toward more robust and reliable research methods, especially with regard to individual differences research.
-The web app (\url{https://ccp-odc.eva.mpg.de/gafo-demo/}) and its source code (\url{https://github.com/ccp-eva/gafo-demo}) are freely accessible.
+In sum, the TANGO provides a step toward more robust and reliable research methods, especially with regard to individual differences research.
+The web app (\url{https://ccp-odc.eva.mpg.de/tango-demo/}) and its source code (\url{https://github.com/ccp-eva/tango-demo}) are freely accessible.
 We want to highlight that researchers are welcome to use and modify our task according to their needs.
 
-One of the main contributions of the gaze understanding task is that it induces variation between participants.
+One of the main contributions of the TANGO is that it induces variation between participants.
 This is primarily achieved through the implementation of short trials, resulting in over a dozen replicates per subject (15 test trials within 5-10 minutes testing time).
 
 In our task, participants are asked to locate a balloon by using the gaze cues of another agent.
@@ -593,26 +595,28 @@ When testing time is limited (and number of trials might be low), we recommend u
 However, the categorical box version demonstrates design features that might be preferable in some research contexts: for example, researchers could induce different levels of salience for each box.
 Our task could consequently be used to study bias, preferences, and diverse desires (e.g., matching the box appearance to some feature/behavioral characteristic of the agent).
 
-Adding complexity to our gaze understanding task might increase individual differences in an adult sample.
+Adding complexity to the TANGO might increase individual differences in an adult sample.
 Researchers could consider adjusting the task difficulty, for example, by changing the target speed or implementing a saccade version (i.e., where the agent only briefly looks at the target position and then back to the center).
 Another task extension could realize differential feedback dependent on the participant's accuracy.
-By inducing more between-person variance, reliability estimates could further increase.
+By inducing more between-person variance, reliability estimates could further increase and could get even more precise than they already are.
 
 As we could see in the split-half reliability calculations, the more accurately the statistical method represents the task structure, the higher our reliability estimates are.
 Therefore, we argue that future research should aim at implementing statistical analyses that mirror the experimental design in its complexity.
-Computational cognitive models are a promising approach forward.
+Theoretically informed, computational cognitive models are a promising approach forward (Haines et al., 2020).
 We could take advantage of all available information and model variation between and within individuals in an even more fine-grained and psychologically interpretable manner.
 Computational frameworks could also be used to model performance and their underlying cognitive processes across tasks.
 With nested hierarchical models, we could assess the systematic relation between various social-cognitive abilities and recover potentially shared structures between cognitive processes (Bohn, Tessler, Kordt, Hausmann, \& Frank, 2022).
 
+The TANGO fulfills several demands that were proposed by Schaafsma et al. (2015)'s wish list: it measures proficiency on a range, avoids floor and ceiling effects, induces variation across age ranges, shows satisfactory reliability estimates, and a high face value.
+
 In addition to the new task design itself, we designed a new testing infrastructure.
-Our gaze understanding task is presented as an interactive web app.
+The TANGO is presented as an interactive web app.
 This enables presentation across devices without any prior installation.
 Stimuli presentation is achieved through the use of SVGs.
 This has several advantages: the aspect ratio and stimulus quality are kept constant no matter which size the web browser displays.
 The cartoon-like presentation makes the task engaging for children and adults alike.
 Most importantly, we can dynamically modify the stimulus details (e.g., target positions) on a trial-by-trial basis.
-Presented agents and objects can be easily adapted for future task modifications or specific cultural settings.
+Presented agents, voice-over instructions and objects can be easily adapted for future task modifications or specific linguistic and cultural settings.
 
 The web-based implementation allows for different data collection modes: participants can be tested in person with supervision or remotely at home.
 Test instructions are standardized and with prior informed consent the webcam records study participation.
@@ -625,15 +629,13 @@ Therefore, we recommend using a tablet for remote data collection.
 Children can click for themselves and caregivers have less chance to interfere.
 The design choices of the infrastructure underline how our study design can act as a versatile framework for addressing further research questions on social-cognitive development.
 
-After having probed our new testing infrastructure and psychometric properties, the next step will be to ensure the validity of our gaze understanding task.
+After having probed our new testing infrastructure and psychometric properties, the next step will be to ensure the validity of the TANGO.
 Validity is often assessed by looking at concurrent relations between measures.
 Studies on gaze following traditionally present children with a simultaneous, congruent movement of eyes and head orientation.
 In our study, however, children only observe a subtle eye movement.
 Therefore, our results are not directly comparable to traditional gaze following studies.
 Another promising way to assess validity is to correlate the social-cognitive ability in question to concepts that are thought to be theoretically related.
-For example, it has been postulated that social-cognitive abilities are predicted by family-level variables and children's language abilities.
-In our sample, caregivers were asked to fill out a short questionnaire on children's daily surroundings (e.g., sibling composition; information on childcare).
-In addition, a subset of our remote child sample completed a receptive vocabulary task (Bohn, Prein, Delikaya, Haun, \& Gagarina, n.d.). We will report the association between these family-level factors and children's language skills on their gaze understanding abilities in a separate paper (in preparation). In order to match our fine-grained, parametric measure of gaze understanding, however, we hope that future technological advances will enable the continuous measures of children's real-life social surroundings (Barr et al., 2020; Long, Kachergis, Agrawal, \& Frank, 2020; Rogoff, Dahl, \& Callanan, 2018).
+For example, it has been postulated that social-cognitive abilities are predicted by family-level variables and children's language abilities (e.g., Bulgarelli \& Molina, 2016). Future research should probe these relations.
 
 Our future goal is to utilize the presented testing infrastructure for further studies on social-cognitive abilities.
 As has been pointed out, social cognition encompasses a whole range of abilities which could be best assessed by task batteries (Hughes et al., 2011; Schaafsma et al., 2015).
@@ -643,13 +645,24 @@ We want to move from the most fundamental social-cognitive abilities to more com
 \section{Conclusion}\label{conclusion}}
 
 We have presented a new experimental paradigm to study gaze understanding across the lifespan.
-Our gaze understanding task captures individual differences and shows highly satisfactory psychometric properties with respect to internal consistency and retest reliability.
+The TANGO captures individual differences and shows highly satisfactory psychometric properties with respect to internal consistency and retest reliability.
 The web-based testing infrastructure allows for standardized, portable data collection at scale, both remotely as well as in person.
 Ultimately, this work shows a promising way forward toward more precise measures of cognitive development.
 The data sets and the analysis code are freely available in the associated online repository (\url{https://github.com/ccp-eva/gazecues-methods}).
-A demo version of the task is available at the following website: \url{https://ccp-odc.eva.mpg.de/gafo-demo/}.
-The implementation architecture (JavaScript and HTML code) and the materials can be accessed in the following repository: \url{https://github.com/ccp-eva/gafo-demo}.
+A demo version of the task is available at the following website (see Figure \ref{fig:fig4}): \url{https://ccp-odc.eva.mpg.de/tango-demo/}.
+The implementation architecture (JavaScript and HTML code) and the materials can be accessed in the following repository: \url{https://github.com/ccp-eva/tango-demo}.
 These resources allow interested researchers to use, extend and adapt the task.
+
+
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_demo_screenshot} 
+
+}
+
+\caption{\textbf{TANGO demo website.} We want to highlight that researchers are welcome to use and modify our task according to their needs.}\label{fig:fig4}
+\end{figure}
 
 \newpage
 
@@ -659,7 +672,7 @@ These resources allow interested researchers to use, extend and adapt the task.
 \hypertarget{open-practices-statement}{%
 \subsection{Open practices statement}\label{open-practices-statement}}
 
-The web application (\url{https://ccp-odc.eva.mpg.de/gafo-demo/}) described here is open source (\url{https://github.com/ccp-eva/gafo-demo}).
+The web application (\url{https://ccp-odc.eva.mpg.de/tango-demo/}) described here is open source (\url{https://github.com/ccp-eva/tango-demo}).
 The data sets generated during and/or analysed during the current study are available in the {[}gazecues-methods{]} repository, (\url{https://github.com/jprein/gazecues-methods}).
 All experiments were preregistered (\url{https://osf.io/zjhsc/}).
 
@@ -706,9 +719,6 @@ Astor, K., Thiele, M., \& Gredebäck, G. (2021). Gaze following emergence relies
 \leavevmode\vadjust pre{\hypertarget{ref-baron-cohen1985does}{}}%
 Baron-Cohen, S., Leslie, A. M., \& Frith, U. (1985). Does the autistic child have a "theory of mind" ? \emph{Cognition}, \emph{21}, 37--46. \url{https://doi.org/10.1016/0010-0277(85)90022-8}
 
-\leavevmode\vadjust pre{\hypertarget{ref-barr2020screen}{}}%
-Barr, R., Kirkorian, H., Radesky, J., Coyne, S., Nichols, D., Blanchfield, O., \ldots{} Fitzpatrick, caroline. (2020). Beyond {Screen Time}: {A Synergistic Approach} to a {More Comprehensive Assessment} of {Family Media Exposure During Early Childhood}. \emph{Frontiers in Psychology}, \emph{11}.
-
 \leavevmode\vadjust pre{\hypertarget{ref-barrett2013early}{}}%
 Barrett, H. C., Broesch, T., Scott, R. M., He, Z., Baillargeon, R., Wu, D., \ldots{} Laurence, S. (2013). Early false-belief understanding in traditional non-{Western} societies. \emph{Proceedings of the Royal Society B: Biological Sciences}. \url{https://doi.org/10.1098/rspb.2012.2654}
 
@@ -718,11 +728,14 @@ Beaudoin, C., Leblanc, É., Gagner, C., \& Beauchamp, M. H. (2020). Systematic {
 \leavevmode\vadjust pre{\hypertarget{ref-benson2012individual}{}}%
 Benson, J., Sabbagh, M., Carlson, S., \& Zelazo, P. (2012). Individual {Differences} in {Executive Functioning Predict Preschoolers}' {Improvement From Theory-of-Mind Training}. \emph{Developmental Psychology}, \emph{49}. \url{https://doi.org/10.1037/a0031056}
 
-\leavevmode\vadjust pre{\hypertarget{ref-bohnorev}{}}%
-Bohn, M., Prein, J., Delikaya, B., Haun, D. B. M., \& Gagarina, N. (n.d.). \emph{{oREV}: An {Item Response Theory} based open receptive vocabulary task for 3 to 8-year-old children}.
+\leavevmode\vadjust pre{\hypertarget{ref-bohn2021children}{}}%
+Bohn, M., Le, K. N., Peloquin, B., Köymen, B., \& Frank, M. C. (2021). Children's interpretation of ambiguous pronouns based on prior discourse. \emph{Developmental Science}, \emph{24}(3), e13049. \url{https://doi.org/10.1111/desc.13049}
 
 \leavevmode\vadjust pre{\hypertarget{ref-bohn2022individual}{}}%
 Bohn, M., Tessler, M. H., Kordt, C., Hausmann, T., \& Frank, M. C. (2022). \emph{An individual differences perspective on the development of pragmatic abilities in the preschool years}. {PsyArXiv}. \url{https://doi.org/10.31234/osf.io/s2e3p}
+
+\leavevmode\vadjust pre{\hypertarget{ref-bohn2021how}{}}%
+Bohn, M., Tessler, M. H., Merrick, M., \& Frank, M. C. (2021). How young children integrate information sources to infer the meaning of words. \emph{Nature Human Behaviour}, \emph{5}(8), 1046--1054. \url{https://doi.org/10.1038/s41562-021-01145-1}
 
 \leavevmode\vadjust pre{\hypertarget{ref-brooks2005development}{}}%
 Brooks, R., \& Meltzoff, A. N. (2005). The development of gaze following and its relation to language. \emph{Developmental Science}, \emph{8}(6), 535--543. \url{https://doi.org/10.1111/j.1467-7687.2005.00445.x}
@@ -763,6 +776,9 @@ Del Bianco, T., Falck-Ytter, T., Thorup, E., \& Gredebäck, G. (2019). The {Deve
 \leavevmode\vadjust pre{\hypertarget{ref-dunn1991young}{}}%
 Dunn, J., Brown, J., Slomkowski, C., Tesla, C., \& Youngblade, L. (1991). \href{https://www.ncbi.nlm.nih.gov/pubmed/1786720}{Young children's understanding of other people's feelings and beliefs: Individual differences and their antecedents}. \emph{Child Development}, \emph{62}(6), 1352--1366.
 
+\leavevmode\vadjust pre{\hypertarget{ref-frank2016using}{}}%
+Frank, M. C., Sugarman, E., Horowitz, A. C., Lewis, M. L., \& Yurovsky, D. (2016). Using {Tablets} to {Collect Data From Young Children}. \emph{Journal of Cognition and Development}, \emph{17}(1), 1--17. \url{https://doi.org/10.1080/15248372.2015.1061528}
+
 \leavevmode\vadjust pre{\hypertarget{ref-frischen2007gaze}{}}%
 Frischen, A., Bayliss, A. P., \& Tipper, S. P. (2007). Gaze cueing of attention: {Visual} attention, social cognition, and individual differences. \emph{Psychological Bulletin}, \emph{133}(4), 694--724. \url{https://doi.org/10.1037/0033-2909.133.4.694}
 
@@ -771,6 +787,9 @@ Gola, A. A. H. (2012). Mental verb input for promoting children's theory of mind
 
 \leavevmode\vadjust pre{\hypertarget{ref-gopnik1991young}{}}%
 Gopnik, A., \& Slaughter, V. (1991). Young {Children}'s {Understanding} of {Changes} in {Their Mental States}. \emph{Child Development}, \emph{62}(1), 98. \url{https://doi.org/10.2307/1130707}
+
+\leavevmode\vadjust pre{\hypertarget{ref-haines2020theoretically}{}}%
+Haines, N., Kvam, P. D., Irving, L. H., Smith, C., Beauchaine, T. P., Pitt, M. A., \ldots{} Turner, B. M. (2020). \emph{Theoretically {Informed Generative Models Can Advance} the {Psychological} and {Brain Sciences}: {Lessons} from the {Reliability Paradox}}. {PsyArXiv}. \url{https://doi.org/10.31234/osf.io/xr7y3}
 
 \leavevmode\vadjust pre{\hypertarget{ref-happe2017structure}{}}%
 Happé, F., Cook, J. L., \& Bird, G. (2017). The {Structure} of {Social Cognition}: {In}(ter)dependence of {Sociocognitive Processes}. \emph{Annual Review of Psychology}, \emph{68}(1), 243--267. \url{https://doi.org/10.1146/annurev-psych-010416-044046}
@@ -813,9 +832,6 @@ Lecce, S., Bianco, F., Devine, R. T., Hughes, C., \& Banerjee, R. (2014). Promot
 
 \leavevmode\vadjust pre{\hypertarget{ref-lee1998children}{}}%
 Lee, K., Eskritt, M., Symons, L. A., \& Muir, D. (1998). Children's use of triadic eye gaze information for "mind reading". \emph{Developmental Psychology}, \emph{34}(3), 525--539. \url{https://doi.org/10.1037//0012-1649.34.3.525}
-
-\leavevmode\vadjust pre{\hypertarget{ref-long2020detecting}{}}%
-Long, B., Kachergis, G., Agrawal, K., \& Frank, M. C. (2020). \emph{Detecting social information in a dense dataset of infants' natural visual experience} {[}Preprint{]}. {PsyArXiv}. \url{https://doi.org/10.31234/osf.io/z7tdg}
 
 \leavevmode\vadjust pre{\hypertarget{ref-mayer2015weird}{}}%
 Mayer, A., \& Träuble, B. (2015). The weird world of cross-cultural false-belief research: {A} true- and false-belief study among samoan children based on commands. \emph{Journal of Cognition and Development}, \emph{16}(4), 650--665. \url{https://doi.org/10.1080/15248372.2014.926273}
@@ -864,9 +880,6 @@ Repacholi, V. S. \&. B. (2003). Introduction {Individual Differences} in {Theory
 
 \leavevmode\vadjust pre{\hypertarget{ref-rizzo2018theory}{}}%
 Rizzo, M. T., \& Killen, M. (2018). Theory of mind is related to children's resource allocations in gender stereotypic contexts. \emph{Developmental Psychology}, \emph{54}(3), 510. \url{https://doi.org/10.1037/dev0000439}
-
-\leavevmode\vadjust pre{\hypertarget{ref-rogoff2018importance}{}}%
-Rogoff, B., Dahl, A., \& Callanan, M. (2018). The importance of understanding children's lived experience. \emph{Developmental Review}, \emph{50}, 5--15. \url{https://doi.org/10.1016/j.dr.2018.05.006}
 
 \leavevmode\vadjust pre{\hypertarget{ref-rouder2019psychometrics}{}}%
 Rouder, J. N., \& Haaf, J. M. (2019). A psychometrics of individual differences in experimental tasks. \emph{Psychonomic Bulletin \& Review}, \emph{26}(2), 452--467. \url{https://doi.org/10.3758/s13423-018-1558-y}
