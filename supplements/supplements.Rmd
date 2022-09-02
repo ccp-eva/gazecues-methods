@@ -1,7 +1,7 @@
 ---
 title             : |
                     <center> Supplements for the manuscript </center>
-                    <center> "Measuring individual differences in the understanding of gaze cues across the lifespan" </center>
+                    <center> "TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults" </center>
 shorttitle        : "Supplements"
 author: 
   
@@ -16,7 +16,7 @@ author:
   - name          : "Steven Kalinke"
     affiliation   : "1"
     
-  - name          : "Daniel M. Haun"
+  - name          : "Daniel B. M. Haun"
     affiliation   : "1"
 affiliation:
   - id            : "1"
