@@ -60,7 +60,7 @@ knitr::include_graphics("../figures/supplements_webcamcoding_draws.png")
 ```
 
 ```{r sample}
-testtrials <- readRDS(file = "../data/gafo-testtrials.rds") %>% 
+testtrials <- readRDS(file = "../data/tango-testtrials.rds") %>% 
   # determine order of factors
   mutate(
     targetPosition = factor(targetPosition, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "box1", "box2", "box3", "box4", "box5")), 
