@@ -1,0 +1,85 @@
+---
+title: "TANGO training"
+author: "Julia Prein"
+date: "02/04/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(ggthemes)
+library(ggrain)
+
+options(scipen = 999)
+theme_set(theme_classic())
+```
+
+```{r load_data}
+alltrials <- readRDS(file = "../data/tango-alltrials.rds") %>% 
+  # determine order of factors
+  mutate(
+    targetPosition = factor(targetPosition, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "box1", "box2", "box3", "box4", "box5")), 
+    studyversion = factor(studyversion, levels = c("hedge", "box")), 
+    datacollection = factor(datacollection, levels = c("in-person - supervised", "remote - unsupervised")),
+    sample = factor(sample, levels = c("kids", "adults")), 
+    trialType = factor(trialType, levels = c("touch", "fam", "test"), labels = c("training 1", "training 2 & 3", "test")), 
+    studytype = factor(studytype, levels = c("vali", "reli"), labels = c("individual variation sample", "reliability sample")),
+    
+    # for models, summarize targetPositions in a way that it's symmetrical for left/ right side
+    # the smaller the value, the more central the position
+    symmetricPosition = case_when(
+                                  targetPosition == "5" | targetPosition == "6" | targetPosition == "box3" ~ 1, 
+                                  targetPosition == "4" | targetPosition == "7" | targetPosition == "box2" | targetPosition == "box4" ~ 2,
+                                  targetPosition == "3" | targetPosition == "8" | targetPosition == "box1" | targetPosition == "box5" ~ 3, 
+                                  targetPosition == "2" | targetPosition == "9" ~ 4,
+                                  targetPosition == "1" | targetPosition == "10" ~ 5, 
+                       ), 
+    
+    # distance between target and click in balloon widths (balloon width is 160 SVG units)
+    clickDistInBalloons = abs(clickDistFromTargetCenterX)/160,
+  )
+```
+
+```{r trainingtrials}
+alltrials %>% 
+  filter(ageInYears < 6) %>% 
+  ggplot(., aes(x = trialType, y = clickDistInBalloons, fill = trialType)) +
+  geom_rain(cov = "clickDistInBalloons", 
+            point.args.pos = rlang::list2(size = 0.5, position = position_jitter(width = 0.05, height = 0)),
+            boxplot.args.pos = list(
+              width = 0.1, position = position_nudge(x = 0.13)),
+            violin.args.pos = list(
+              side = "r",
+              width = 1, position = position_nudge(x = 0.2))) +
+  guides(fill = 'none', color = 'none') +
+  scale_colour_gradient(high = "#220220", low = "#D3D3D3") + 
+  scale_fill_manual(values=c("#c6d325", "#00b1ea", "#29485d")) + 
+  facet_grid(studytype ~ studyversion) + 
+  scale_x_discrete(expand = c(0, 0)) +
+  labs(x = "Trial type", y = "Imprecision in target width")
+
+ggsave("../figures/tango_supplements_trainingtrials.png", width = 9, height = 6, scale = 1.2, bg = "white")
+```
+
+```{r across_trials}
+alltrials %>% 
+  filter(trialType == "test" & ageInYears < 6) %>%
+  ggplot(mapping = aes(x = trialNr, y = clickDistInBalloons)) +
+  geom_point(aes(color = subjID, group = subjID), alpha = 0.2) +
+  geom_line(aes(color = subjID, group = subjID), alpha = 0.2) +
+  geom_smooth(method = "lm", linetype = "dashed", size = 1.5, color = "black", se = FALSE) +
+  scale_x_continuous(breaks = seq(1, 19, 1)) + 
+  scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, 2)) + 
+  xlab("Trial Number") + 
+  ylab("Imprecision in target widths") +
+  theme_classic() +
+  theme(legend.position = "none") + 
+  facet_grid(studytype ~ studyversion)
+
+ggsave("../figures/tango_supplements_acrosstrials.png", width = 8, height = 6, scale = 1, bg = "white")
+```
+

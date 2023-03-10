@@ -69,6 +69,29 @@
   \let\oldsubparagraph\subparagraph
   \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \ifLuaTeX
 \usepackage[bidi=basic]{babel}
 \else
@@ -155,14 +178,13 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
+  pdftitle={Supplements for the manuscript `TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'},
   pdfauthor={Julia Prein1, Manuel Bohn1, Steven Kalinke1, \& Daniel B. M. Haun1},
   pdflang={en-EN},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Supplements for the manuscript
-
-``TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults''}
+\title{Supplements for the manuscript `TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'}
 \author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1}, Steven Kalinke\textsuperscript{1}, \& Daniel B. M. Haun\textsuperscript{1}}
 \date{}
 
@@ -180,21 +202,47 @@ Correspondence concerning this article should be addressed to Julia Prein, Max P
 \begin{document}
 \maketitle
 
-\hypertarget{child-sample}{%
-\section{Child sample}\label{child-sample}}
+\hypertarget{effects-of-trial-type-and-trial-number}{%
+\section{Effects of trial type and trial number}\label{effects-of-trial-type-and-trial-number}}
 
-\hypertarget{webcam-coding}{%
-\subsection{Webcam coding}\label{webcam-coding}}
+Children showed nearly perfect precision in the first training trial. As visual access to the target location decreased in the succeeding training trials, imprecision levels increased. Within test trials, children's imprecision levels did not vary as a function of trial number.
 
 
 
 \begin{figure}
 
-{\centering \includegraphics[width=1\linewidth]{../figures/supplements_webcamcoding_draws} 
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_supplements_trainingtrials} 
 
 }
 
-\caption{\textbf{Model comparison for exploratory webcam coding of parental interference}. Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level (i.e., average across trials per subject).}\label{fig:fig4}
+\caption{\textbf{Imprecision by trial type, split by study version and sample}. The x axis represents the trial type. The y axis represents imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with imprecision of 1 clicked one target width to the left or right of the true target center. Small dots show the imprecision for each subject in each trial. Boxplots (boxes represent first to third quartiles of data; vertical lines indicate the median; horizontal black lines display the range) and a half violin plot show the data distribution.}\label{fig:fig1}
+\end{figure}
+
+
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_supplements_acrosstrials} 
+
+}
+
+\caption{\textbf{Imprecision across test trials, split by study version and sample}. The x axis represents trial number. The y axis represents imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with imprecision of 1 clicked one target width to the left or right of the true target center. The black dashed regression lines show smooth conditional means based on linear models. Small colored dots show the imprecision for each subject in each trial. Colored lines connect the trials of each individual.}\label{fig:fig2}
+\end{figure}
+
+\newpage
+
+\hypertarget{webcam-coding-of-the-child-sample}{%
+\section{Webcam coding of the child sample}\label{webcam-coding-of-the-child-sample}}
+
+
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_supplements_webcamcoding} 
+
+}
+
+\caption{\textbf{Model comparison for exploratory webcam coding of parental interference}. Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level (i.e., average across trials per subject).}\label{fig:fig3}
 \end{figure}
 
 Comparing the performances of children across our two data collection modes, we found that children participating remotely were slightly more precise.
@@ -209,9 +257,7 @@ We transcribed all utterances by parents and children and counted the words utte
 We then classified the utterances into several categories: question asked by child, repeated test questions by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive \& negative feedback, motivational statements, and incomprehensible utterances.
 In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial.
 We conducted a model comparison to estimate the effects of parental interference.
-Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in \texttt{R:\ correct\ \textasciitilde{}\ age\ +\ (1\ \textbar{}\ subjID)\ +\ (1\ \textbar{}\ targetPosition)}.\footnote{Attentive readers might notice that we simplified the structure of random effects.
-  Compared to our models in the \emph{Individual differences} section, this model does not include the random slope for symmetric target position within participants.
-  We decided to do so since we had limited amount of data from few participants.}
+Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in \texttt{R:\ correct\ \textasciitilde{}\ age\ +\ symmetricPosition\ +\ (1\ +\ symmetricPosition\ \textbar{}\ subjID)}.
 
 We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects.
 Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect.
@@ -223,49 +269,237 @@ On the trial level, the model including the verification of choice as a main eff
 Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments.
 On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box.
 In all cases, however, ELPD difference scores were smaller than their standard errors.
-Similarly, 95\% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}).
+Similarly, 95\% CI of the model estimates included zero and were rather wide.
 Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
 
-\begin{table}[tbp]
-
-\begin{center}
-\begin{threeparttable}
-
-\caption{\label{tab:webcam_table}Model comparison for exploratory webcam coding of parental interference}
-
-\begin{tabular}{lllll}
+\begin{table}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lrrrrr}
 \toprule
-Predictor & \multicolumn{1}{c}{WAIC} & \multicolumn{1}{c}{Weight} & \multicolumn{1}{c}{ELPD} & \multicolumn{1}{c}{SE}\\
+Predictor & WAIC & SE\_WAIC & Weight & ELPD\_DIFF & SE\_ELPD\_DIFF\\
 \midrule
-By trial - \# Verification choice & 262.98 & 0.57 & 0.00 & 0.00\\
-By trial - Null model & 263.25 & 0.43 & -0.13 & 1.19\\
-By trial - Parental interference index & 264.32 & 0.00 & -0.67 & 0.97\\
-By trial - \# Repeated testquestion & 265.34 & 0.00 & -1.18 & 1.26\\
-By trial - \# Words uttered by caregiver & 266.27 & 0.00 & -1.65 & 1.21\\
-By trial - \# Hints eyes & 266.33 & 0.00 & -1.68 & 1.27\\
-By subject - \# Repeated testquestion & 83.83 & 0.70 & 0.00 & 0.00\\
-By subject - Parental interference index & 88.50 & 0.00 & -2.34 & 3.56\\
-By subject - Null model & 89.62 & 0.00 & -2.90 & 3.60\\
-By subject - \# Verification choice & 89.75 & 0.30 & -2.96 & 4.46\\
-By subject - \# Words uttered by caregiver & 90.46 & 0.00 & -3.32 & 4.21\\
-By subject - \# Hints eyes & 92.90 & 0.00 & -4.54 & 3.73\\
-\bottomrule
+By trial - \# Verification choice & 255.98 & 15.66 & 0.34 & 0.00 & 0.00\\
+By trial - Null model & 256.77 & 15.05 & 0.23 & -0.40 & 1.18\\
+By trial - Parental interference index & 257.24 & 15.32 & 0.18 & -0.63 & 0.99\\
+By trial - \# Repeated testquestion & 258.57 & 15.25 & 0.09 & -1.30 & 1.23\\
+By trial - \# Words uttered by caregiver & 258.88 & 15.37 & 0.08 & -1.45 & 1.13\\
 \addlinespace
-\end{tabular}
-
-\begin{tablenotes}[para]
-\normalsize{\textit{Note.} All models included random intercepts for participant and target position.}
-\end{tablenotes}
-
-\end{threeparttable}
-\end{center}
-
+By trial - \# Hints eyes & 258.88 & 15.35 & 0.08 & -1.45 & 1.21\\
+By subject - \# Repeated testquestion & 83.61 & 10.23 & 0.81 & 0.00 & 0.00\\
+By subject - Parental interference index & 88.27 & 12.17 & 0.08 & -2.33 & 3.58\\
+By subject - Null model & 89.16 & 11.21 & 0.05 & -2.78 & 3.60\\
+By subject - \# Verification choice & 89.96 & 12.04 & 0.03 & -3.18 & 4.47\\
+\addlinespace
+By subject - \# Words uttered by caregiver & 90.56 & 10.70 & 0.02 & -3.48 & 4.23\\
+By subject - \# Hints eyes & 93.02 & 11.84 & 0.01 & -4.71 & 3.76\\
+\bottomrule
+\end{tabular}}
 \end{table}
 
 \newpage
 
-\hypertarget{adult-sample}{%
-\section{Adult sample}\label{adult-sample}}
+\hypertarget{reliability-by-age-group}{%
+\section{Reliability by age group}\label{reliability-by-age-group}}
+
+
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_supplements_reli_byagegroup} 
+
+}
+
+\caption{\textbf{Reliability split by age group}. (A) Internal consistency (odd-even split) in hedge child sample by age group. (B) Test-retest reliability in hedge child sample by age group. (C) Internal consistency (odd-even split) in box child sample by age group. (D) Test-retest reliability in box child sample by age group. For the hedge version, performance is measured as imprecision, i.e., the absolute distance between the target's center and the participant's click (averaged across trials). The unit of imprecision is counted in the width of the target, i.e., a participant with imprecision of 1 clicked on average one target width to the left or right of the true target center. For the box version, performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that contained the target. Regression lines with 95\% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with \emph{Pearson}'s correlation coefficient \emph{r}. Dots show the performance for each subject. The color of data points denotes age group.}\label{fig:fig4}
+\end{figure}
+
+\newpage
+
+\hypertarget{validity}{%
+\section{Validity}\label{validity}}
+
+\hypertarget{social-environmental-factors}{%
+\subsection{Social-environmental factors}\label{social-environmental-factors}}
+
+\hypertarget{participants}{%
+\subsubsection{Participants}\label{participants}}
+
+We included all children where families filled out a short demographic questionnaire. This subsample consisted of 109 children, including 30 3-year-olds (mean = 41.80 months, SD = 3.44, range = 36 - 47),
+36 4-year-olds (mean = 54.19 months, SD = 3.08, range = 48 - 59), and
+43 5-year-olds (mean = 66.28 months, SD = 3.62, range = 60 - 71).
+
+\hypertarget{analysis}{%
+\subsubsection{Analysis}\label{analysis}}
+
+To estimate social environmental influences on gaze understanding, we fitted GLMMs predicting the task performance by each of our questionnaire variables, controlling for age (scaled), data collection mode (reference category: remote unsupervised) and study version (reference category: box version): \texttt{cor\_tango\ \textbar{}\ trials(n\_tango)\ \textasciitilde{}\ age\ +\ datacollection\ +\ studyversion}).
+In order to combine data of our two study versions, we transformed continuous click responses from the hedge version into a discrete outcome.
+For the target position, we categorized two adjacent bins as one imaginary box.
+To measure participants' performance, we created imaginary box boundaries around the target's landing position and examined whether the participant's click response fell into this imaginary box.
+Across the two study versions, we could consequently model the number of participant's correct responses using a \texttt{Binomial} distribution.
+For model comparisons, we ran separate models, each with one of the following predictors as a fixed effects added to the null model: number of household members, number of children aged 0-18 in household, number of children aged 1-12 in household, hours spent in childcare each day, and age when subject entered childcare.
+In addition, we calculated three index scores.
+First, we calculated a sibling variety score according to Peterson (2000).
+Second, we implemented the modified version of Cassidy, Fineberg, Brown, and Perkins (2005).
+Third, based on our own data exploration, we calculated the amount of peer exposure determined as the number of siblings and the average hours spent in childcare.
+We compared the models using WAIC (widely applicable information criterion) scores and weights (McElreath, 2020).
+As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit.
+WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
+
+\hypertarget{results}{%
+\subsubsection{Results}\label{results}}
+
+\begin{table}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lrrrrr}
+\toprule
+Predictor & WAIC & SE\_WAIC & Weight & ELPD\_DIFF & SE\_ELPD\_DIFF\\
+\midrule
+Age of childcare entry & 571.66 & 28.13 & 0.73 & 0.00 & 0.00\\
+Null model & 575.85 & 30.39 & 0.09 & -2.09 & 4.49\\
+Sibling variety score (Peterson, 2000) & 577.91 & 29.85 & 0.03 & -3.12 & 4.64\\
+\# Children in household aged 0-18 & 578.01 & 29.70 & 0.03 & -3.18 & 4.72\\
+Peer exposure index & 578.04 & 30.23 & 0.03 & -3.19 & 4.70\\
+\addlinespace
+Sibling variety score (Cassidy et al., 2005) & 578.36 & 29.88 & 0.03 & -3.35 & 4.65\\
+\# Household members & 578.70 & 30.35 & 0.02 & -3.52 & 4.50\\
+\# Children in household aged 1-12 & 578.93 & 30.04 & 0.02 & -3.64 & 4.86\\
+Average hours spent in childcare per day & 579.03 & 30.69 & 0.02 & -3.69 & 4.57\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+Note that we did not find a great difference in WAIC scores between the compared models (see Supplements for WAIC scores and weights). The model estimates were all considerably smaller than estimates of age, study version and data collection, and all 95\% CIs included zero. Nevertheless, a general pattern emerges: exposure to a more variable social environment positively influenced children's gaze understanding. The number of people and, more specifically, children, as well as the more diverse their age, the more likely children were to understand the agent's gaze cue. The only predictor resulting in a negative estimate was the age at which a participant entered childcare, i.e., the later a child entered, the better performance in the task.
+
+\hypertarget{receptive-vocabulary}{%
+\subsection{Receptive vocabulary}\label{receptive-vocabulary}}
+
+\hypertarget{participants-1}{%
+\subsubsection{Participants}\label{participants-1}}
+
+Our sample consisted of 117 children, including 11 3-year-olds (mean = 45.05 months, SD = 1.58, range = 43 - 47,
+26 4-year-olds (mean = 53.17 months, SD = 3.01, range = 48 - 57),
+32 5-year-olds (mean = 65.80 months, SD = 3.23, range = 61 - 71),\\
+36 6-year-olds (mean = 78.36 months, SD = 3.26, range = 72 - 84), and 12 7-year-olds (mean = 88.11 months, SD = 1.96, range = 84 - 91).
+
+\hypertarget{materials}{%
+\subsubsection{Materials}\label{materials}}
+
+We employed the oREV, an Item Response Theory based open receptive vocabulary task for 3 to 8-year-old children (Bohn, Prein, Delikaya, Haun, \& Gagarina, 2022). Similarly to the TANGO, the task was presented as an interactive web application (see Figure \ref{fig:fig5}; live demo \url{https://ccp-odc.eva.mpg.de/orev-demo/}; source code \url{https://github.com/ccp-eva/orev-demo}).
+
+Each trial presented four pictures: one target word alongside three distractors (1 phonological, 1 semantic, 1 unrelated distractor). A verbal prompt asked children to select one of the pictures (prompt: ``Zeige mir {[}target word{]}''; engl.: ``Show me {[}target word{]}''). The positioning of the target word and the three distractor types was counterbalanced across the four display positions (upper/lower and left/right corners). Children responded by clicking on one of the four pictures. The outcome measure consisted of the proportion of correct responses.
+
+
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/orev_procedure} 
+
+}
+
+\caption{Setup of the oREV. On each trial, participants heard a word and were asked to select the corresponding picture. Verbal prompts could be replayed by pressing the loudspeaker button.}\label{fig:fig5}
+\end{figure}
+
+\hypertarget{procedure}{%
+\subsubsection{Procedure}\label{procedure}}
+
+Families received a personalized study link and completed the study at any location or time they wanted. Caregivers were asked to only provide technical support but no further help. Webcam recordings were done whenever consented and technically possible. We analyzed data of 20 trials per child. Children received the trials in two different orders. Performance across the two study orders did not differ. Hence, we decided to combine the data.
+
+\hypertarget{analysis-1}{%
+\subsubsection{Analysis}\label{analysis-1}}
+
+To estimate the effect of gaze understanding on receptive vocabulary, we fitted a GLMM predicting the task performance by the gaze understanding score (scaled), controlling for age: \texttt{cor\_clt\ \textbar{}\ trials(n\_clt)\ \textasciitilde{}\ age\_centered\ +\ mean\_gaze\_centered}). We modelled the number of participant's correct responses using a \texttt{Binomial} distribution.
+
+\hypertarget{results-1}{%
+\subsubsection{Results}\label{results-1}}
+
+\begin{table}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lrrrrr}
+\toprule
+Predictor & WAIC & SE\_WAIC & Weight & ELPD\_DIFF & SE\_ELPD\_DIFF\\
+\midrule
+Age of childcare entry & 571.66 & 28.13 & 0.73 & 0.00 & 0.00\\
+Null model & 575.85 & 30.39 & 0.09 & -2.09 & 4.49\\
+Sibling variety score (Peterson, 2000) & 577.91 & 29.85 & 0.03 & -3.12 & 4.64\\
+\# Children in household aged 0-18 & 578.01 & 29.70 & 0.03 & -3.18 & 4.72\\
+Peer exposure index & 578.04 & 30.23 & 0.03 & -3.19 & 4.70\\
+\addlinespace
+Sibling variety score (Cassidy et al., 2005) & 578.36 & 29.88 & 0.03 & -3.35 & 4.65\\
+\# Household members & 578.70 & 30.35 & 0.02 & -3.52 & 4.50\\
+\# Children in household aged 1-12 & 578.93 & 30.04 & 0.02 & -3.64 & 4.86\\
+Average hours spent in childcare per day & 579.03 & 30.69 & 0.02 & -3.69 & 4.57\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\newpage
+
+\hypertarget{additional-information-for-the-adult-sample}{%
+\section{Additional information for the adult sample}\label{additional-information-for-the-adult-sample}}
+
+\begin{longtable}{llr}
+\toprule
+Current Country of Residence & studytype & n\\
+\midrule
+\endfirsthead
+\multicolumn{3}{@{}l}{\textit{(continued)}}\\
+\toprule
+Current Country of Residence & studytype & n\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+United Kingdom & vali & 47\\
+South Africa & vali & 8\\
+Portugal & vali & 6\\
+Poland & vali & 5\\
+Ireland & vali & 5\\
+\addlinespace
+Italy & vali & 4\\
+Spain & vali & 4\\
+Netherlands & vali & 4\\
+Canada & vali & 2\\
+Australia & vali & 2\\
+\addlinespace
+France & vali & 2\\
+Austria & vali & 2\\
+Norway & vali & 1\\
+DATA EXPIRED & vali & 1\\
+Finland & vali & 1\\
+\addlinespace
+Greece & vali & 1\\
+Germany & vali & 1\\
+United States & vali & 1\\
+Mexico & vali & 1\\
+South Africa & reli & 48\\
+\addlinespace
+United Kingdom & reli & 19\\
+United States & reli & 14\\
+Portugal & reli & 10\\
+Italy & reli & 7\\
+Canada & reli & 6\\
+\addlinespace
+Spain & reli & 5\\
+Ireland & reli & 5\\
+Poland & reli & 4\\
+Greece & reli & 4\\
+Netherlands & reli & 3\\
+\addlinespace
+CONSENT REVOKED & reli & 3\\
+Germany & reli & 3\\
+Australia & reli & 2\\
+France & reli & 2\\
+Czech Republic & reli & 2\\
+\addlinespace
+Hungary & reli & 2\\
+Chile & reli & 1\\
+Iceland & reli & 1\\
+New Zealand & reli & 1\\*
+\end{longtable}
 
 \hypertarget{recruitment}{%
 \subsection{Recruitment}\label{recruitment}}
@@ -316,7 +550,7 @@ On average, participants took 04:43min to complete the study.
 \hypertarget{study-3---reliability-hedge-version}{%
 \subsection{Study 3 - Reliability hedge version}\label{study-3---reliability-hedge-version}}
 
-In stuyy 3 and 4, we assessed the test-retest reliability of our gaze understanding task in an adult sample.
+In study 3 and 4, we assessed the test-retest reliability of our gaze understanding task in an adult sample.
 The pre-registration can be found here: \url{https://osf.io/nu62m}.
 We tested the same participants twice with a delay of two weeks.
 The testing conditions were as specified in Study 1 and 2.
@@ -324,7 +558,7 @@ However, the target locations as well as the succession of animals and target co
 Each participant then received the same fixed randomized order of target location, animal, and target color.
 Participants received 30 test trials without voice-over description, so that each of the ten bins occurred exactly three times.
 
-In addition to the beforementioned prescreening settings, we used a whitelist.
+In addition to the aforementioned prescreening settings, we used a whitelist.
 \emph{Prolific} has a so-called \emph{custom allowlist prescreening filter} where one can enter the \emph{Prolific} IDs of participants who completed a previous study.
 Only these subjects are then invited to participate in a study.
 This way, repeated measurements can be implemented, collecting data from the same subjects at different points in time.
@@ -423,6 +657,33 @@ This is the content of our audio recordings that were played as instructions and
 \textbf{sound for target click} & - & - & positive-feedback.mp3 \\
 \bottomrule()
 \end{longtable}
+
+\newpage
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-bohn2022orev}{}}%
+Bohn, M., Prein, J., Delikaya, B., Haun, D. B. M., \& Gagarina, N. (2022). \emph{{oREV}: An {Item Response Theory} based open receptive vocabulary task for 3 to 8-year-old children}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-cassidy2005theory}{}}%
+Cassidy, K. W., Fineberg, D. S., Brown, K., \& Perkins, A. (2005). Theory of {Mind May Be Contagious}, but {You Don}'t {Catch It} from {Your Twin}. \emph{Child Development}, \emph{76}(1), 97--106. Retrieved from \url{https://www.jstor.org/stable/3696711}
+
+\leavevmode\vadjust pre{\hypertarget{ref-mcelreath2020statistical}{}}%
+McElreath, R. (2020). \emph{Statistical rethinking: {A Bayesian Course} with {Examples} in {R} and {Stan}} (Second). {Chapman and Hall/CRC}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-peterson2000kindred}{}}%
+Peterson. (2000). Kindred spirits: {Influences} of siblings' perspectives on theory of mind. \emph{Cognitive Development}, \emph{15}(4), 435--455. \url{https://doi.org/10.1016/S0885-2014(01)00040-5}
+
+\end{CSLReferences}
+
+\endgroup
 
 
 \end{document}

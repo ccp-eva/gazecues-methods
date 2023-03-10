@@ -1,0 +1,531 @@
+---
+title: "TANGO Validity"
+author: "Julia Prein"
+date: "2023-03-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(ggpubr)
+library(ggthemes)
+library(brms) # modeling
+library(tidyverse) # data handling etc.
+library(tidybayes) # gather_draws
+
+options(scipen = 999)
+theme_set(theme_classic())
+```
+
+```{r load_data}
+testtrials <- readRDS(file = "../data/tango-testtrials.rds") %>% 
+  # determine order of factors
+  mutate(
+    targetPosition = factor(targetPosition, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "box1", "box2", "box3", "box4", "box5")), 
+    studyversion = factor(studyversion, levels = c("hedge", "box")), 
+    datacollection = factor(datacollection, levels = c("in-person - supervised", "remote - unsupervised")),
+    sample = factor(sample, levels = c("kids", "adults")), 
+    studytype = factor(studytype, levels = c("vali", "vali2", "reli")),
+    
+    # for models, summarize targetPositions in a way that it's symmetrical for left/ right side
+    # the smaller the value, the more central the position
+    symmetricPosition = ifelse(studyversion == "box", 
+                               # for box version
+                               case_when(
+                                  targetPosition == "box3" ~ 0, 
+                                  targetPosition == "box2" | targetPosition == "box4" ~ 1,
+                                  targetPosition == "box1" | targetPosition == "box5" ~ 2), 
+                               # for hedge version
+                               targetCentralityX
+                       ), 
+    
+    # distance between target and click in balloon widths (balloon width is 160 SVG units)
+    clickDistInBalloons = abs(clickDistFromTargetCenterX)/160,
+  )
+```
+
+```{r orev_data}
+orev_data <- read.table("../data/tango-orev-data.csv", encoding="UTF-8", header = TRUE, sep = ",", quote = "\"", dec = ".") %>% 
+  mutate_if(is.character, as.factor)
+```
+
+# SOCIAL ENVIRONMENTAL INFLUENCES
+
+```{r socenv_prepareData}
+mDataSocenv <- testtrials %>% 
+  filter(ageInYears < 6) %>% 
+  select(datacollection, studyversion, subjID, ageInMonths, ageInYears, correctBox, childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW) %>% 
+  group_by(subjID) %>% 
+  # so that all models run with same nr of subjects
+  drop_na() %>%
+  ungroup() %>% 
+  mutate(
+    # scaled (centered around mean, SD = 1, i.e., z-transformed)
+    hhSibs = scale(siblingsNr, center = TRUE, scale = TRUE),
+    sibsChildAged = scale(siblingsChildAged, center = TRUE, scale = TRUE),
+    ccAge = scale(childcareAge, center = TRUE, scale = TRUE),
+    ccHours = scale(childcareHours, center = TRUE, scale = TRUE),
+    hhTotal = scale(householdTotal, center = TRUE, scale = TRUE),
+    age = scale(ageInMonths, center = TRUE, scale = TRUE), 
+    peerExposure = scale(childcareHours, center = TRUE, scale = TRUE) + scale(siblingsNr, center = TRUE, scale = TRUE),
+    pe = scale(peerExposure, center = TRUE, scale = TRUE), 
+  ) %>% 
+  group_by(datacollection, studyversion, subjID, age, ageInMonths, ageInYears, ccAge, ccHours, hhTotal, hhSibs, sibsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW, pe) %>% 
+  summarise(
+    cor_tango = sum(correctBox),
+    n_tango = n()
+  ) %>% 
+  mutate_if(is.character, as.factor)
+```
+
+```{r socenv_sample}
+testtrials %>%
+  filter(ageInYears < 6) %>% 
+  distinct(subjID, .keep_all = T) %>%
+  pivot_longer(cols = c(childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW), names_to = "score", values_to = "value") %>%
+  group_by(score) %>%
+  summarise(na = sum(is.na(value)))
+
+n_distinct(mDataSocenv$subjID)
+
+socenv_sample <- mDataSocenv %>% 
+  group_by(ageInYears) %>%
+  summarise(
+    nTotal = n_distinct(subjID), 
+    meanAge = mean(ageInMonths, na.rm = T) %>% round(2),
+    sdAge = sd(ageInMonths, na.rm = T) %>% round(2),
+    minAge = min(ageInMonths, na.rm = T),
+    maxAge = max(ageInMonths, na.rm = T),
+  ) %>% 
+  mutate(sample = "socenv")
+
+socenv_sample
+```
+
+```{r socenv_nullmodel}
+mSEnull <- brm(cor_tango | trials(n_tango) ~ age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+```
+
+```{r socenv_fullmodels}
+mSEccAge <- brm(cor_tango | trials(n_tango) ~ ccAge + age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+
+mSEccHours <- brm(cor_tango | trials(n_tango) ~ ccHours + age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+
+mSEhhTotal <- brm(cor_tango | trials(n_tango) ~ hhTotal + age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+
+mSEhhSibs <- brm(cor_tango | trials(n_tango) ~ hhSibs + age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+
+mSEsibsChildAged <- brm(cor_tango | trials(n_tango) ~ sibsChildAged + age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+
+mSEsiblingsVarietyScoreP <- brm(cor_tango | trials(n_tango) ~ siblingsVarietyScoreP + age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+
+mSEsiblingsVarietyScoreW <- brm(cor_tango | trials(n_tango) ~ siblingsVarietyScoreW + age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+
+mSEPE <- brm(cor_tango | trials(n_tango) ~ pe + age + datacollection + studyversion,
+                data = mDataSocenv,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+```
+
+```{r socenv_modelcomparisons}
+mSEComparison <- loo_compare(mSEnull, mSEccAge, mSEccHours, mSEhhTotal, mSEhhSibs, mSEsibsChildAged, mSEsiblingsVarietyScoreP, mSEsiblingsVarietyScoreW, mSEPE, criterion = "waic")%>% 
+  as_tibble(rownames = "model") %>%
+  left_join(as_tibble(model_weights(mSEnull, mSEccAge, mSEccHours, mSEhhTotal, mSEhhSibs, mSEsibsChildAged, mSEsiblingsVarietyScoreP, mSEsiblingsVarietyScoreW, mSEPE, weights = "waic"), rownames = "model")) %>% 
+  rename(modelweight = value)
+
+mSEComparison
+
+socenvModelorder <- mSEComparison %>% arrange(modelweight) %>% pull(model)
+```
+
+```{r socenv_savemodels}
+write.csv(mSEnull, "../saves/mSEnull.csv", quote = F, row.names = F)
+saveRDS(mSEnull, "../saves/mSEnull.rds")
+write.csv(mSEccAge, "../saves/mSEccAge.csv", quote = F, row.names = F)
+saveRDS(mSEccAge, "../saves/mSEccAge.rds")
+write.csv(mSEccHours, "../saves/mSEccHours.csv", quote = F, row.names = F)
+saveRDS(mSEccHours, "../saves/mSEccHours.rds")
+write.csv(mSEhhTotal, "../saves/mSEhhTotal.csv", quote = F, row.names = F)
+saveRDS(mSEhhTotal, "../saves/mSEhhTotal.rds")
+write.csv(mSEhhSibs, "../saves/mSEhhSibs.csv", quote = F, row.names = F)
+saveRDS(mSEhhSibs, "../saves/mSEhhSibs.rds")
+write.csv(mSEsibsChildAged, "../saves/mSEsibsChildAged.csv", quote = F, row.names = F)
+saveRDS(mSEsibsChildAged, "../saves/mSEsibsChildAged.rds")
+write.csv(mSEsiblingsVarietyScoreP, "../saves/mSEsiblingsVarietyScoreP.csv", quote = F, row.names = F)
+saveRDS(mSEsiblingsVarietyScoreP, "../saves/mSEsiblingsVarietyScoreP.rds")
+write.csv(mSEsiblingsVarietyScoreW, "../saves/mSEsiblingsVarietyScoreW.csv", quote = F, row.names = F)
+saveRDS(mSEsiblingsVarietyScoreW, "../saves/mSEsiblingsVarietyScoreW.rds")
+write.csv(mSEPE, "../saves/mSEPE.csv", quote = F, row.names = F)
+saveRDS(mSEPE, "../saves/mSEPE.rds")
+```
+
+```{r socenv_save}
+socenv_results <- mSEComparison %>%
+  select(model, waic, se_waic, modelweight, elpd_diff, se_diff) %>%
+  rename(
+    Predictor = model, 
+    WAIC = waic, 
+    SE_WAIC = se_waic,
+    Weight = modelweight, 
+    ELPD_DIFF = elpd_diff, 
+    SE_ELPD_DIFF = se_diff,
+  ) %>% 
+  mutate(
+    Predictor = recode(Predictor, 
+                   "mSEPE" = "Peer exposure index", 
+                   "mSEsiblingsVarietyScoreW" = "Sibling variety score (Cassidy et al., 2005)", 
+                   "mSEhhSibs" = "# Children in household aged 0-18", 
+                   "mSEccHours" = "Average hours spent in childcare per day",
+                   "mSEnull" = "Null model", 
+                   "mSEhhTotal" = "# Household members",
+                   "mSEccAge" = "Age of childcare entry", 
+                   "mSEsiblingsVarietyScoreP" = "Sibling variety score (Peterson, 2000)", 
+                   "mSEsibsChildAged" = "# Children in household aged 1-12",
+                   )
+  )
+write.csv(socenv_results, "../saves/socenv_results.csv", quote = F, row.names = F)
+saveRDS(socenv_results, "../saves/socenv_results.rds")
+```
+
+```{r socenv_posteriordraws}
+socenv_draws <- bind_rows(
+  mSEccAge %>% gather_draws(b_ccAge),
+  mSEccHours %>% gather_draws(b_ccHours), 
+  mSEhhTotal %>% gather_draws(b_hhTotal), 
+  mSEhhSibs %>% gather_draws(b_hhSibs), 
+  mSEsibsChildAged %>% gather_draws(b_sibsChildAged), 
+  mSEsiblingsVarietyScoreP %>% gather_draws(b_siblingsVarietyScoreP), 
+  mSEsiblingsVarietyScoreW %>% gather_draws(b_siblingsVarietyScoreW),
+  mSEPE %>% gather_draws(b_pe)
+  ) %>% 
+  mutate(
+    predictor = factor(.variable, 
+                       levels = c("b_hhSibs", 
+                                  "b_siblingsVarietyScoreP", 
+                                  "b_sibsChildAged", 
+                                  "b_hhTotal", 
+                                  "b_ccHours", 
+                                  "b_ccAge", 
+                                  "b_siblingsVarietyScoreW", 
+                                  "b_pe"), 
+                       labels = c("# Children in household aged 0-18", 
+                                  "Sibling variety score (Peterson, 2000)", 
+                                  "# Children in household aged 1-12", 
+                                  "# Household members", 
+                                  "Average hours spent in childcare per day", 
+                                  "Age of childcare entry", 
+                                  "Sibling variety score (Cassidy et al., 2005)", 
+                                  "Peer exposure index")
+                       )  
+  ) %>% 
+  rename(estimate = .value)
+
+write.csv(socenv_draws, "../saves/socenv_draws.csv", quote = F, row.names = F)
+saveRDS(socenv_draws, "../saves/socenv_draws.rds")
+```
+
+```{r socenv_plot_winning}
+socenv_plot_winning <- socenv_draws %>% 
+  filter(predictor == "Age of childcare entry") %>% 
+  ggplot(., aes(y = predictor, x = estimate)) +
+  tidybayes::stat_halfeye(.width = c(.95, .8), scale = 0.8, slab_color = "#006c66", slab_fill = "#EBECEC", slab_alpha = 0.9) +
+  labs(x = "Posterior estimate when predicting TANGO score", y = "") +
+  guides(fill = "none")+
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  coord_cartesian(expand = TRUE, ylim = c(1.5, 1.5)) +
+  theme_classic()
+
+socenv_plot_winning
+
+saveRDS(socenv_plot_winning, file = "../saves/socenv_plot_winning.rds")
+# ggsave("../figures/socenv_plot_winning.png", width = 10, height = 6, scale = 1, bg = "white")
+```
+
+```{r socenv_plot_allother}
+socenv_plot_allother <- socenv_draws %>% 
+  filter(predictor != "Age of childcare entry") %>% 
+  ggplot(., aes(y = predictor, x = estimate)) +
+  tidybayes::stat_halfeye(.width = c(.95, .8), scale = 1, slab_color = "#006c66", slab_size = 0.5, slab_fill = "#EBECEC", slab_alpha = 0.9) +
+  labs(x = "Posterior estimate when predicting TANGO score", y = "") +
+  guides(fill = "none")+
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  coord_cartesian(expand = TRUE, ylim = c(1.5, 7.5)) +
+  theme_classic()
+
+socenv_plot_allother
+
+saveRDS(socenv_plot_allother, file = "../saves/socenv_plot_allother.rds")
+# ggsave("../figures/socenv_plot_allother.png", width = 10, height = 6, scale = 1, bg = "white")
+```
+
+# RECEPTIVE VOCABULARY 
+
+```{r orev_sample}
+orev_sample <- orev_data %>% 
+  group_by(ageInYears) %>%
+  summarise(
+    nTotal = n_distinct(subjID), 
+    meanAge = mean(age_orev*12, na.rm = T) %>% round(2),
+    sdAge = sd(age_orev*12, na.rm = T) %>% round(2),
+    minAge = min(age_orev*12, na.rm = T) %>% round(),
+    maxAge = max(age_orev*12, na.rm = T) %>% round(),
+  ) %>% 
+  mutate(sample = "orev")
+
+time_diff <- orev_data %>% 
+  summarise(
+    meanTimeDiff = mean(time_diff, na.rm = T) %>% round(2),
+    sdTimeDiff = sd(time_diff, na.rm = T) %>% round(2),
+    minTimeDiff = min(time_diff, na.rm = T) %>% round(2),
+    maxTimeDiff = max(time_diff, na.rm = T) %>% round(2),
+  ) %>% 
+  mutate(sample = "orev_tango")
+
+vali_sample <- bind_rows(socenv_sample, orev_sample, time_diff)
+
+vali_sample
+saveRDS(vali_sample, file = "../saves/vali_sample.rds")
+```
+
+```{r orev_prepareData}
+mDataOrev <- orev_data %>% 
+  mutate(
+    age_centered = scale(age_orev, scale = T, center = T), 
+    mean_tango_centered = scale(mean_tango, scale = T, center = T),
+  )
+
+n_distinct(mDataOrev$subjID)
+```
+
+```{r orev_models}
+mOrevNull <- brm(cor_orev | trials(n_orev) ~ 1,
+                 data = mDataOrev,
+                 family = binomial, 
+                 warmup = 1000, 
+                 iter   = 3000, 
+                 chains = 4, 
+                 inits  = "random",
+                 cores  = 4
+     ) %>%
+  add_criterion(c("loo","waic"))
+
+mOrevAge <- brm(cor_orev | trials(n_orev) ~ age_centered,
+                data = mDataOrev,
+                family = binomial, 
+                warmup = 1000, 
+                iter   = 3000, 
+                chains = 4, 
+                inits  = "random",
+                cores  = 4
+            ) %>% 
+  add_criterion(c("loo","waic"))
+
+mOrevFull <- brm(cor_orev | trials(n_orev) ~ age_centered + mean_tango_centered,
+                 data = mDataOrev,
+                 family = binomial, 
+                 warmup = 1000, 
+                 iter   = 3000, 
+                 chains = 4, 
+                 inits  = "random",
+                 cores  = 4
+              ) %>%
+  add_criterion(c("loo","waic"))
+```
+
+```{r orev_modelcomparison}
+mOrevComparison <- loo_compare(mOrevNull, mOrevAge, mOrevFull, criterion = "waic") %>% as_tibble(rownames = "model") %>%
+  left_join(as_tibble(model_weights(mOrevNull, mOrevAge, mOrevFull, weights = "waic"), rownames = "model")) %>% 
+  rename(modelweight = value)
+
+mOrevComparison
+```
+
+```{r orev_save}
+orev_results <- mOrevComparison %>%
+  select(model, waic, se_waic, modelweight, elpd_diff, se_diff) %>%
+  rename(
+    Predictor = model, 
+    WAIC = waic, 
+    SE_WAIC = se_waic,
+    Weight = modelweight, 
+    ELPD_DIFF = elpd_diff, 
+    SE_ELPD_DIFF = se_diff,
+  ) %>% 
+  mutate(
+    Predictor = recode(Predictor, 
+                   "mOrevFull" = "Age (scaled), TANGO score (scaled)", 
+                   "mOrevAge" = "Age (scaled)", 
+                   "mOrevNull" = "Null model", 
+                   )
+  )
+
+write.csv(orev_results, "../saves/orev_results.csv", quote = F, row.names = F)
+saveRDS(orev_results, "../saves/orev_results.rds")
+```
+
+```{r orev_posteriordraws}
+orev_draws <- bind_rows(
+  mOrevAge %>% gather_draws(b_age_centered) %>% mutate(model = "age model"), 
+  mOrevFull %>% gather_draws(b_age_centered, b_mean_tango_centered) %>% mutate(model = "full model"), 
+  ) %>% 
+  mutate(
+    .variable = factor(.variable, levels = c("b_age_centered", "b_mean_tango_centered"), labels = c("Age (scaled)", "TANGO score (scaled)")), 
+  ) %>% 
+  rename(estimate = .value, predictor = .variable)
+
+write.csv(orev_draws, "../saves/orev_draws.csv", quote = F, row.names = F)
+saveRDS(orev_draws, "../saves/orev_draws.rds")
+```
+
+```{r orev_modelplot}
+orev_modelplot <- orev_draws %>% 
+  ggplot(., aes(x = estimate, y = predictor)) +
+ tidybayes::stat_halfeye(.width = c(.95, .8), scale = 1, slab_color = "#006c66", slab_fill = "#EBECEC", slab_alpha = 0.9) +
+    labs(x = "Posterior estimate when predicting oREV score", y = "") +
+  guides(fill = "none")+
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  coord_cartesian(expand = TRUE, xlim = c(-0.1, 0.6), ylim = c(1.5, 2.5)) +
+  theme_classic()
+
+orev_modelplot
+
+saveRDS(orev_modelplot, file = "../saves/orev_modelplot.rds")
+# ggsave("../figures/tango_orev_model.png", width = 10, height = 6, scale = 0.7, bg = "white")
+```
+
+```{r orev_plot}
+orev_plot <- ggplot(mDataOrev, aes(x = mean_orev, y = mean_tango)) +
+  
+  geom_point(aes(col = as.factor(ageInYears)), shape = 18, size = 2) +
+  geom_smooth(method = "glm", size = 0.5, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0.9, label.y = 0.975, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  
+  scale_color_manual(values = c("#c6d325", "#00b1ea", "#29485d", "#9D3BBD", "#F71C8D"), labels = c("3-year-olds", "4-year-olds", "5-year-olds", "6-year-olds", "7-year-olds")) + 
+  
+  labs(x = "oREV score", y = "TANGO score", col = "Age in years") + 
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) + 
+
+  theme(legend.title = element_text(size = 9), 
+        legend.text = element_text(size = 9),
+        legend.key.size = unit(0.4, "cm"), 
+        legend.direction = "vertical", 
+        legend.box = "horizontal",
+        legend.position = c(0.175, 0.25), 
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black")
+        )
+
+orev_plot
+
+saveRDS(orev_plot, file = "../saves/orev_plot.rds")
+# ggsave("../figures/tango_orev_plot.png", width = 7, height = 4)
+```
+
+# ARRANGE PLOT
+
+```{r arrange_plots}
+vali_arrangedplot <- ggarrange(
+  ggarrange(
+    socenv_plot_winning,
+    socenv_plot_allother,
+    ncol = 2,
+    labels = c("A", "B")
+  ),
+  
+  ggarrange(
+    orev_modelplot, 
+    orev_plot,
+    ncol = 2,
+    labels = c("C", "D")
+  ), 
+  nrow = 2
+  )
+
+vali_arrangedplot
+
+saveRDS(vali_arrangedplot, file = "../saves/vali-arrangedplot.rds")
+ggsave("../figures/tango_vali_arrangedplot.png", width = 8.5, height = 6, scale = 1.5, bg = "white")
+```
+

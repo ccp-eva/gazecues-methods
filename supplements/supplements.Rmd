@@ -1,7 +1,5 @@
 ---
-title             : |
-                    <center> Supplements for the manuscript </center>
-                    <center> "TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults" </center>
+title             : "Supplements for the manuscript  'TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'"
 shorttitle        : "Supplements"
 author: 
   
@@ -15,13 +13,13 @@ author:
     affiliation   : "1"
   - name          : "Steven Kalinke"
     affiliation   : "1"
-    
   - name          : "Daniel B. M. Haun"
     affiliation   : "1"
 affiliation:
   - id            : "1"
     institution   : "Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany"
 floatsintext      : yes
+bibliography      : ["../../references.bib"]
 figurelist        : no
 tablelist         : no
 footnotelist      : no
@@ -42,6 +40,8 @@ editor_options:
 ```{r setup, include = FALSE}
 library("papaja")
 library("tidyverse")
+library("ggpubr")
+library("kableExtra")
 theme_set(theme_classic())
 ```
 
@@ -51,12 +51,30 @@ set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
-# Child sample
-## Webcam coding
-(ref:figlab4) **Model comparison for exploratory webcam coding of parental interference**. Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level (i.e., average across trials per subject).
+# Effects of trial type and trial number
 
-```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
-knitr::include_graphics("../figures/supplements_webcamcoding_draws.png")
+Children showed nearly perfect precision in the first training trial. As visual access to the target location decreased in the succeeding training trials, imprecision levels increased. Within test trials, children’s imprecision levels did not vary as a function of trial number.
+
+(ref:figlab1) **Imprecision by trial type, split by study version and sample**. The x axis represents the trial type. The y axis represents imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with imprecision of 1 clicked one target width to the left or right of the true target center. Small dots show the imprecision for each subject in each trial. Boxplots (boxes represent first to third quartiles of data; vertical lines indicate the median; horizontal black lines display the range) and a half violin plot show the data distribution.
+
+```{r fig1, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab1)"}
+knitr::include_graphics("../figures/tango_supplements_trainingtrials.png")
+```
+
+(ref:figlab2) **Imprecision across test trials, split by study version and sample**. The x axis represents trial number. The y axis represents imprecision, i.e., the absolute distance between the target's center and the participant's click. The unit of imprecision is counted in the width of the target, i.e., a participant with imprecision of 1 clicked one target width to the left or right of the true target center. The black dashed regression lines show smooth conditional means based on linear models. Small colored dots show the imprecision for each subject in each trial. Colored lines connect the trials of each individual. 
+
+```{r fig2, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab2)"}
+knitr::include_graphics("../figures/tango_supplements_acrosstrials.png")
+```
+
+\newpage
+
+# Webcam coding of the child sample
+
+(ref:figlab3) **Model comparison for exploratory webcam coding of parental interference**. Factors of parental interference and their influence on the probability of responding correctly. The graph shows the estimated density curves of a model's predictor coefficient. Models are ordered according to their WAIC scores in the trial-by-trial analysis, with the uppermost winning the model comparison. (A) Analysis on a trial-by-trial level. (B) Analysis on a subject level (i.e., average across trials per subject).
+
+```{r fig3, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab3)"}
+knitr::include_graphics("../figures/tango_supplements_webcamcoding.png")
 ```
 
 ```{r sample}
@@ -83,11 +101,7 @@ We transcribed all utterances by parents and children and counted the words utte
 We then classified the utterances into several categories: question asked by child, repeated test questions by caregiver, hints towards agents (how many times the caregivers guided the child's attention to the agent), hints towards eyes (how many times the caregivers guided the child's attention to the agent's eyes), verification of choice (how many times the caregiver questioned or double checked the child's response), mentioning of screen (how many times the caregiver verbally guided the child's attention to the screen), pointing to screen (how many times the caregiver pointed towards the screen), positive & negative feedback, motivational statements, and incomprehensible utterances.
 In addition, we coded how many adults and children were present, whether a response click was obviously conducted by the caregiver themselves, and whether children took a break during the trial.
 We conducted a model comparison to estimate the effects of parental interference.
-Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in `R: correct ~ age + (1 | subjID) + (1 | targetPosition)`.[^3]
-
-[^3]: Attentive readers might notice that we simplified the structure of random effects.
-    Compared to our models in the *Individual differences* section, this model does not include the random slope for symmetric target position within participants.
-    We decided to do so since we had limited amount of data from few participants.
+Our null model explained the response behavior by age, while including random effects for subject and target position (model notation in `R: correct ~ age + symmetricPosition + (1 + symmetricPosition | subjID)`.
 
 We compared this null model to models including the number of words uttered by the caregiver, number of repeated testquestions, verification of choice, or hints towards eyes as fixed effects.
 Furthermore, we calculated an parental interference index by summing up number of repeated testquestions, verification of choice, and hints towards eyes, with the sign matching the variable's direction of effect.
@@ -99,25 +113,159 @@ On the trial level, the model including the verification of choice as a main eff
 Interestingly, the effect reversed on a subject level - possibly due to greater learning effects for the children that were most likely to click incorrectly in the beginning and then receiving most parental comments.
 On the subject level, the model including number of repeated test questions performed best: the more caregivers asked again where the target landed, the more likely children were to respond to the incorrect box.
 In all cases, however, ELPD difference scores were smaller than their standard errors.
-Similarly, 95% CI of the model estimates included zero and were rather wide (Table \ref{tab:webcam_table}).
+Similarly, 95% CI of the model estimates included zero and were rather wide.
 Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
 
-```{r webcam_table, results = "asis"}
+```{r webcam_table}
 webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
-  mutate(across(c(WAIC, Weight, ELPD, SE), as.numeric)) %>%
+  mutate(across(c(WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>%
   mutate_if(is.numeric, round, 2)
 
-papaja::apa_table(
-  webcam_models,
-  caption = "Model comparison for exploratory webcam coding of parental interference",
-  note = "All models included random intercepts for participant and target position.",
-  escape = T
+knitr::kable(webcam_models, format = "latex", booktabs = TRUE) %>% 
+  kable_styling(latex_options = "scale_down")
+```
+
+```{r reli_agegroup, include=FALSE}
+hedge_intCon_agegroup <- readRDS("../saves/tango-hedge-intCon-kids.rds") + 
+  geom_point(aes(col = ageInYears), size = 1) + 
+  facet_wrap(~ ageInYears)
+
+hedge_retest_agegroup <- readRDS("../saves/tango-hedge-retest-kids.rds") + 
+  geom_point(aes(col = ageInYears), size = 1) + 
+  facet_wrap(~ ageInYears)
+
+box_intCon_agegroup <- readRDS("../saves/tango-box-intCon-kids.rds") + 
+  geom_point(aes(col = ageInYears), size = 1) + 
+  facet_wrap(~ ageInYears)
+
+box_retest_agegroup <- readRDS("../saves/tango-box-retest-kids.rds") + 
+  geom_point(aes(col = ageInYears), size = 1) + 
+  facet_wrap(~ ageInYears)
+
+ggarrange(hedge_intCon_agegroup, 
+          hedge_retest_agegroup,
+          box_intCon_agegroup, 
+          box_retest_agegroup, 
+          ncol = 2,
+          nrow = 2, 
+          labels = c("A", "B", "C", "D")
 )
+
+ggsave("../figures/tango_supplements_reli_byagegroup.png", width = 9, height = 6)
 ```
 
 \newpage
 
-# Adult sample
+# Reliability by age group
+
+(ref:figlab4) **Reliability split by age group**. (A) Internal consistency (odd-even split) in hedge child sample by age group. (B) Test-retest reliability in hedge child sample by age group. (C) Internal consistency (odd-even split) in box child sample by age group. (D) Test-retest reliability in box child sample by age group. For the hedge version, performance is measured as imprecision, i.e., the absolute distance between the target's center and the participant's click (averaged across trials). The unit of imprecision is counted in the width of the target, i.e., a participant with imprecision of 1 clicked on average one target width to the left or right of the true target center. For the box version, performance is measured as the proportion of correct responses, i.e., how many times the participant clicked on the box that contained the target. Regression lines with 95% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with *Pearson*'s correlation coefficient *r*. Dots show the performance for each subject. The color of data points denotes age group.
+
+```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
+knitr::include_graphics("../figures/tango_supplements_reli_byagegroup.png")
+```
+
+\newpage
+
+# Validity 
+
+## Social-environmental factors
+
+```{r vali_sample}
+vali_sample <- readRDS("../saves/vali_sample.rds")
+```
+
+### Participants
+We included all children where families filled out a short demographic questionnaire. This subsample consisted of `r sum(vali_sample$nTotal[vali_sample$sample == "socenv"])` children, including `r vali_sample$nTotal[vali_sample$sample == "socenv" & vali_sample$ageInYears == "3"]` 3-year-olds (mean = `r vali_sample$meanAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "3"]` months, SD = `r vali_sample$sdAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "3"]`, range = `r vali_sample$minAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "3"]` - `r vali_sample$maxAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "3"]`),
+`r vali_sample$nTotal[vali_sample$sample == "socenv" & vali_sample$ageInYears == "4"]` 4-year-olds (mean = `r vali_sample$meanAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "4"]` months, SD = `r vali_sample$sdAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "4"]`, range = `r vali_sample$minAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "4"]` - `r vali_sample$maxAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "4"]`), and 
+`r vali_sample$nTotal[vali_sample$sample == "socenv" & vali_sample$ageInYears == "5"]` 5-year-olds (mean = `r vali_sample$meanAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "5"]` months, SD = `r vali_sample$sdAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "5"]`, range = `r vali_sample$minAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "5"]` - `r vali_sample$maxAge[vali_sample$sample == "socenv" & vali_sample$ageInYears == "5"]`). 
+
+### Analysis
+To estimate social environmental influences on gaze understanding, we fitted GLMMs predicting the task performance by each of our questionnaire variables, controlling for age (scaled), data collection mode (reference category: remote unsupervised) and study version (reference category: box version): `cor_tango | trials(n_tango) ~ age + datacollection + studyversion`).
+In order to combine data of our two study versions, we transformed continuous click responses from the hedge version into a discrete outcome.
+For the target position, we categorized two adjacent bins as one imaginary box.
+To measure participants' performance, we created imaginary box boundaries around the target's landing position and examined whether the participant's click response fell into this imaginary box.
+Across the two study versions, we could consequently model the number of participant's correct responses using a `Binomial` distribution.
+For model comparisons, we ran separate models, each with one of the following predictors as a fixed effects added to the null model: number of household members, number of children aged 0-18 in household, number of children aged 1-12 in household, hours spent in childcare each day, and age when subject entered childcare.
+In addition, we calculated three index scores.
+First, we calculated a sibling variety score according to @peterson2000kindred.
+Second, we implemented the modified version of @cassidy2005theory.
+Third, based on our own data exploration, we calculated the amount of peer exposure determined as the number of siblings and the average hours spent in childcare.
+We compared the models using WAIC (widely applicable information criterion) scores and weights [@mcelreath2020statistical].
+As an indicator of out-of-sample predictive accuracy, lower WAIC scores stand for a better model fit.
+WAIC weights represent the probability that the model in question provides the best out-of-sample prediction compared to the other models.
+
+### Results 
+```{r socenv_results, results = "asis"}
+socenv_results <- readRDS("../saves/socenv_results.rds") %>% 
+  mutate(across(c(WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>%
+  mutate_if(is.numeric, round, 2)
+
+knitr::kable(socenv_results, format = "latex", booktabs = TRUE) %>% 
+  kable_styling(latex_options = "scale_down")
+```
+
+Note that we did not find a great difference in WAIC scores between the compared models (see Supplements for WAIC scores and weights). The model estimates were all considerably smaller than estimates of age, study version and data collection, and all 95% CIs included zero. Nevertheless, a general pattern emerges: exposure to a more variable social environment positively influenced children's gaze understanding. The number of people and, more specifically, children, as well as the more diverse their age, the more likely children were to understand the agent's gaze cue. The only predictor resulting in a negative estimate was the age at which a participant entered childcare, i.e., the later a child entered, the better performance in the task.
+
+## Receptive vocabulary
+
+### Participants
+
+Our sample consisted of `r sum(vali_sample$nTotal[vali_sample$sample == "orev"])` children, including `r vali_sample$nTotal[vali_sample$sample == "orev" & vali_sample$ageInYears == "3"]` 3-year-olds (mean = `r vali_sample$meanAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "3"]` months, SD = `r vali_sample$sdAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "3"]`, range = `r vali_sample$minAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "3"]` - `r vali_sample$maxAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "3"]`,
+`r vali_sample$nTotal[vali_sample$sample == "orev" & vali_sample$ageInYears == "4"]` 4-year-olds (mean = `r vali_sample$meanAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "4"]` months, SD = `r vali_sample$sdAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "4"]`, range = `r vali_sample$minAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "4"]` - `r vali_sample$maxAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "4"]`),
+`r vali_sample$nTotal[vali_sample$sample == "orev" & vali_sample$ageInYears == "5"]` 5-year-olds (mean = `r vali_sample$meanAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "5"]` months, SD = `r vali_sample$sdAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "5"]`, range = `r vali_sample$minAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "5"]` - `r vali_sample$maxAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "5"]`),  
+`r vali_sample$nTotal[vali_sample$sample == "orev" & vali_sample$ageInYears == "6"]` 6-year-olds (mean = `r vali_sample$meanAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "6"]` months, SD = `r vali_sample$sdAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "6"]`, range = `r vali_sample$minAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "6"]` - `r vali_sample$maxAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "6"]`), and `r vali_sample$nTotal[vali_sample$sample == "orev" & vali_sample$ageInYears == "7"]` 7-year-olds (mean = `r vali_sample$meanAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "7"]` months, SD = `r vali_sample$sdAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "7"]`, range = `r vali_sample$minAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "7"]` - `r vali_sample$maxAge[vali_sample$sample == "orev" & vali_sample$ageInYears == "7"]`). 
+
+### Materials
+
+We employed the oREV, an Item Response Theory based open receptive vocabulary task for 3 to 8-year-old children [@bohn2022orev]. Similarly to the TANGO, the task was presented as an interactive web application (see Figure \@ref(fig:fig5); live demo https://ccp-odc.eva.mpg.de/orev-demo/; source code https://github.com/ccp-eva/orev-demo).
+
+Each trial presented four pictures: one target word alongside three distractors (1 phonological, 1 semantic, 1 unrelated distractor). A verbal prompt asked children to select one of the pictures (prompt: "Zeige mir [target word]"; engl.: "Show me [target word]"). The positioning of the target word and the three distractor types was counterbalanced across the four display positions (upper/lower and left/right corners). Children responded by clicking on one of the four pictures. The outcome measure consisted of the proportion of correct responses.
+
+(ref:figlab5) Setup of the oREV. On each trial, participants heard a word and were asked to select the corresponding picture. Verbal prompts could be replayed by pressing the loudspeaker button.
+
+```{r fig5, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab5)"}
+knitr::include_graphics("../figures/orev_procedure.png")
+```
+
+### Procedure
+
+Families received a personalized study link and completed the study at any location or time they wanted. Caregivers were asked to only provide technical support but no further help. Webcam recordings were done whenever consented and technically possible. We analyzed data of 20 trials per child. Children received the trials in two different orders. Performance across the two study orders did not differ. Hence, we decided to combine the data.
+
+### Analysis
+To estimate the effect of gaze understanding on receptive vocabulary, we fitted a GLMM predicting the task performance by the gaze understanding score (scaled), controlling for age: `cor_clt | trials(n_clt) ~ age_centered + mean_gaze_centered`). We modelled the number of participant's correct responses using a `Binomial` distribution.
+
+### Results 
+
+```{r orev_results, results = "asis"}
+orev_results <- readRDS("../saves/socenv_results.rds") %>% 
+  mutate(across(c(WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>%
+  mutate_if(is.numeric, round, 2)
+
+knitr::kable(orev_results, format = "latex", booktabs = TRUE) %>% 
+  kable_styling(latex_options = "scale_down")
+```
+
+\newpage
+
+# Additional information for the adult sample
+
+```{r adult_sample_country, include=FALSE}
+levels(testtrials$`Current Country of Residence`)
+```
+
+```{r adult_sample_countryn, echo=FALSE}
+adult_sample_countryn <- testtrials %>% 
+  group_by(subjID) %>% 
+  slice(1) %>% 
+  group_by(`Current Country of Residence`, studytype) %>%
+  summarise(n = n()) %>%
+  arrange(studytype, -n) %>% 
+  filter(!is.na(`Current Country of Residence`) & !is.na(studytype))
+
+kable(adult_sample_countryn, "latex", booktabs = TRUE, longtable = TRUE) %>%
+  kable_styling(latex_options = c("hold_position", "repeat_header"))
+```
+
 ## Recruitment
 We recruited participants using the online participant recruitment service *Prolific* from the University of Oxford.
 *Prolific*'s subject pool consists of a mostly European and US-american sample although subjects from all over the world are included.
@@ -159,7 +307,7 @@ We estimated an average completion time of 6 minutes, resulting in an estimated 
 On average, participants took 04:43min to complete the study.
 
 ## Study 3 - Reliability hedge version
-In stuyy 3 and 4, we assessed the test-retest reliability of our gaze understanding task in an adult sample.
+In study 3 and 4, we assessed the test-retest reliability of our gaze understanding task in an adult sample.
 The pre-registration can be found here: <https://osf.io/nu62m>.
 We tested the same participants twice with a delay of two weeks.
 The testing conditions were as specified in Study 1 and 2.
@@ -167,7 +315,7 @@ However, the target locations as well as the succession of animals and target co
 Each participant then received the same fixed randomized order of target location, animal, and target color.
 Participants received 30 test trials without voice-over description, so that each of the ten bins occurred exactly three times.
 
-In addition to the beforementioned prescreening settings, we used a whitelist.
+In addition to the aforementioned prescreening settings, we used a whitelist.
 *Prolific* has a so-called *custom allowlist prescreening filter* where one can enter the *Prolific* IDs of participants who completed a previous study.
 Only these subjects are then invited to participate in a study.
 This way, repeated measurements can be implemented, collecting data from the same subjects at different points in time.
@@ -255,3 +403,20 @@ This is the content of our audio recordings that were played as instructions and
 | **landing sound of balloon** | \-                                                                                                                                                                                                                                               | \-                                                                                                                                                                                                                                                    | balloon-lands.mp3     |
 | **sound of blinking eyes**   | \-                                                                                                                                                                                                                                               | \-                                                                                                                                                                                                                                                    | blink.mp3             |
 | **sound for target click**   | \-                                                                                                                                                                                                                                               | \-                                                                                                                                                                                                                                                    | positive-feedback.mp3 |
+
+
+\newpage
+
+# References
+
+```{=tex}
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+```
+::: {#refs custom-style="Bibliography"}
+:::
+
+```{=tex}
+\endgroup
+```
