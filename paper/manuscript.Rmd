@@ -716,7 +716,7 @@ knitr::include_graphics("../figures/tango_demo_screenshot.png")
 ## Open practices statement
 
 The web application (<https://ccp-odc.eva.mpg.de/tango-demo/>) described here is open source (<https://github.com/ccp-eva/tango-demo>).
-The data sets generated during and/or analysed during the current study are available in the [gazecues-methods] repository (<https://github.com/jprein/gazecues-methods>).
+The data sets generated during and/or analysed during the current study are available in the [gazecues-methods] repository (<https://github.com/ccp-eva/gazecues-methods>).
 All experiments were pre-registered (<https://osf.io/zjhsc/>).
 
 ## Funding
