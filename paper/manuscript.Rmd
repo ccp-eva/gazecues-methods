@@ -27,7 +27,7 @@ abstract: |
    Our task measures inter-individual differences in a child (N = 387) and an adult (N = 236) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test–retest reliability estimates underline that the captured variation is systematic. This work shows a promising way forward in studying individual differences in social cognition and will help us explore the structure and development of our core social-cognitive processes in greater detail.
   
 keywords          : "social cognition, individual differences, gaze cues, cognitive development"
-wordcount         : "8548"
+wordcount         : "8590"
 bibliography      : ["../../references.bib"]
 floatsintext      : yes
 figurelist        : no
@@ -601,7 +601,7 @@ In particular, family constellation, the number and age of siblings, and their i
 To assess such external validity for the TANGO task, we handed out a brief demographic questionnaire to families of our kindergarten and online child sample and asked for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in daycare, and if yes, (5) since when and (6) for how long on an average day. 
 `r sum(vali_sample$nTotal[vali_sample$sample == "socenv"])` families filled out the questionnaire and were included in the analysis.
 We used parents' responses to construct different scores suggested in the literature [@peterson2000kindred; @cassidy2005theory], capturing aspects of children’s opportunities for social interaction with adults and peers. 
-Only the `predictor age of childcare entry` improved the model fit compared to the null model (see Figure Figure \@ref(fig:fig4)A; for model comparisons, see Supplements). Figure \@ref(fig:fig4)B shows that all other predictor scores were positively linked to gaze understanding. Albeit the effects were weak, they are consistent with the literature.
+Only the predictor `age of childcare entry` improved the model fit compared to the null model (see Figure Figure \@ref(fig:fig4)A; for model comparisons, see Supplements). Figure \@ref(fig:fig4)B shows that all other predictor scores were positively linked to gaze understanding. Effect sizes were probably influenced by the lack of variance in the predictors: variables like household size and number of siblings typically vary very little among German households (see Supplements for distribution characteristics of the predictors). Albeit the effects were weak, they are consistent with the literature. 
 
 In addition, children's sensitivity to gaze has been linked to language acquisition [@brooks2005development; @okumura2017individual; @delbianco2019developmental].
 Discovering the attentional focus of your counterpart is thought to facilitate word learning, for example by identifying the referent of a new word [@tomasello2003constructing].

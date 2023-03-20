@@ -59,9 +59,31 @@ mDataSocenv <- testtrials %>%
   filter(ageInYears < 6) %>% 
   select(datacollection, studyversion, subjID, ageInMonths, ageInYears, correctBox, childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW) %>% 
   group_by(subjID) %>% 
+  mutate(siblingsChildAged = replace(siblingsChildAged, siblingsChildAged == -4, 0)) %>% 
   # so that all models run with same nr of subjects
   drop_na() %>%
-  ungroup() %>% 
+  ungroup()
+
+socenv_predictordistributions <- mDataSocenv %>% 
+  group_by(subjID) %>% 
+  slice(1) %>% 
+  select(childcareAge, childcareHours, householdTotal, siblingsNr, siblingsChildAged, siblingsVarietyScoreP, siblingsVarietyScoreW) %>% 
+  rename(
+    "Age of childcare entry in months" = childcareAge, 
+    "# Children in household aged 0-18" = siblingsNr, 
+    "Sibling variety score (Peterson, 2000)" = siblingsVarietyScoreP, 
+    "# Children in household aged 1-12" = siblingsChildAged,
+    "# Household members" = householdTotal,
+    "Average hours spent in childcare per day" = childcareHours, 
+    "Sibling variety score (Cassidy et al., 2005)" = siblingsVarietyScoreW,
+  ) %>% 
+  psych::describe() %>% 
+  select(-c(vars, median, trimmed, mad, range))
+    
+socenv_predictordistributions
+saveRDS(socenv_predictordistributions, file = "../saves/socenv_predictordistributions.rds")
+
+mDataSocenv <- mDataSocenv %>% 
   mutate(
     # scaled (centered around mean, SD = 1, i.e., z-transformed)
     hhSibs = scale(siblingsNr, center = TRUE, scale = TRUE),

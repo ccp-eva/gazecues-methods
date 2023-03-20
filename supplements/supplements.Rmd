@@ -28,7 +28,7 @@ mask              : no
 draft             : no
 documentclass     : "apa6"
 classoption       : "man"
-output            : papaja::apa6_pdf
+output            : papaja::apa6_word
 header-includes:
   - \usepackage{setspace}
   - \captionsetup[figure]{font={stretch=1}}
@@ -122,7 +122,7 @@ webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds")
   mutate_if(is.numeric, round, 2)
 
 knitr::kable(webcam_models, format = "latex", booktabs = TRUE) %>% 
-  kable_styling(latex_options = "scale_down")
+  kable_styling(latex_options = c("scale_down", "HOLD_position"))
 ```
 
 ```{r reli_agegroup, include=FALSE}
@@ -201,10 +201,21 @@ socenv_results <- readRDS("../saves/socenv_results.rds") %>%
   mutate_if(is.numeric, round, 2)
 
 knitr::kable(socenv_results, format = "latex", booktabs = TRUE) %>% 
-  kable_styling(latex_options = "scale_down")
+  kable_styling(latex_options = c("scale_down", "HOLD_position"))
 ```
 
-Note that we did not find a great difference in WAIC scores between the compared models (see Supplements for WAIC scores and weights). The model estimates were all considerably smaller than estimates of age, study version and data collection, and all 95% CIs included zero. Nevertheless, a general pattern emerges: exposure to a more variable social environment positively influenced children's gaze understanding. The number of people and, more specifically, children, as well as the more diverse their age, the more likely children were to understand the agent's gaze cue. The only predictor resulting in a negative estimate was the age at which a participant entered childcare, i.e., the later a child entered, the better performance in the task.
+Note that we did not find a great difference in WAIC scores between the compared models (see Supplements for WAIC scores and weights). The model estimates were all considerably smaller than estimates of age, study version and data collection, and all 95% CIs included zero. Nevertheless, a general pattern emerges: exposure to a more variable social environment positively influenced children's gaze understanding. The number of people and, more specifically, children, as well as the more diverse their age, the more likely children were to understand the agent's gaze cue. The only predictor resulting in a negative estimate was the age at which a participant entered childcare, i.e., the later a child entered, the better performance in the task. Effect sizes were probably influenced by the lack of variance in the predictors: variables like household size and number of siblings typically vary very little among German households (see distribution characteristics of predictor variables below).
+
+```{r socenv_predictordistributions, results = "asis"}
+socenv_predictordistributions <- readRDS("../saves/socenv_predictordistributions.rds") %>%
+  mutate_if(is.numeric, round, 2) %>% 
+  ungroup()
+
+socenv_predictordistributions <- socenv_predictordistributions[-1,] # get rid of subjid
+
+knitr::kable(socenv_predictordistributions, format = "latex", booktabs = TRUE) %>% 
+  kable_styling(latex_options = c("scale_down", "HOLD_position"))
+```
 
 ## Receptive vocabulary
 
@@ -237,12 +248,12 @@ To estimate the effect of gaze understanding on receptive vocabulary, we fitted 
 ### Results 
 
 ```{r orev_results, results = "asis"}
-orev_results <- readRDS("../saves/socenv_results.rds") %>% 
+orev_results <- readRDS("../saves/orev_results.rds") %>% 
   mutate(across(c(WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>%
   mutate_if(is.numeric, round, 2)
 
 knitr::kable(orev_results, format = "latex", booktabs = TRUE) %>% 
-  kable_styling(latex_options = "scale_down")
+  kable_styling(latex_options = c("scale_down", "HOLD_position"))
 ```
 
 \newpage
@@ -263,7 +274,7 @@ adult_sample_countryn <- testtrials %>%
   filter(!is.na(`Current Country of Residence`) & !is.na(studytype))
 
 kable(adult_sample_countryn, "latex", booktabs = TRUE, longtable = TRUE) %>%
-  kable_styling(latex_options = c("hold_position", "repeat_header"))
+  kable_styling(latex_options = c("HOLD_position", "repeat_header"))
 ```
 
 ## Recruitment
