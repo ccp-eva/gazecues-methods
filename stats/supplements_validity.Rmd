@@ -15,6 +15,7 @@ library(ggthemes)
 library(brms) # modeling
 library(tidyverse) # data handling etc.
 library(tidybayes) # gather_draws
+library(ggtext) # for printing italics
 
 options(scipen = 999)
 theme_set(theme_classic())
@@ -497,26 +498,30 @@ saveRDS(orev_modelplot, file = "../saves/orev_modelplot.rds")
 ```
 
 ```{r orev_plot}
-orev_plot <- ggplot(mDataOrev, aes(x = mean_orev, y = mean_tango)) +
+orev_data %>%
+  group_by(ageInYears) %>%
+  summarize(cor=cor(mean_tango, mean_orev) %>% round(2))
+
+orev_plot <- ggplot(orev_data, aes( x = mean_tango, y = mean_orev)) +
   
-  geom_point(aes(col = as.factor(ageInYears)), shape = 18, size = 2) +
-  geom_smooth(method = "glm", size = 0.5, alpha = 0.15, col = "darkgrey") +
-  stat_cor(method = "pearson", label.x = 0.9, label.y = 0.975, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
+  geom_jitter(aes(col = as.factor(ageInYears)), shape = 18, size = 2, width = 0.05, height = 0.05) +
+  geom_smooth(method = "glm", size = 1, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0.9, label.y = 0.98, aes(label = paste(..r.label..)), size = 4, r.accuracy = 0.01, cor.coef.name = "r") + 
   
-  scale_color_manual(values = c("#c6d325", "#00b1ea", "#29485d", "#9D3BBD", "#F71C8D"), labels = c("3-year-olds", "4-year-olds", "5-year-olds", "6-year-olds", "7-year-olds")) + 
+  scale_color_manual(values = c("#c6d325", "#00b1ea", "#29485d", "#9D3BBD", "#F71C8D"), labels = c("3-year-olds (*r* = 0.26)", "4-year-olds (*r* = 0.22)", "5-year-olds (*r* = 0.29)", "6-year-olds (*r* = 0.11)", "7-year-olds (*r* = 0.40)")) + 
   
-  labs(x = "oREV score", y = "TANGO score", col = "Age in years") + 
-  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) + 
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) + 
+  labs(x = "TANGO score", y = "oREV score", col = "Age in years") + 
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.25)) + 
+  scale_y_continuous(limits = c(0, 1.1), breaks = seq(0, 1, 0.25)) + 
 
   theme(legend.title = element_text(size = 9), 
-        legend.text = element_text(size = 9),
         legend.key.size = unit(0.4, "cm"), 
         legend.direction = "vertical", 
         legend.box = "horizontal",
-        legend.position = c(0.175, 0.25), 
+        legend.position = c(0.2, 0.18), 
         legend.background = element_blank(),
-        legend.box.background = element_rect(colour = "black")
+        legend.box.background = element_rect(colour = "black"), 
+        legend.text = element_markdown()
         )
 
 orev_plot
@@ -549,5 +554,26 @@ vali_arrangedplot
 
 saveRDS(vali_arrangedplot, file = "../saves/vali-arrangedplot.rds")
 ggsave("../figures/tango_vali_arrangedplot.png", width = 8.5, height = 6, scale = 1.5, bg = "white")
+```
+
+```{r orev_by_agegroup}
+orev_agegroup <- ggplot(orev_data, aes( x = mean_tango, y = mean_orev)) +
+  
+  geom_jitter(aes(col = as.factor(ageInYears)), shape = 18, size = 2, width = 0.05, height = 0.05) +
+  geom_smooth(method = "glm", size = 1, alpha = 0.15, col = "darkgrey") +
+  stat_cor(method = "pearson", label.x = 0.05, label.y = 1.1, aes(label = paste(..r.label..)), size = 3, r.accuracy = 0.01, cor.coef.name = "r") + 
+  
+  scale_color_manual(values = c("#c6d325", "#00b1ea", "#29485d", "#9D3BBD", "#F71C8D"), labels = c("3-year-olds (*r* = 0.26)", "4-year-olds (*r* = 0.22)", "5-year-olds (*r* = 0.29)", "6-year-olds (*r* = 0.11)", "7-year-olds (*r* = 0.40)")) + 
+  
+  labs(x = "TANGO score", y = "oREV score", col = "Age in years") + 
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.5)) + 
+  scale_y_continuous(limits = c(0, 1.1), breaks = seq(0, 1, 0.25)) +
+  facet_grid(~ ageInYears) + 
+  theme(legend.position = "none")
+d
+orev_agegroup
+
+saveRDS(orev_agegroup, file = "../saves/tango_orev_byagegroup.rds")
+ggsave("../figures/tango_supplements_orev_byagegroup.png", width = 7, height = 4)
 ```
 

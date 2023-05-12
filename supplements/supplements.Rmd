@@ -125,35 +125,6 @@ knitr::kable(webcam_models, format = "latex", booktabs = TRUE) %>%
   kable_styling(latex_options = c("scale_down", "HOLD_position"))
 ```
 
-```{r reli_agegroup, include=FALSE}
-hedge_intCon_agegroup <- readRDS("../saves/tango-hedge-intCon-kids.rds") + 
-  geom_point(aes(col = ageInYears), size = 1) + 
-  facet_wrap(~ ageInYears)
-
-hedge_retest_agegroup <- readRDS("../saves/tango-hedge-retest-kids.rds") + 
-  geom_point(aes(col = ageInYears), size = 1) + 
-  facet_wrap(~ ageInYears)
-
-box_intCon_agegroup <- readRDS("../saves/tango-box-intCon-kids.rds") + 
-  geom_point(aes(col = ageInYears), size = 1) + 
-  facet_wrap(~ ageInYears)
-
-box_retest_agegroup <- readRDS("../saves/tango-box-retest-kids.rds") + 
-  geom_point(aes(col = ageInYears), size = 1) + 
-  facet_wrap(~ ageInYears)
-
-ggarrange(hedge_intCon_agegroup, 
-          hedge_retest_agegroup,
-          box_intCon_agegroup, 
-          box_retest_agegroup, 
-          ncol = 2,
-          nrow = 2, 
-          labels = c("A", "B", "C", "D")
-)
-
-ggsave("../figures/tango_supplements_reli_byagegroup.png", width = 9, height = 6)
-```
-
 \newpage
 
 # Reliability by age group
@@ -244,6 +215,7 @@ Families received a personalized study link and completed the study at any locat
 
 ### Analysis
 To estimate the effect of gaze understanding on receptive vocabulary, we fitted a GLMM predicting the task performance by the gaze understanding score (scaled), controlling for age: `cor_clt | trials(n_clt) ~ age_centered + mean_gaze_centered`). We modelled the number of participant's correct responses using a `Binomial` distribution.
+In order to combine data of our two TANGO study versions, we transformed continuous click responses from the hedge version into a discrete outcome. After this transformation, we calculated a "TANGO score" as the proportion of correctly located targets. See Analysis section of Social-environmental factors for further detail. 
 
 ### Results 
 
@@ -254,6 +226,12 @@ orev_results <- readRDS("../saves/orev_results.rds") %>%
 
 knitr::kable(orev_results, format = "latex", booktabs = TRUE) %>% 
   kable_styling(latex_options = c("scale_down", "HOLD_position"))
+```
+
+(ref:figlab6) **Effect of gaze understanding on receptive vocabulary by age group**. Regression lines with 95% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with *Pearson*'s correlation coefficient *r*. Diamonds show the performance for each subject. The color of data points denotes age group.
+
+```{r fig6, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab6)"}
+knitr::include_graphics("../figures/tango_supplements_orev_byagegroup.png")
 ```
 
 \newpage

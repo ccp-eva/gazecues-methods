@@ -1925,3 +1925,18 @@ tango_arrangedplot
 saveRDS(tango_arrangedplot, file = "../saves/tango-arrangedplot.rds")
 ggsave("../figures/tango_arrangedplot.png", width = 6.5, height = 5, scale = 1.6, bg = "white")
 ```
+
+```{r supplements_reli_byagegroup}
+ggarrange(
+  hedge_intCon_kids + facet_grid(~ ageInYears), 
+  hedge_retest_kids + facet_grid(~ ageInYears),
+  box_intCon_kids + facet_grid(~ ageInYears) + scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5)), 
+  box_retest_kids + facet_grid(~ ageInYears) + scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.5)), 
+  nrow = 2, 
+  ncol = 2, 
+  labels = c("A", "B", "C", "D")
+)
+
+ggsave("../figures/tango_supplements_reli_byagegroup.png", width = 8, height = 6)
+```
+
