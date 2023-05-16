@@ -1,0 +1,10 @@
+ageInYears,nTotal,meanAge,sdAge,minAge,maxAge,sample,meanTimeDiff,sdTimeDiff,minTimeDiff,maxTimeDiff
+3,30,41.8,3.44,36,47,socenv,NA,NA,NA,NA
+4,36,54.19,3.08,48,59,socenv,NA,NA,NA,NA
+5,43,66.28,3.62,60,71,socenv,NA,NA,NA,NA
+3,11,45.05,1.58,43,47,orev,NA,NA,NA,NA
+4,26,53.17,3.01,48,57,orev,NA,NA,NA,NA
+5,32,65.8,3.23,61,71,orev,NA,NA,NA,NA
+6,36,78.36,3.26,72,84,orev,NA,NA,NA,NA
+7,12,88.11,1.96,84,91,orev,NA,NA,NA,NA
+NA,NA,NA,NA,NA,NA,orev_tango,0.52,0.08,0.06,0.8

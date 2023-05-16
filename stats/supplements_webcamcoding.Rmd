@@ -22,7 +22,7 @@ theme_set(theme_classic())
 
 ```{r load_data}
 webcam_data <- readRDS(file = "../data/tango-testtrials.rds") %>% 
-  filter(studytype == "vali" & datacollection == "remote - unsupervised" & studyversion == "box" & webcam == TRUE & ageInYears == 3) %>% 
+  filter(studytype == "vali" & datacollection == "remote - unsupervised" & studyversion == "box" & !is.na(nrRepeatedTestquestion) & ageInYears == 3) %>% 
   group_by(subjID) %>% 
   # determine order of factors
   mutate(
@@ -171,8 +171,8 @@ perTrial_draws <- bind_rows(
   ) %>% 
   rename(estimate = .value)
 
-write.csv(perTrial_draws, "../saves/supplements-webcamcoding-perTrialdraws.csv", quote = F, row.names = F)
-saveRDS(perTrial_draws, "../saves/supplements-webcamcoding-perTrialdraws.rds")
+write.csv(perTrial_draws, "../saves/supplements_webcamcoding_perTrialdraws.csv", quote = F, row.names = F)
+saveRDS(perTrial_draws, "../saves/supplements_webcamcoding_perTrialdraws.rds")
 ```
 
 ```{r webcam_perTrial_plot}
@@ -317,8 +317,8 @@ perSubject_draws <- bind_rows(
   ) %>% 
   rename(estimate = .value)
 
-write.csv(perSubject_draws, "../saves/supplements-webcamcoding-perSubjectdraws.csv", quote = F, row.names = F)
-saveRDS(perSubject_draws, "../saves/supplements-webcamcoding-perSubjectdraws.rds")
+write.csv(perSubject_draws, "../saves/supplements_webcamcoding_perSubjectdraws.csv", quote = F, row.names = F)
+saveRDS(perSubject_draws, "../saves/supplements_webcamcoding_perSubjectdraws.rds")
 ```
 
 ```{r webcam_perSubject_plot}
@@ -345,6 +345,7 @@ ggarrange(perTrial_plot,
           )
 
 ggsave("../figures/tango_supplements_webcamcoding.png", width = 10, height = 5, scale = 1, bg = "white")
+ggsave("../figures/tango_supplements_webcamcoding.pdf", width = 10, height = 5, scale = 1, bg = "white")
 ```
 
 ```{r overall_save}
@@ -377,7 +378,7 @@ overall_results <- bind_rows(mPerTrialComparison, mPerSubjectComparison) %>%
 
 overall_results
 
-write.csv(overall_results, "../saves/supplements-webcamcoding-results.csv", quote = F, row.names = F)
-saveRDS(overall_results, "../saves/supplements-webcamcoding-results.rds")
+write.csv(overall_results, "../saves/supplements_webcamcoding_results.csv", quote = F, row.names = F)
+saveRDS(overall_results, "../saves/supplements_webcamcoding_results.rds")
 ```
 

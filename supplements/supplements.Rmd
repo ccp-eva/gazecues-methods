@@ -1,16 +1,15 @@
 ---
-title             : "Supplements for the manuscript  'TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'"
+title             : "Supplemental Material for the manuscript  'TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'"
 shorttitle        : "Supplements"
 author: 
   
   - name          : "Julia Prein"
     affiliation   : "1"
-    corresponding : yes    # Define only one corresponding author
     address       : "Max Planck Institute for Evolutionary Anthropology, Deutscher Platz 6, 04103 Leipzig, Germany"
     email         : "julia_prein@eva.mpg.de"
     
   - name          : "Manuel Bohn"
-    affiliation   : "1"
+    affiliation   : "1,2"
   - name          : "Steven Kalinke"
     affiliation   : "1"
   - name          : "Daniel B. M. Haun"
@@ -18,6 +17,8 @@ author:
 affiliation:
   - id            : "1"
     institution   : "Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany"
+  - id            : "2"
+    institution   : "Institute of Psychology, Leuphana University Lüneburg, Germany" 
 floatsintext      : yes
 bibliography      : ["../../references.bib"]
 figurelist        : no
@@ -78,15 +79,7 @@ knitr::include_graphics("../figures/tango_supplements_webcamcoding.png")
 ```
 
 ```{r sample}
-testtrials <- readRDS(file = "../data/tango-testtrials.rds") %>% 
-  # determine order of factors
-  mutate(
-    targetPosition = factor(targetPosition, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "box1", "box2", "box3", "box4", "box5")), 
-    studyversion = factor(studyversion, levels = c("hedge", "box")), 
-    datacollection = factor(datacollection, levels = c("in-person - supervised", "remote - unsupervised")),
-    sample = factor(sample, levels = c("kids", "adults")), 
-    studytype = factor(studytype, levels = c("vali", "vali2", "reli"))
-  )
+testtrials <- readRDS(file = "../data/tango-testtrials.rds")
 ```
 
 Comparing the performances of children across our two data collection modes, we found that children participating remotely were slightly more precise.
@@ -117,7 +110,7 @@ Similarly, 95% CI of the model estimates included zero and were rather wide.
 Therefore, we conclude that the effect of parental interference was negligable and could, most likely, be explained as described above.
 
 ```{r webcam_table}
-webcam_models <- readRDS(file = "../saves/supplements-webcamcoding-results.rds") %>%
+webcam_models <- readRDS(file = "../saves/supplements_webcamcoding_results.rds") %>%
   mutate(across(c(WAIC, Weight, ELPD_DIFF, SE_ELPD_DIFF), as.numeric)) %>%
   mutate_if(is.numeric, round, 2)
 
@@ -239,17 +232,17 @@ knitr::include_graphics("../figures/tango_supplements_orev_byagegroup.png")
 # Additional information for the adult sample
 
 ```{r adult_sample_country, include=FALSE}
-levels(testtrials$`Current Country of Residence`)
+levels(testtrials$currentResidence)
 ```
 
 ```{r adult_sample_countryn, echo=FALSE}
 adult_sample_countryn <- testtrials %>% 
   group_by(subjID) %>% 
   slice(1) %>% 
-  group_by(`Current Country of Residence`, studytype) %>%
+  group_by(currentResidence, studytype) %>%
   summarise(n = n()) %>%
   arrange(studytype, -n) %>% 
-  filter(!is.na(`Current Country of Residence`) & !is.na(studytype))
+  filter(!is.na(currentResidence) & !is.na(studytype))
 
 kable(adult_sample_countryn, "latex", booktabs = TRUE, longtable = TRUE) %>%
   kable_styling(latex_options = c("HOLD_position", "repeat_header"))

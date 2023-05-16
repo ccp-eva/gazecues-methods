@@ -3,31 +3,49 @@ title             : "TANGO: A reliable, open-source, browser-based task to asses
 shorttitle        : "assessing individual differences in gaze understanding"
 author: 
   
-  - name          : "Julia Prein"
+  - name          : "Julia Christin Prein"
     affiliation   : "1"
     corresponding : yes    # Define only one corresponding author
     address       : "Max Planck Institute for Evolutionary Anthropology, Deutscher Platz 6, 04103 Leipzig, Germany"
     email         : "julia_prein@eva.mpg.de"
+    role          :
+      - Conceptualization
+      - Software
+      - Formal Analysis
+      - Writing - Original Draft Preparation
+      - Writing - Review & Editing
     
   - name          : "Manuel Bohn"
-    affiliation   : "1"
+    affiliation   : "1,2"
+    role          :
+      - Conceptualization
+      - Writing - Original Draft Preparation
+      - Writing - Review & Editing    
   - name          : "Steven Kalinke"
     affiliation   : "1"
+    role          : 
+      - Software
+      - Writing - Review & Editing
   - name          : "Daniel B. M. Haun"
     affiliation   : "1"
+    role          :
+      - Conceptualization
+      - Writing - Review & Editing
     
 affiliation:
   - id            : "1"
     institution   : "Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany"
+  - id            : "2"
+    institution   : "Institute of Psychology, Leuphana University Lüneburg, Germany"    
 authornote: |
 abstract: |
   Traditional measures of social cognition used in developmental research often lack satisfactory psychometric properties and are not designed to capture variation *between* individuals. 
   Here we present TANGO (Task for Assessing iNdividual differences in Gaze understanding - Open); a brief (approx. 5–10min), reliable, open-source task to quantify individual differences in the understanding of gaze cues. Localizing the attentional focus of an agent is crucial in inferring their mental states, building common ground, and thus, supporting cooperation.
    Our interactive browser-based task works across devices and enables in-person and remote testing. The implemented spatial layout allows for discrete and continuous measures of participants’ click imprecision and is easily adaptable to different study requirements. 
-   Our task measures inter-individual differences in a child (N = 387) and an adult (N = 236) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test–retest reliability estimates underline that the captured variation is systematic. Associations with social-environmental factors and language skills speak toward the validity of the task. This work shows a promising way forward in studying individual differences in social cognition and will help us explore the structure and development of our core social-cognitive processes in greater detail.
+   Our task measures inter-individual differences in a child (N = 387) and an adult (N = 236) sample. Our two study versions and data collection modes yield comparable results that show substantial developmental gains: the older children are, the more accurately they locate the target. High internal consistency and test–retest reliability estimates underline that the captured variation is systematic. Associations with social-environmental factors and language skills speak to the validity of the task. This work shows a promising way forward in studying individual differences in social cognition and will help us explore the structure and development of our core social-cognitive processes in greater detail.
   
 keywords          : "social cognition, individual differences, gaze cues, cognitive development"
-wordcount         : "8590"
+wordcount         : "8897"
 bibliography      : ["../../references.bib"]
 floatsintext      : yes
 figurelist        : no
@@ -249,7 +267,7 @@ Furthermore, we were interested in whether and how the data collection mode (in-
 
 Task design, data collection, and sample sizes were pre-registered: <https://osf.io/snju6> (child sample) and <https://osf.io/r3bhn> (adult sample).
 The analyses reported here were not pre-registered but followed the structure of the ones specified in the above pre-registrations (see Footnotes for deviations).
-The additional analyses mentioned in the pre-registrations (e.g., computational model) address separate research questions (e.g., how can we explain the concept and process of gaze understanding?) and will be reported elsewhere. In this paper, we focus on the methodological and psychometric aspects of our task.
+The additional analyses mentioned in the pre-registrations (e.g., computational model) address separate research questions (e.g., process-level account of gaze understanding) and will be reported elsewhere. In this paper, we focus on the methodological and psychometric aspects of our task.
 
 The study design and procedure obtained ethical clearance by the MPG Ethics commission Munich, Germany, falling under a packaged ethics application (Appl. No. 2021_45), and was approved by an internal ethics committee at the Max Planck Institute for Evolutionary Anthropology.
 The research adheres to the legal requirements of psychological research with children in Germany.
@@ -283,10 +301,10 @@ inddiff_adults <- inddiff %>%
   ) %>% 
   summarise(
     nTotal = n_distinct(subjID), 
-    meanAge = mean(age, na.rm = T) %>% round(2),
-    sdAge = sd(age, na.rm = T) %>% round(2),
-    minAge = min(age, na.rm = T),
-    maxAge = max(age, na.rm = T),
+    meanAge = mean(ageAdults, na.rm = T) %>% round(2),
+    sdAge = sd(ageAdults, na.rm = T) %>% round(2),
+    minAge = min(ageAdults, na.rm = T),
+    maxAge = max(ageAdults, na.rm = T),
     nFemales = ceiling(sum(female/15)),
   )
 ```
@@ -456,7 +474,7 @@ reli_kids <- reli %>%
     sdAgeInMonths = sd(ageInMonths, na.rm = T) %>% round(2),
     minAgeInMonths = min(ageInMonths, na.rm = T),
     maxAgeInMonths = max(ageInMonths, na.rm = T),
-    nFemales = ceiling(sum(female/30)), # 15 test trials * 2
+    nFemales = ceiling(sum(female/30)),
   )
 
 reli_adults <- reli %>%
@@ -470,10 +488,10 @@ reli_adults <- reli %>%
   ungroup() %>% 
   summarise(
     nTotal = n_distinct(subjID), 
-    meanAge = mean(age, na.rm = T) %>% round(2),
-    sdAge = sd(age, na.rm = T) %>% round(2),
-    minAge = min(age, na.rm = T),
-    maxAge = max(age, na.rm = T),
+    meanAge = mean(ageAdults, na.rm = T) %>% round(2),
+    sdAge = sd(ageAdults, na.rm = T) %>% round(2),
+    minAge = min(ageAdults, na.rm = T),
+    maxAge = max(ageAdults, na.rm = T),
     nFemales = sum(female),
   )
 ```
@@ -607,17 +625,17 @@ In particular, family constellation, the number and age of siblings, and their i
 To assess such external validity for the TANGO, we handed out a brief demographic questionnaire to families of our kindergarten and online child sample and asked for (1) the total number of household members, (2) the number of children, (3) age of the other children, (4) whether the child was in daycare, and if yes, (5) since when and (6) for how long on an average day. 
 `r sum(vali_sample$nTotal[vali_sample$sample == "socenv"])` families filled out the questionnaire and were included in the analysis.
 We used parents' responses to construct different scores suggested in the literature [@peterson2000kindred; @cassidy2005theory], capturing aspects of children’s opportunities for social interaction with adults and peers. 
-Only the predictor `age of childcare entry` improved the model fit compared to the null model (see Figure Figure \@ref(fig:fig4)A; for model comparisons, see Supplements). Figure \@ref(fig:fig4)B shows that all other predictor scores were positively linked to gaze understanding. Effect sizes were probably influenced by the lack of variance in the predictors: variables like household size and number of siblings typically vary very little among German households (see Supplements for distribution characteristics of the predictors). Albeit the effects were weak, they are consistent with the literature. 
+Only the predictor `age of childcare entry` improved the model fit compared to the null model (see Figure Figure \@ref(fig:fig4)A; for model comparisons, see Supplements): the older the children were when entering childcare, the less likely they were to correctly use the available gaze cue. Figure \@ref(fig:fig4)A shows that all other predictor scores were positively linked to gaze understanding. Effect sizes were probably influenced by the lack of variance in the predictors: variables like household size and number of siblings typically vary very little among German households (see Supplements for distribution characteristics of the predictors). Albeit the effects were weak, they are consistent with the literature. 
 
 In addition, children's sensitivity to gaze has been linked to language acquisition [@brooks2005development; @okumura2017individual; @delbianco2019developmental].
 Discovering the attentional focus of your counterpart is thought to facilitate word learning, for example by identifying the referent of a new word [@tomasello2003constructing].
-For `r sum(vali_sample$nTotal[vali_sample$sample == "orev"])` children, we also collected data on a receptive vocabulary test [oREV; @bohn2022orev] approximately six months (mean = `r vali_sample$meanTimeDiff[vali_sample$sample == "orev_tango"]` years, sd = `r vali_sample$sdTimeDiff[vali_sample$sample == "orev_tango"]`, range = `r vali_sample$minTimeDiff[vali_sample$sample == "orev_tango"]` - `r vali_sample$maxTimeDiff[vali_sample$sample == "orev_tango"]`) after their participation in the TANGO. In the oREV task, children are shown four pictures (target word, distractor with similar age-of-acquisition rating, phonological distractor, and semantic distractor; see Supplements for further detail) and hear a verbal prompt asking them to select one of the pictures. The oREV score then represents the proportion of correctly identified target pictures. We found a substantial relationship between gaze understanding six months prior and receptive vocabulary, even when correcting for age (see Figure \@ref(fig:fig4)C and D).
+For `r sum(vali_sample$nTotal[vali_sample$sample == "orev"])` children, we also collected data with a receptive vocabulary test [oREV, @bohn2022orev] approximately six months (mean = `r vali_sample$meanTimeDiff[vali_sample$sample == "orev_tango"]` years, sd = `r vali_sample$sdTimeDiff[vali_sample$sample == "orev_tango"]`, range = `r vali_sample$minTimeDiff[vali_sample$sample == "orev_tango"]` - `r vali_sample$maxTimeDiff[vali_sample$sample == "orev_tango"]`) after their participation in the TANGO. In the oREV task, children are shown four pictures (see Supplements for further detail) and hear a verbal prompt asking them to select one of the pictures. The oREV score is the proportion of correctly selected pictures. We found a substantial relationship between gaze understanding six months prior and receptive vocabulary, even when correcting for age (see Figure \@ref(fig:fig4)B and C).
 Taken together, our newly developed task shows connections to external variables and psychological constructs that are characteristic of measures of social cognition.
 
-(ref:figlab4) **Validity of the TANGO.** (A) Influence of age of childcare entry on gaze understanding. The older the children were when entering childcare, the less likely they are to respond correctly. (B) Influence of social-environmental factors on gaze understanding. Adding each predictors respectively to the null model did not improve model fit. (C) Influence of gaze understanding on receptive vocabulary. The oREV score represents a proportion of correctly identified target words in the receptive vocabulary test. Similarly, the TANGO score refers to proportion of correctly located targets (see Supplements for further detail). (D) Influence of gaze understanding on receptive vocabulary by age. The regression line with 95% CI shows a smooth conditional mean based on a generalized linear model, with *Pearson*’s correlation coefficient *r*. Dots show the mean performance for each subject averaged across trials with minimal horizontal and vertical noise added to avoid overplotting. The color of dots denotes age group. For (A), (B), and (C), the graphs show the posterior distributions for the respective predictor of each model. Black dots represent means, thicker black lines 80% CrI and thinner black lines 95% CrI.
+(ref:figlab4) **Validity of the TANGO.** (A) Influence of social-environmental factors on gaze understanding. (B) Influence of gaze understanding on receptive vocabulary. For (A) and (B), the graphs show the posterior distributions for the respective predictor of each model. Filled green distributions show that adding the respective predictor improved the model fit compared to the null model. Black dots represent means, thicker black lines 80% CrI and thinner black lines 95% CrI. The oREV score is the proportion of correctly selected pictures in the receptive vocabulary task. Similarly, the TANGO score refers to proportion of correctly located targets (see Supplements for further detail). (C) Influence of gaze understanding on receptive vocabulary by age. The regression line with 95% CI shows a smooth conditional mean based on a generalized linear model, with *Pearson*’s correlation coefficient *r*. Dots show the mean performance for each subject averaged across trials with minimal horizontal and vertical noise added to avoid overplotting. The color of dots denotes age group.  
 
 ```{r fig4, include = T, out.width = "100%", fig.align = "center", fig.cap = "(ref:figlab4)"}
-knitr::include_graphics("../figures/tango_vali_arrangedplot.png")
+knitr::include_graphics("../figures/tango_vali_plot.pdf")
 ```
 
 # General Discussion
@@ -646,7 +664,7 @@ Therefore, we argue that future research should aim at implementing statistical 
 Theoretically informed, computational cognitive models are a promising approach forward [@haines2020theoretically].
 Computational models take advantage of all available information and model variation between and within individuals in an even more fine-grained and psychologically interpretable manner.
 Computational frameworks could also be used to model performance and their underlying cognitive processes across tasks.
-With nested hierarchical models, we could assess the systematic relation between various social-cognitive abilities and recover potentially shared structures between cognitive processes [@bohn2022individual].
+With nested hierarchical models, we could assess the systematic relation between various social-cognitive abilities and recover potentially shared structures between cognitive processes [@bohn2023individual].
 
 The TANGO fulfills several demands that were proposed by @schaafsma2015deconstructing's wish list: it measures proficiency on a continuum, avoids floor and ceiling effects, measures variation across age ranges, shows satisfactory reliability estimates, and has a high face value.
 
@@ -694,7 +712,7 @@ Steering the child's behavior becomes less possible when touchscreens are used, 
 This is why we recommend using tablets for remote data collection.
 However, it should be noted that families' access to technological devices varies, both across socio-environmental as well as cultural settings.
 
-Third, the children in our sample live in an industrialized, urban Central-European context. It is unclear how our results would generalize to different socio-cultural contexts. A limiting factor of our study is that we did not collect demographical information on a participant-level. Therefore, we could only provide a broader demographic description on a community-level. This is important to keep in mind when gauging the generalizability of our new measure. 
+Third, the children in our sample live in an industrialized, urban Central-European context. It is unclear how our results would generalize to different socio-cultural contexts. A related limitation is that we did not collect demographical information on a participant-level and, instead, had to rely on a community-level description of the sample. This is important to keep in mind when gauging the generalizability of our new measure. 
 
 Finally, we utilized subtle gaze cues in order to increase difficulty and capture individual differences.
 However, in real-life settings, children could be more accustomed to a combination of head and eye orientation changes, and subtle gaze differences might be less common.
@@ -703,7 +721,7 @@ However, in real-life settings, children could be more accustomed to a combinati
 
 We have presented a new experimental paradigm to study gaze understanding across the lifespan.
 The TANGO captures individual differences and shows highly satisfactory psychometric properties with respect to internal consistency and test-retest reliability.
-The browser-based testing infrastructure allows for standardized, portable data collection at scale, both remotely as well as in person. Associations with social-environmental factors and language skills speak toward the validity of the task.
+The browser-based testing infrastructure allows for standardized, portable data collection at scale, both remotely as well as in person. Associations with social-environmental factors and language skills illustrate the validity of the task.
 Ultimately, this work shows a promising way forward toward more precise measures of cognitive development.
 The data sets and the analysis code are freely available in the associated online repository (<https://github.com/ccp-eva/gazecues-methods>).
 A demo version of the task is available at the following website (see Figure \@ref(fig:fig5)): <https://ccp-odc.eva.mpg.de/tango-demo/>.

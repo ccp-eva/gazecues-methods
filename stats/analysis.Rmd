@@ -27,30 +27,7 @@ theme_set(theme_classic())
 ```
 
 ```{r load_data}
-testtrials <- readRDS(file = "../data/tango-testtrials.rds") %>% 
-  # determine order of factors
-  mutate(
-    targetPosition = factor(targetPosition, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "box1", "box2", "box3", "box4", "box5")), 
-    studyversion = factor(studyversion, levels = c("hedge", "box")), 
-    datacollection = factor(datacollection, levels = c("in-person - supervised", "remote - unsupervised")),
-    sample = factor(sample, levels = c("kids", "adults")), 
-    studytype = factor(studytype, levels = c("vali", "vali2", "reli")),
-    
-    # for models, summarize targetPositions in a way that it's symmetrical for left/ right side
-    # the smaller the value, the more central the position
-    symmetricPosition = ifelse(studyversion == "box", 
-                               # for box version
-                               case_when(
-                                  targetPosition == "box3" ~ 0, 
-                                  targetPosition == "box2" | targetPosition == "box4" ~ 1,
-                                  targetPosition == "box1" | targetPosition == "box5" ~ 2), 
-                               # for hedge version
-                               targetCentralityX
-                       ), 
-    
-    # distance between target and click in balloon widths (balloon width is 160 SVG units)
-    clickDistInBalloons = abs(clickDistFromTargetCenterX)/160,
-  )
+testtrials <- readRDS(file = "../data/tango-testtrials.rds")
 ```
 
 # VARIATION
@@ -159,7 +136,7 @@ hedge_variation_plot_GLMM <- ggplot() +
         )
 
 hedge_variation_plot_GLMM
-saveRDS(hedge_variation_plot_GLMM, file = "../saves/tango-hedge-variation-plot-GLMM.rds")
+saveRDS(hedge_variation_plot_GLMM, file = "../saves/tango_hedge_variation_plot_GLMM.rds")
 # ggsave("../figures/tango_hedge_variation_GLMM.png", width = 7, height = 4)
 ```
 
@@ -204,7 +181,6 @@ saveRDS(mAgeBox, "../saves/mAgeBox.rds")
 ```
 
 ```{r GLMM_plot_box}
-# mAgeBox <- readRDS("../saves/mAgeBox.rds")
 nd_box <- mDataAgeBox %>% 
   select(-c(correctBox, trialNr)) %>% 
   mutate(trialNr = 0, symmetricPosition = 0)
@@ -259,7 +235,7 @@ box_variation_plot_GLMM <- ggplot() +
 
 box_variation_plot_GLMM
 
-saveRDS(box_variation_plot_GLMM, file = "../saves/tango-box-variation-plot-GLMM.rds")
+saveRDS(box_variation_plot_GLMM, file = "../saves/tango_box_variation_plot_GLMM.rds")
 # ggsave("../figures/tango_box_variation_GLMM.png", width = 7, height = 4)
 ```
 
@@ -317,7 +293,7 @@ hedge_intCon_kids <- hedge_intCon %>%
 
 hedge_intCon_kids
 
-saveRDS(hedge_intCon_kids, file = "../saves/tango-hedge-intCon-kids.rds")
+saveRDS(hedge_intCon_kids, file = "../saves/tango_hedge_intCon_kids.rds")
 # ggsave("../figures/tango_hedge_intCon_kids.png", width = 6, height = 4)
 ```
 
@@ -335,7 +311,7 @@ hedge_intCon_adults <- hedge_intCon %>%
 
 hedge_intCon_adults
 
-saveRDS(hedge_intCon_adults, file = "../saves/tango-hedge-intCon-adults.rds")
+saveRDS(hedge_intCon_adults, file = "../saves/tango_hedge_intCon_adults.rds")
 # ggsave("../figures/tango_hedge_intCon_adults.png", width = 6, height = 4)
 ```
 
@@ -377,7 +353,7 @@ box_intCon_kids <- box_intCon %>%
 
 box_intCon_kids
 
-saveRDS(box_intCon_kids, file = "../saves/tango-box-intCon-kids.rds")
+saveRDS(box_intCon_kids, file = "../saves/tango_box_intCon_kids.rds")
 # ggsave("../figures/tango_box_intCon_kids.png", width = 6, height = 4)
 ```
 
@@ -395,7 +371,7 @@ box_intCon_adults <- box_intCon %>%
 
 box_intCon_adults
 
-saveRDS(box_intCon_adults, file = "../saves/tango-box-intCon-adults.rds")
+saveRDS(box_intCon_adults, file = "../saves/tango_box_intCon_adults.rds")
 # ggsave("../figures/tango_box_intCon_adults.png", width = 6, height = 4)
 ```
 
@@ -1614,9 +1590,10 @@ splithalf_plot <- splithalf_data %>%
     theme(legend.position = "none", panel.spacing = unit(1.5, "lines"))
 
 splithalf_plot
-saveRDS(splithalf_plot, file = "../saves/tango-splithalf-plot.rds")
+saveRDS(splithalf_plot, file = "../saves/tango_splithalf_plot.rds")
 
 ggsave("../figures/tango_splithalf.png", width = 8, height = 2.5, scale = 1.2)
+ggsave("../figures/tango_splithalf.pdf", width = 8, height = 2.5, scale = 1.2)
 ```
 
 ```{r splithalf_table}
@@ -1624,8 +1601,8 @@ knitr::kable(splithalf_data)
 ```
 
 ```{r save_splithalf_data}
-write.csv(splithalf_data, "../saves/tango-splithalf.csv", quote = F, row.names = F)
-saveRDS(splithalf_data, file = "../saves/tango-splithalf-table.rds")
+write.csv(splithalf_data, "../saves/tango_splithalf_table.csv", quote = F, row.names = F)
+saveRDS(splithalf_data, file = "../saves/tango_splithalf_table.rds")
 
 # clean up
 rm(list = ls(pattern = "^splitscores"))
@@ -1724,7 +1701,8 @@ hedge_retest_correlationcoefficients <- rbind(
 
 hedge_retest_correlationcoefficients
 
-saveRDS(hedge_retest_correlationcoefficients, file = "../saves/tango-hedge-retest-correlationcoefficients.rds")
+saveRDS(hedge_retest_correlationcoefficients, file = "../saves/tango_hedge_retest_correlationcoefficients.rds")
+write.csv(hedge_retest_correlationcoefficients, "../saves/tango_hedge_retest_correlationcoefficients.csv", quote = F, row.names = F)
 ```
 
 ```{r retest_hedge_kids}
@@ -1742,7 +1720,7 @@ hedge_retest_kids <- hedge_retest %>%
 
 hedge_retest_kids
 
-saveRDS(hedge_retest_kids, file = "../saves/tango-hedge-retest-kids.rds")
+saveRDS(hedge_retest_kids, file = "../saves/tango_hedge_retest_kids.rds")
 # ggsave("../figures/tango_hedge_retest_kids.png", width = 6, height = 4)
 ```
 
@@ -1760,7 +1738,7 @@ hedge_retest_adults <- hedge_retest %>%
 
 hedge_retest_adults
 
-saveRDS(hedge_retest_adults, file = "../saves/tango-hedge-retest-adults.rds")
+saveRDS(hedge_retest_adults, file = "../saves/tango_hedge_retest_adults.rds")
 # ggsave("../figures/tango_hedge_retest_adults.png", width = 6, height = 4)
 ```
 
@@ -1843,7 +1821,7 @@ box_retest_kids <- box_retest %>%
 
 box_retest_kids
 
-saveRDS(box_retest_kids, file = "../saves/tango-box-retest-kids.rds")
+saveRDS(box_retest_kids, file = "../saves/tango_box_retest_kids.rds")
 # ggsave("../figures/tango_box_retest_kids.png", width = 6, height = 4)
 ```
 
@@ -1861,24 +1839,13 @@ box_retest_adults <- box_retest %>%
 
 box_retest_adults
 
-saveRDS(box_retest_adults, file = "../saves/tango-box-retest-adults.rds")
+saveRDS(box_retest_adults, file = "../saves/tango_box_retest_adults.rds")
 # ggsave("../figures/tango_hedge_retest_adults.png", width = 6, height = 4)
 ```
 
 # Save plots
 
 ```{r arrange_plots}
-# hedge_variation_plot_GLMM <- readRDS(file = "../saves/tango-hedge-variation-plot-GLMM.rds")
-# hedge_intCon_kids <- readRDS(file = "../saves/tango-hedge-intCon-kids.rds")
-# hedge_intCon_adults <- readRDS(file = "../saves/tango-hedge-intCon-adults.rds")
-# hedge_retest_kids <- readRDS(file = "../saves/tango-hedge-retest-kids.rds")
-# hedge_retest_adults <- readRDS(file = "../saves/tango-hedge-retest-adults.rds")
-# box_variation_plot_GLMM <- readRDS(file = "../saves/tango-box-variation-plot-GLMM.rds")
-# box_intCon_kids <- readRDS(file = "../saves/tango-box-intCon-kids.rds")
-# box_intCon_adults <- readRDS(file = "../saves/tango-box-intCon-adults.rds")
-# box_retest_kids <- readRDS(file = "../saves/tango-box-retest-kids.rds")
-# box_retest_adults <- readRDS(file = "../saves/tango-box-retest-adults.rds")
-
 tango_arrangedplot <- ggarrange(
 
   ggarrange(hedge_variation_plot_GLMM,
@@ -1922,8 +1889,9 @@ tango_arrangedplot <- ggarrange(
 )
 
 tango_arrangedplot
-saveRDS(tango_arrangedplot, file = "../saves/tango-arrangedplot.rds")
+saveRDS(tango_arrangedplot, file = "../saves/tango_arrangedplot.rds")
 ggsave("../figures/tango_arrangedplot.png", width = 6.5, height = 5, scale = 1.6, bg = "white")
+ggsave("../figures/tango_arrangedplot.pdf", width = 6.5, height = 5, scale = 1.6, bg = "white")
 ```
 
 ```{r supplements_reli_byagegroup}
@@ -1938,5 +1906,6 @@ ggarrange(
 )
 
 ggsave("../figures/tango_supplements_reli_byagegroup.png", width = 8, height = 6)
+ggsave("../figures/tango_supplements_reli_byagegroup.pdf", width = 8, height = 6)
 ```
 

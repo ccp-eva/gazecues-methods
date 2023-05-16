@@ -1,0 +1,5 @@
+sample,n,pearson_retest,analysis
+kids,58,0.81,outlier excluded
+adults,68,0.66,outlier excluded
+kids,60,0.88,outlier included
+adults,70,0.73,outlier included

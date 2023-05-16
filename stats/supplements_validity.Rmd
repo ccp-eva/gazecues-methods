@@ -22,30 +22,7 @@ theme_set(theme_classic())
 ```
 
 ```{r load_data}
-testtrials <- readRDS(file = "../data/tango-testtrials.rds") %>% 
-  # determine order of factors
-  mutate(
-    targetPosition = factor(targetPosition, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "box1", "box2", "box3", "box4", "box5")), 
-    studyversion = factor(studyversion, levels = c("hedge", "box")), 
-    datacollection = factor(datacollection, levels = c("in-person - supervised", "remote - unsupervised")),
-    sample = factor(sample, levels = c("kids", "adults")), 
-    studytype = factor(studytype, levels = c("vali", "vali2", "reli")),
-    
-    # for models, summarize targetPositions in a way that it's symmetrical for left/ right side
-    # the smaller the value, the more central the position
-    symmetricPosition = ifelse(studyversion == "box", 
-                               # for box version
-                               case_when(
-                                  targetPosition == "box3" ~ 0, 
-                                  targetPosition == "box2" | targetPosition == "box4" ~ 1,
-                                  targetPosition == "box1" | targetPosition == "box5" ~ 2), 
-                               # for hedge version
-                               targetCentralityX
-                       ), 
-    
-    # distance between target and click in balloon widths (balloon width is 160 SVG units)
-    clickDistInBalloons = abs(clickDistFromTargetCenterX)/160,
-  )
+testtrials <- readRDS(file = "../data/tango-testtrials.rds")
 ```
 
 ```{r orev_data}
@@ -83,6 +60,7 @@ socenv_predictordistributions <- mDataSocenv %>%
     
 socenv_predictordistributions
 saveRDS(socenv_predictordistributions, file = "../saves/socenv_predictordistributions.rds")
+write.csv(socenv_predictordistributions, "../saves/socenv_predictordistributions.csv", quote = F, row.names = F)
 
 mDataSocenv <- mDataSocenv %>% 
   mutate(
@@ -243,23 +221,14 @@ socenvModelorder <- mSEComparison %>% arrange(modelweight) %>% pull(model)
 ```
 
 ```{r socenv_savemodels}
-write.csv(mSEnull, "../saves/mSEnull.csv", quote = F, row.names = F)
 saveRDS(mSEnull, "../saves/mSEnull.rds")
-write.csv(mSEccAge, "../saves/mSEccAge.csv", quote = F, row.names = F)
 saveRDS(mSEccAge, "../saves/mSEccAge.rds")
-write.csv(mSEccHours, "../saves/mSEccHours.csv", quote = F, row.names = F)
 saveRDS(mSEccHours, "../saves/mSEccHours.rds")
-write.csv(mSEhhTotal, "../saves/mSEhhTotal.csv", quote = F, row.names = F)
 saveRDS(mSEhhTotal, "../saves/mSEhhTotal.rds")
-write.csv(mSEhhSibs, "../saves/mSEhhSibs.csv", quote = F, row.names = F)
 saveRDS(mSEhhSibs, "../saves/mSEhhSibs.rds")
-write.csv(mSEsibsChildAged, "../saves/mSEsibsChildAged.csv", quote = F, row.names = F)
 saveRDS(mSEsibsChildAged, "../saves/mSEsibsChildAged.rds")
-write.csv(mSEsiblingsVarietyScoreP, "../saves/mSEsiblingsVarietyScoreP.csv", quote = F, row.names = F)
 saveRDS(mSEsiblingsVarietyScoreP, "../saves/mSEsiblingsVarietyScoreP.rds")
-write.csv(mSEsiblingsVarietyScoreW, "../saves/mSEsiblingsVarietyScoreW.csv", quote = F, row.names = F)
 saveRDS(mSEsiblingsVarietyScoreW, "../saves/mSEsiblingsVarietyScoreW.rds")
-write.csv(mSEPE, "../saves/mSEPE.csv", quote = F, row.names = F)
 saveRDS(mSEPE, "../saves/mSEPE.rds")
 ```
 
@@ -304,22 +273,26 @@ socenv_draws <- bind_rows(
   ) %>% 
   mutate(
     predictor = factor(.variable, 
-                       levels = c("b_hhSibs", 
-                                  "b_siblingsVarietyScoreP", 
-                                  "b_sibsChildAged", 
-                                  "b_hhTotal", 
-                                  "b_ccHours", 
+                       levels = c(
                                   "b_ccAge", 
+                                  "b_hhSibs", 
+                                  "b_pe",
+                                  "b_sibsChildAged", 
                                   "b_siblingsVarietyScoreW", 
-                                  "b_pe"), 
-                       labels = c("# Children in household aged 0-18", 
-                                  "Sibling variety score (Peterson, 2000)", 
-                                  "# Children in household aged 1-12", 
-                                  "# Household members", 
-                                  "Average hours spent in childcare per day", 
+                                  "b_siblingsVarietyScoreP", 
+                                  "b_hhTotal", 
+                                  "b_ccHours"
+                                  ), 
+                       labels = c(
                                   "Age of childcare entry", 
+                                  "# Children in household aged 0-18", 
+                                  "Peer exposure index",
+                                  "# Children in household aged 1-12", 
                                   "Sibling variety score (Cassidy et al., 2005)", 
-                                  "Peer exposure index")
+                                  "Sibling variety score (Peterson, 2000)", 
+                                  "# Household members", 
+                                  "Average hours spent in childcare per day" 
+                                  )
                        )  
   ) %>% 
   rename(estimate = .value)
@@ -328,38 +301,24 @@ write.csv(socenv_draws, "../saves/socenv_draws.csv", quote = F, row.names = F)
 saveRDS(socenv_draws, "../saves/socenv_draws.rds")
 ```
 
-```{r socenv_plot_winning}
-socenv_plot_winning <- socenv_draws %>% 
-  filter(predictor == "Age of childcare entry") %>% 
-  ggplot(., aes(y = predictor, x = estimate)) +
-  tidybayes::stat_halfeye(.width = c(.95, .8), scale = 0.8, slab_color = "#006c66", slab_fill = "#EBECEC", slab_alpha = 0.9) +
+```{r socenv_plot}
+socenv_plot <- socenv_draws %>% 
+  mutate(
+    winning_model = ifelse(predictor == "Age of childcare entry", TRUE, FALSE)
+  ) %>% 
+  ggplot(., aes(x = estimate, y = reorder(predictor, desc(predictor)), fill = winning_model)) +
+  tidybayes::stat_halfeye(.width = c(.95, .8), scale = 0.8, slab_color = "#006c66", slab_size = 0.5, slab_alpha = 0.4) +
+  scale_fill_manual(values = c("#EBECEC", "#006c66")) +
   labs(x = "Posterior estimate when predicting TANGO score", y = "") +
   guides(fill = "none")+
   geom_vline(xintercept = 0, linetype = "dashed") +
-  coord_cartesian(expand = TRUE, ylim = c(1.5, 1.5)) +
+  coord_cartesian(expand = TRUE, ylim = c(1.5, 8.5)) +
   theme_classic()
 
-socenv_plot_winning
+socenv_plot
 
-saveRDS(socenv_plot_winning, file = "../saves/socenv_plot_winning.rds")
-# ggsave("../figures/socenv_plot_winning.png", width = 10, height = 6, scale = 1, bg = "white")
-```
-
-```{r socenv_plot_allother}
-socenv_plot_allother <- socenv_draws %>% 
-  filter(predictor != "Age of childcare entry") %>% 
-  ggplot(., aes(y = predictor, x = estimate)) +
-  tidybayes::stat_halfeye(.width = c(.95, .8), scale = 1, slab_color = "#006c66", slab_size = 0.5, slab_fill = "#EBECEC", slab_alpha = 0.9) +
-  labs(x = "Posterior estimate when predicting TANGO score", y = "") +
-  guides(fill = "none")+
-  geom_vline(xintercept = 0, linetype = "dashed") +
-  coord_cartesian(expand = TRUE, ylim = c(1.5, 7.5)) +
-  theme_classic()
-
-socenv_plot_allother
-
-saveRDS(socenv_plot_allother, file = "../saves/socenv_plot_allother.rds")
-# ggsave("../figures/socenv_plot_allother.png", width = 10, height = 6, scale = 1, bg = "white")
+saveRDS(socenv_plot, file = "../saves/socenv_plot.rds")
+# ggsave("../figures/socenv_plot.png", width = 10, height = 6, scale = 1, bg = "white")
 ```
 
 # RECEPTIVE VOCABULARY 
@@ -389,6 +348,7 @@ vali_sample <- bind_rows(socenv_sample, orev_sample, time_diff)
 
 vali_sample
 saveRDS(vali_sample, file = "../saves/vali_sample.rds")
+write.csv(vali_sample, "../saves/vali_sample.csv", quote = F, row.names = F)
 ```
 
 ```{r orev_prepareData}
@@ -484,7 +444,7 @@ saveRDS(orev_draws, "../saves/orev_draws.rds")
 ```{r orev_modelplot}
 orev_modelplot <- orev_draws %>% 
   ggplot(., aes(x = estimate, y = predictor)) +
- tidybayes::stat_halfeye(.width = c(.95, .8), scale = 1, slab_color = "#006c66", slab_fill = "#EBECEC", slab_alpha = 0.9) +
+ tidybayes::stat_halfeye(.width = c(.95, .8), scale = 1, slab_color = "#006c66", slab_fill = "#006c66", slab_alpha = 0.4) +
     labs(x = "Posterior estimate when predicting oREV score", y = "") +
   guides(fill = "none")+
   geom_vline(xintercept = 0, linetype = "dashed") +
@@ -512,13 +472,13 @@ orev_plot <- ggplot(orev_data, aes( x = mean_tango, y = mean_orev)) +
   
   labs(x = "TANGO score", y = "oREV score", col = "Age in years") + 
   scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.25)) + 
-  scale_y_continuous(limits = c(0, 1.1), breaks = seq(0, 1, 0.25)) + 
+  scale_y_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.25)) + 
 
   theme(legend.title = element_text(size = 9), 
         legend.key.size = unit(0.4, "cm"), 
         legend.direction = "vertical", 
         legend.box = "horizontal",
-        legend.position = c(0.2, 0.18), 
+        legend.position = c(0.8, 0.18), 
         legend.background = element_blank(),
         legend.box.background = element_rect(colour = "black"), 
         legend.text = element_markdown()
@@ -532,29 +492,21 @@ saveRDS(orev_plot, file = "../saves/orev_plot.rds")
 
 # ARRANGE PLOT
 
-```{r arrange_plots}
-vali_arrangedplot <- ggarrange(
-  ggarrange(
-    socenv_plot_winning,
-    socenv_plot_allother,
-    ncol = 2,
-    labels = c("A", "B")
-  ),
-  
-  ggarrange(
-    orev_modelplot, 
-    orev_plot,
-    ncol = 2,
-    labels = c("C", "D")
-  ), 
-  nrow = 2
-  )
+```{r vali_plot}
+ggarrange(
+  socenv_plot,
+  orev_modelplot, 
+  orev_plot,
+  ncol = 3, 
+  widths = c(1.2, 1, 1),
+  labels = c("A", "B", "C")
+)
 
-vali_arrangedplot
-
-saveRDS(vali_arrangedplot, file = "../saves/vali-arrangedplot.rds")
-ggsave("../figures/tango_vali_arrangedplot.png", width = 8.5, height = 6, scale = 1.5, bg = "white")
+ggsave("../figures/tango_vali_plot.png", width = 8, height = 2, scale = 2, bg = "white")
+ggsave("../figures/tango_vali_plot.pdf", width = 8, height = 2, scale = 2, bg = "white")
 ```
+
+
 
 ```{r orev_by_agegroup}
 orev_agegroup <- ggplot(orev_data, aes( x = mean_tango, y = mean_orev)) +
@@ -570,10 +522,11 @@ orev_agegroup <- ggplot(orev_data, aes( x = mean_tango, y = mean_orev)) +
   scale_y_continuous(limits = c(0, 1.1), breaks = seq(0, 1, 0.25)) +
   facet_grid(~ ageInYears) + 
   theme(legend.position = "none")
-d
+
 orev_agegroup
 
 saveRDS(orev_agegroup, file = "../saves/tango_orev_byagegroup.rds")
 ggsave("../figures/tango_supplements_orev_byagegroup.png", width = 7, height = 4)
+ggsave("../figures/tango_supplements_orev_byagegroup.pdf", width = 7, height = 4)
 ```
 
