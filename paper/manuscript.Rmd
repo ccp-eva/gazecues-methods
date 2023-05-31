@@ -559,7 +559,7 @@ A high correlation between our participant-specific model estimates would indica
 ## Results
 
 ```{r splithalf}
-splithalf <- readRDS(file = "../saves/tango-splithalf-table.rds")
+splithalf <- readRDS(file = "../saves/tango_splithalf_table.rds")
 ```
 
 We found that the TANGO measured systematic variation: split-half and test-retest reliability was medium to high.
@@ -584,7 +584,7 @@ mRetestBox <- readRDS(file = "../saves/mRetestBox.rds")
 ```
 
 ```{r hedge_retest_correlationcoefficients}
-hedge_retest_correlationcoefficients <- readRDS(file = "../saves/tango-hedge-retest-correlationcoefficients.rds")
+hedge_retest_correlationcoefficients <- readRDS(file = "../saves/tango_hedge_retest_correlationcoefficients.rds")
 ```
 
 For test-retest reliability, we show the association between raw performance scores of the two test days and corresponding *Pearson* correlation coefficients in Figure \@ref(fig:fig2)D, E, I and J.[^4]
