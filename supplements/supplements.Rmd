@@ -29,7 +29,7 @@ mask              : no
 draft             : no
 documentclass     : "apa6"
 classoption       : "man"
-output            : papaja::apa6_word
+output            : papaja::apa6_pdf
 header-includes:
   - \usepackage{setspace}
   - \captionsetup[figure]{font={stretch=1}}

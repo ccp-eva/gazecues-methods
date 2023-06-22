@@ -5,16 +5,19 @@
 \documentclass[
   man,floatsintext]{apa6}
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -176,28 +179,22 @@
 \fi
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
-  pdftitle={Supplements for the manuscript `TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'},
-  pdfauthor={Julia Prein1, Manuel Bohn1, Steven Kalinke1, \& Daniel B. M. Haun1},
+  pdftitle={Supplemental Material for the manuscript `TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'},
+  pdfauthor={Julia Prein1, Manuel Bohn1,2, Steven Kalinke1, \& Daniel B. M. Haun1},
   pdflang={en-EN},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Supplements for the manuscript `TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'}
-\author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1}, Steven Kalinke\textsuperscript{1}, \& Daniel B. M. Haun\textsuperscript{1}}
+\title{Supplemental Material for the manuscript `TANGO: A reliable, open-source, browser-based task to assess individual differences in gaze understanding in 3 to 5-year-old children and adults'}
+\author{Julia Prein\textsuperscript{1}, Manuel Bohn\textsuperscript{1,2}, Steven Kalinke\textsuperscript{1}, \& Daniel B. M. Haun\textsuperscript{1}}
 \date{}
 
 
 \shorttitle{Supplements}
 
-\authornote{
-
-Correspondence concerning this article should be addressed to Julia Prein, Max Planck Institute for Evolutionary Anthropology, Deutscher Platz 6, 04103 Leipzig, Germany. E-mail: \href{mailto:julia_prein@eva.mpg.de}{\nolinkurl{julia\_prein@eva.mpg.de}}
-
-}
-
-\affiliation{\vspace{0.5cm}\textsuperscript{1} Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany}
+\affiliation{\vspace{0.5cm}\textsuperscript{1} Department of Comparative Cultural Psychology, Max Planck Institute for Evolutionary Anthropology, Leipzig, Germany\\\textsuperscript{2} Institute of Psychology, Leuphana University Lüneburg, Germany}
 
 \begin{document}
 \maketitle
@@ -250,7 +247,7 @@ This difference was especially prominent in younger participants in the box vers
 It is conceivable that caregivers were especially prone to influence the behavior of younger children.
 In the box version, caregivers might have had more opportunities to interfere since they carried out the clicking for their children.
 In an exploratory analysis, we coded parental behavior and environmental factors during remote unsupervised testing.
-Due to the time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = 16).
+Due to the time consuming nature of hand coding videos frame by frame, we focused on the subsample with the greatest performance difference between data collection modes: the three-year-olds in the box version of the task (n = 0).
 We reasoned that if parental interference cannot explain the greatest performance difference in our sample, the effects would be negligible in the remaining sample.
 A trial was defined as the time between two eye blinking sounds.
 We transcribed all utterances by parents and children and counted the words uttered by each.
@@ -279,20 +276,20 @@ Therefore, we conclude that the effect of parental interference was negligable a
 \toprule
 Predictor & WAIC & SE\_WAIC & Weight & ELPD\_DIFF & SE\_ELPD\_DIFF\\
 \midrule
-By trial - \# Verification choice & 255.98 & 15.66 & 0.34 & 0.00 & 0.00\\
-By trial - Null model & 256.77 & 15.05 & 0.23 & -0.40 & 1.18\\
-By trial - Parental interference index & 257.24 & 15.32 & 0.18 & -0.63 & 0.99\\
-By trial - \# Repeated testquestion & 258.57 & 15.25 & 0.09 & -1.30 & 1.23\\
-By trial - \# Words uttered by caregiver & 258.88 & 15.37 & 0.08 & -1.45 & 1.13\\
+By trial - Null model & 256.42 & 15.10 & 0.31 & 0.00 & 0.00\\
+By trial - \# Verification choice & 256.57 & 15.46 & 0.29 & -0.07 & 1.08\\
+By trial - Parental interference index & 258.08 & 15.38 & 0.14 & -0.83 & 0.76\\
+By trial - \# Repeated testquestion & 258.83 & 15.25 & 0.09 & -1.20 & 0.61\\
+By trial - \# Hints eyes & 258.88 & 15.30 & 0.09 & -1.23 & 0.50\\
 \addlinespace
-By trial - \# Hints eyes & 258.88 & 15.35 & 0.08 & -1.45 & 1.21\\
-By subject - \# Repeated testquestion & 83.61 & 10.23 & 0.81 & 0.00 & 0.00\\
-By subject - Parental interference index & 88.27 & 12.17 & 0.08 & -2.33 & 3.58\\
-By subject - Null model & 89.16 & 11.21 & 0.05 & -2.78 & 3.60\\
-By subject - \# Verification choice & 89.96 & 12.04 & 0.03 & -3.18 & 4.47\\
+By trial - \# Words uttered by caregiver & 259.15 & 15.39 & 0.08 & -1.37 & 0.36\\
+By subject - \# Repeated testquestion & 83.45 & 10.20 & 0.82 & 0.00 & 0.00\\
+By subject - Parental interference index & 88.17 & 12.15 & 0.08 & -2.36 & 3.55\\
+By subject - Null model & 89.36 & 11.28 & 0.04 & -2.96 & 3.59\\
+By subject - \# Verification choice & 89.94 & 12.01 & 0.03 & -3.25 & 4.44\\
 \addlinespace
-By subject - \# Words uttered by caregiver & 90.56 & 10.70 & 0.02 & -3.48 & 4.23\\
-By subject - \# Hints eyes & 93.02 & 11.84 & 0.01 & -4.71 & 3.76\\
+By subject - \# Words uttered by caregiver & 90.50 & 10.62 & 0.02 & -3.52 & 4.19\\
+By subject - \# Hints eyes & 93.02 & 11.84 & 0.01 & -4.78 & 3.71\\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -355,16 +352,16 @@ WAIC weights represent the probability that the model in question provides the b
 \toprule
 Predictor & WAIC & SE\_WAIC & Weight & ELPD\_DIFF & SE\_ELPD\_DIFF\\
 \midrule
-Age of childcare entry & 571.62 & 28.13 & 0.73 & 0.00 & 0.00\\
-Null model & 575.96 & 30.44 & 0.08 & -2.17 & 4.53\\
-\# Children in household aged 0-18 & 577.60 & 29.63 & 0.04 & -2.99 & 4.74\\
-Peer exposure index & 577.74 & 30.19 & 0.03 & -3.06 & 4.68\\
-\# Children in household aged 1-12 & 578.07 & 29.93 & 0.03 & -3.22 & 4.70\\
+Age of childcare entry & 571.54 & 28.09 & 0.72 & 0.00 & 0.00\\
+Null model & 575.80 & 30.43 & 0.09 & -2.13 & 4.51\\
+\# Children in household aged 0-18 & 577.29 & 29.61 & 0.04 & -2.88 & 4.70\\
+Peer exposure index & 577.90 & 30.20 & 0.03 & -3.18 & 4.65\\
+\# Children in household aged 1-12 & 578.02 & 29.93 & 0.03 & -3.24 & 4.69\\
 \addlinespace
-Sibling variety score (Cassidy et al., 2005) & 578.13 & 29.87 & 0.03 & -3.25 & 4.67\\
-Sibling variety score (Peterson, 2000) & 578.29 & 29.87 & 0.03 & -3.33 & 4.66\\
-\# Household members & 578.80 & 30.40 & 0.02 & -3.59 & 4.53\\
-Average hours spent in childcare per day & 579.36 & 30.74 & 0.02 & -3.87 & 4.60\\
+Sibling variety score (Cassidy et al., 2005) & 578.15 & 29.85 & 0.03 & -3.31 & 4.66\\
+Sibling variety score (Peterson, 2000) & 578.21 & 29.84 & 0.03 & -3.34 & 4.64\\
+\# Household members & 578.30 & 30.32 & 0.02 & -3.38 & 4.48\\
+Average hours spent in childcare per day & 579.04 & 30.66 & 0.02 & -3.75 & 4.56\\
 \bottomrule
 \end{tabular}}
 \end{table}
@@ -404,7 +401,7 @@ Our sample consisted of 117 children, including 11 3-year-olds (mean = 45.05 mon
 \hypertarget{materials}{%
 \subsubsection{Materials}\label{materials}}
 
-We employed the oREV, an Item Response Theory based open receptive vocabulary task for 3 to 8-year-old children (Bohn, Prein, Delikaya, Haun, \& Gagarina, 2022). Similarly to the TANGO, the task was presented as an interactive web application (see Figure \ref{fig:fig5}; live demo \url{https://ccp-odc.eva.mpg.de/orev-demo/}; source code \url{https://github.com/ccp-eva/orev-demo}).
+We employed the oREV, an Item Response Theory based open receptive vocabulary task for 3 to 8-year-old children (Bohn et al., 2022). Similarly to the TANGO, the task was presented as an interactive web application (see Figure \ref{fig:fig5}; live demo \url{https://ccp-odc.eva.mpg.de/orev-demo/}; source code \url{https://github.com/ccp-eva/orev-demo}).
 
 Each trial presented four pictures: one target word alongside three distractors (1 phonological, 1 semantic, 1 unrelated distractor). A verbal prompt asked children to select one of the pictures (prompt: ``Zeige mir {[}target word{]}''; engl.: ``Show me {[}target word{]}''). The positioning of the target word and the three distractor types was counterbalanced across the four display positions (upper/lower and left/right corners). Children responded by clicking on one of the four pictures. The outcome measure consisted of the proportion of correct responses.
 
@@ -428,6 +425,7 @@ Families received a personalized study link and completed the study at any locat
 \subsubsection{Analysis}\label{analysis-1}}
 
 To estimate the effect of gaze understanding on receptive vocabulary, we fitted a GLMM predicting the task performance by the gaze understanding score (scaled), controlling for age: \texttt{cor\_clt\ \textbar{}\ trials(n\_clt)\ \textasciitilde{}\ age\_centered\ +\ mean\_gaze\_centered}). We modelled the number of participant's correct responses using a \texttt{Binomial} distribution.
+In order to combine data of our two TANGO study versions, we transformed continuous click responses from the hedge version into a discrete outcome. After this transformation, we calculated a ``TANGO score'' as the proportion of correctly located targets. See Analysis section of Social-environmental factors for further detail.
 
 \hypertarget{results-1}{%
 \subsubsection{Results}\label{results-1}}
@@ -439,12 +437,23 @@ To estimate the effect of gaze understanding on receptive vocabulary, we fitted 
 \toprule
 Predictor & WAIC & SE\_WAIC & Weight & ELPD\_DIFF & SE\_ELPD\_DIFF\\
 \midrule
-Age (scaled), TANGO score (scaled) & 570.14 & 26.37 & 0.97 & 0.00 & 0.00\\
-Age (scaled) & 577.22 & 27.11 & 0.03 & -3.54 & 4.15\\
-Null model & 635.80 & 28.71 & 0.00 & -32.83 & 10.61\\
+Age (scaled), TANGO score (scaled) & 570.16 & 26.38 & 0.98 & 0.00 & 0.00\\
+Age (scaled) & 577.66 & 27.16 & 0.02 & -3.75 & 4.16\\
+Null model & 635.72 & 28.70 & 0.00 & -32.78 & 10.62\\
 \bottomrule
 \end{tabular}}
 \end{table}
+
+
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/tango_supplements_orev_byagegroup} 
+
+}
+
+\caption{\textbf{Effect of gaze understanding on receptive vocabulary by age group}. Regression lines with 95\% CI show smooth conditional mean based on a linear model (generalized linear model for box version), with \emph{Pearson}'s correlation coefficient \emph{r}. Diamonds show the performance for each subject. The color of data points denotes age group.}\label{fig:fig6}
+\end{figure}
 
 \newpage
 
@@ -453,12 +462,12 @@ Null model & 635.80 & 28.71 & 0.00 & -32.83 & 10.61\\
 
 \begin{longtable}{llr}
 \toprule
-Current Country of Residence & studytype & n\\
+currentResidence & studytype & n\\
 \midrule
 \endfirsthead
 \multicolumn{3}{@{}l}{\textit{(continued)}}\\
 \toprule
-Current Country of Residence & studytype & n\\
+currentResidence & studytype & n\\
 \midrule
 \endhead
 
@@ -487,29 +496,44 @@ Greece & vali & 1\\
 Germany & vali & 1\\
 United States & vali & 1\\
 Mexico & vali & 1\\
-South Africa & reli & 48\\
+South Africa & vali2 & 20\\
 \addlinespace
+Portugal & vali2 & 11\\
+United Kingdom & vali2 & 5\\
+France & vali2 & 3\\
+Italy & vali2 & 2\\
+Spain & vali2 & 2\\
+\addlinespace
+Poland & vali2 & 2\\
+DATA EXPIRED & vali2 & 1\\
+Finland & vali2 & 1\\
+Czech Republic & vali2 & 1\\
+Latvia & vali2 & 1\\
+\addlinespace
+Switzerland & vali2 & 1\\
+South Africa & reli & 48\\
 United Kingdom & reli & 19\\
 United States & reli & 14\\
 Portugal & reli & 10\\
+\addlinespace
 Italy & reli & 7\\
 Canada & reli & 6\\
-\addlinespace
 Spain & reli & 5\\
 Ireland & reli & 5\\
 Poland & reli & 4\\
+\addlinespace
 Greece & reli & 4\\
 Netherlands & reli & 3\\
-\addlinespace
 CONSENT REVOKED & reli & 3\\
 Germany & reli & 3\\
 Australia & reli & 2\\
+\addlinespace
 France & reli & 2\\
 Czech Republic & reli & 2\\
-\addlinespace
 Hungary & reli & 2\\
 Chile & reli & 1\\
 Iceland & reli & 1\\
+\addlinespace
 New Zealand & reli & 1\\*
 \end{longtable}
 
@@ -643,8 +667,10 @@ This is the content of our audio recordings that were played as instructions and
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
-\toprule()
+\toprule\noalign{}
 \endhead
+\bottomrule\noalign{}
+\endlastfoot
 \textbf{Timeline} & \textbf{German} & \textbf{English} & \textbf{Filename} \\
 \textbf{welcome} & Hallo! Schön, dass du da bist. Wir spielen jetzt das Ballon-Spiel! Siehst du die Tiere auf dem Bild da? Wir möchten gleich zusammen mit den Tieren mit einem Ballon spielen. Was genau passiert, erklären wir dir jetzt ganz in Ruhe. & Hello! Great that you're here. We'll now play a balloon game. Can you see the animals in the picture over there? We want to play together with the animals using the balloon. We'll now talk you through exactly what will happen. & welcome.mp3 \\
 \textbf{touch} & Schau mal, da steht ein Tier im Fenster. Und siehst du den Ballon da? Der Ballon fällt immer runter und landet auf dem Boden. Und du musst ihn dann finden. Das Tier hilft Dir und schaut immer den Ballon an. & Look, an animal is standing in the window. And can you see the balloon over there? The balloon always falls down and lands on the ground. And you have to find it! The animal helps you and always looks at the balloon. & touch-1.mp3 \\
@@ -667,7 +693,6 @@ This is the content of our audio recordings that were played as instructions and
 \textbf{landing sound of balloon} & - & - & balloon-lands.mp3 \\
 \textbf{sound of blinking eyes} & - & - & blink.mp3 \\
 \textbf{sound for target click} & - & - & positive-feedback.mp3 \\
-\bottomrule()
 \end{longtable}
 
 \newpage
@@ -682,7 +707,7 @@ This is the content of our audio recordings that were played as instructions and
 \hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
 \leavevmode\vadjust pre{\hypertarget{ref-bohn2022orev}{}}%
-Bohn, M., Prein, J., Delikaya, B., Haun, D. B. M., \& Gagarina, N. (2022). \emph{{oREV}: An {Item Response Theory} based open receptive vocabulary task for 3 to 8-year-old children}.
+Bohn, M., Prein, J. C., Koch, T., Bee, R. M., Delikaya, B., Haun, D. B. M., \& Gagarina, N. (2022). \emph{{oREV}: An {Item Response Theory} based open receptive vocabulary task for 3 to 8-year-old children} {[}Preprint{]}. {PsyArXiv}. \url{https://doi.org/10.31234/osf.io/4z86w}
 
 \leavevmode\vadjust pre{\hypertarget{ref-cassidy2005theory}{}}%
 Cassidy, K. W., Fineberg, D. S., Brown, K., \& Perkins, A. (2005). Theory of {Mind May Be Contagious}, but {You Don}'t {Catch It} from {Your Twin}. \emph{Child Development}, \emph{76}(1), 97--106. Retrieved from \url{https://www.jstor.org/stable/3696711}
